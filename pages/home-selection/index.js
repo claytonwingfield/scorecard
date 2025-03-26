@@ -2,11 +2,15 @@ import Header from "@/components/Navigation/header";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_MANAGERS } from "@/graphql/queries";
+import { GET_ALL_LOCATIONS } from "@/graphql/queries";
 export default function HomeSelection() {
-  const { data, loading, error } = useQuery(GET_ALL_MANAGERS);
+  const { data, loading, error } = useQuery(GET_ALL_LOCATIONS);
 
-  console.log(data, error);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const locations = data?.locations || [];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -23,7 +27,7 @@ export default function HomeSelection() {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <h1 className="text-white text-3xl font-futura-bold text-center">
-              Oklahoma City <br /> Contact Center
+              {locations[1].city} <br /> Contact Center
             </h1>
           </div>
         </Link>
@@ -36,7 +40,7 @@ export default function HomeSelection() {
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <h1 className="text-white text-3xl font-futura-bold text-center">
-              Contact Us <br /> Santo Domingo
+              Contact Us <br /> {locations[0].city}
             </h1>
           </div>
         </Link>

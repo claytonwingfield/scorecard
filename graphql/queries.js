@@ -77,9 +77,22 @@ const GET_ALL_DEPARTMENTS = gql`
   }
 `;
 
+const GET_ALL_LOCATIONS = gql`
+  query Location {
+    locations {
+      documentId
+      city
+      createdAt
+      updatedAt
+      publishedAt
+    }
+  }
+`;
+
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
   GET_ALL_AGENTS,
   GET_ALL_DEPARTMENTS,
+  GET_ALL_LOCATIONS,
 };
