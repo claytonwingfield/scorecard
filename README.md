@@ -1,40 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Contact Center Scorecard 🚀
 
-## Getting Started
+Welcome to the **Contact Center Scorecard** project! This repository is built with [Next.js](https://nextjs.org) (bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app)) and features an integrated [Strapi](https://strapi.io) backend. It provides a comprehensive dashboard for contact centers to monitor performance and key metrics.
 
-First, run the development server:
+## Table of Contents
 
-```bash
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Starting the Next.js Frontend](#starting-the-nextjs-frontend)
+  - [Starting the Strapi Backend](#starting-the-strapi-backend)
+- [Development Workflow](#development-workflow)
+- [Learn More](#learn-more)
+- [Deploy on Vercel](#deploy-on-vercel)
+
+## Overview ✨
+
+The **Contact Center Scorecard** offers an intuitive interface to view, manage, and analyze contact center performance. With Next.js powering the frontend and Strapi managing the backend content, you get a robust and scalable solution.
+
+## Getting Started 🚀
+
+### Starting the Next.js Frontend
+
+1. **Install Dependencies**  
+   Ensure you have installed all necessary packages:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+
+   ```
+
+2. **Run the Development Server**
+   Start the Next.js development server:
+
 npm run dev
+
 # or
+
 yarn dev
+
 # or
+
 pnpm dev
+
 # or
+
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser to see your app in action. 🎉
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+3. Edit Your Pages
+   Begin editing by modifying files in the pages/ directory (e.g., pages/index.js). The app auto-refreshes as you save your changes.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+**Starting the Strapi Backend**
+1 . Navigate to the Strapi Directory
+Open a terminal and switch to your Strapi backend folder:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+cd backend
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install Backend Dependencies
+   If you haven’t installed Strapi’s dependencies yet, run:
 
-## Learn More
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# or
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+yarn install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Launch Strapi
+   Start the Strapi development server:
 
-## Deploy on Vercel
+npm run develop
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# or
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+yarn develop
+
+Your Strapi backend will now be available at http://localhost:1337, and the admin panel at http://localhost:1337/admin. 🔥
+
+**Development Workflow 🛠️**
+Editing Pages:
+Update pages in the pages/ directory. The app supports hot-reloading for rapid development.
+
+API Routes:
+Access API endpoints at http://localhost:3000/api/hello. Modify these in pages/api/hello.js.
+
+Content Management:
+Manage your content through the Strapi admin panel, where you can configure data types and API endpoints.
+
+This project also leverages next/font for automatic font optimization and loading.
+
+**Learn More 📚**
+Enhance your knowledge with these resources:
+
+Next.js Documentation – Explore Next.js features and APIs.
+
+Learn Next.js – Interactive tutorial for building Next.js apps.
+
+Strapi Documentation – Learn how to manage and customize your backend.
+
+For additional details, check out the Next.js GitHub repository and share your feedback or contributions!
