@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "supervisors",
+  "info": {
+    "singularName": "supervisor",
+    "pluralName": "supervisors",
+    "displayName": "supervisor",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "agents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::agent.agent",
+      "mappedBy": "supervisor"
+    },
+    "department": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::department.department",
+      "inversedBy": "supervisors"
+    },
+    "role": {
+      "type": "enumeration",
+      "enum": [
+        "Supervisor of Help Desk",
+        "Supervisor of Customer Service",
+        "Supervisor of Resolutions"
+      ],
+      "required": true
+    },
+    "managers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manager.manager",
+      "inversedBy": "supervisors"
+    },
+    "location": {
+      "type": "enumeration",
+      "enum": [
+        "Oklahoma City",
+        "Dominican Republic"
+      ],
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,183 @@
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Head from "next/head";
+import useNavigation from "@/components/Navigation/hooks/useNavigation";
+import { mobileHamburgerIcon } from "@/components/Icons/icons";
+import DesktopDropDownMenu from "./desktopDropDownMenu";
+import MobileDropDownMenu from "./mobileDropDownMenu";
+import { useTheme } from "next-themes";
+import { flushSync } from "react-dom";
+import * as Switch from "../Effects/Switch/Switch";
+
+import { IconMoon, IconSun } from "@/components/Icons/icons";
+
+export default function Header() {
+  const { isMenuOpen, setIsMenuOpen, currentPage, handlePageChange, pages } =
+    useNavigation();
+
+  const { theme, setTheme } = useTheme();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const ref = useRef(null);
+
+  const toggleDarkMode = async (isDarkMode) => {
+    if (
+      !ref.current ||
+      !document.startViewTransition ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setTheme(isDarkMode ? "dark" : "light");
+      return;
+    }
+
+    setIsAnimating(true);
+
+    await document.startViewTransition(() => {
+      flushSync(() => {
+        setTheme(isDarkMode ? "dark" : "light");
+      });
+    }).ready;
+
+    const { top, left, width, height } = ref.current.getBoundingClientRect();
+    const x = left + width / 2;
+    const y = top + height / 2;
+    const right = window.innerWidth - left;
+    const bottom = window.innerHeight - top;
+    const maxRadius = Math.hypot(Math.max(left, right), Math.max(top, bottom));
+
+    document.documentElement.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${maxRadius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 500,
+        easing: "ease-in-out",
+        pseudoElement: "::view-transition-new(root)",
+      }
+    );
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
+  };
+
+  return (
+    <>
+      <Head>
+        <meta property="og:type" content="website" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+        />
+      </Head>
+
+      {/* Header container */}
+      <header className="bg-lovesWhite dark:bg-darkBg dark:shadow-darkLightGray dark:shadow-sm shadow-lg w-full">
+        <nav className="flex items-center justify-between lg:px-6 px-3 py-4 w-full">
+          {/* Logo + Current Page Title */}
+          <div className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center p-1">
+              <Image alt="Love's Logo" src="/Logo.png" width={60} height={60} />
+            </Link>
+            <h1 className="font-futura-bold text-lovesBlack dark:text-lovesWhite lg:text-2xl text-xl mt-3">
+              {currentPage}
+            </h1>
+          </div>
+          {/* DESKTOP NAV (md+) */}
+          <div className="hidden md:flex items-center space-x-6 ml-auto">
+            {pages.map((page) => (
+              <div key={page.name}>
+                {page.isDropdown ? (
+                  <DesktopDropDownMenu
+                    menuTitle={page.name}
+                    subPages={page.subPages}
+                    handlePageChange={handlePageChange}
+                  />
+                ) : (
+                  <Link
+                    href={page.path}
+                    onClick={() => handlePageChange(page.name)}
+                    className="
+            inline-flex items-center
+            text-lovesBlack dark:text-lovesWhite
+            text-lg font-medium font-futura-bold 
+            cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
+          "
+                  >
+                    {page.name}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center space-x-5 md:ml-3">
+            {/* MOBILE TOGGLE BUTTON */}
+            <button
+              className="md:hidden text-lovesBlack dark:text-lovesWhite flex items-center h-10"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {mobileHamburgerIcon}
+            </button>
+
+            {/* DARK-MODE SWITCH */}
+            <Switch.Root
+              className="flex items-center h-10 lg:mb-0 mb-3"
+              checked={theme === "dark"}
+              onCheckedChange={(checked) => toggleDarkMode(checked)}
+              aria-label="Toggle Dark Mode"
+            >
+              <Switch.Thumb
+                ref={ref}
+                className="flex items-center justify-center h-full"
+              >
+                {theme === "dark" ? <IconMoon /> : <IconSun />}
+              </Switch.Thumb>
+            </Switch.Root>
+          </div>
+        </nav>
+
+        {/* MOBILE NAV DROPDOWN */}
+        {isMenuOpen && (
+          <div className="z-50 md:hidden bg-lovesWhite dark:bg-darkBg shadow-lg w-full px-4 pb-4 space-y-2 rounded-lg">
+            {pages.map((page) => (
+              <div key={page.name} className="flex flex-col">
+                {page.isDropdown ? (
+                  <MobileDropDownMenu
+                    menuTitle={page.name}
+                    subPages={page.subPages}
+                    handlePageChange={handlePageChange}
+                  />
+                ) : (
+                  <Link
+                    href={page.path}
+                    onClick={() => handlePageChange(page.name)}
+                    className="
+                      block
+                      text-lovesBlack dark:text-lovesWhite
+                      text-xl font-medium font-futura-bold
+                      cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
+                    "
+                  >
+                    {page.name}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <style jsx global>{`
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+          animation: none;
+          mix-blend-mode: normal;
+        }
+      `}</style>
+    </>
+  );
+}

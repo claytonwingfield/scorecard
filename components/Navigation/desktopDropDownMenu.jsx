@@ -1,0 +1,149 @@
+// desktopDropDownMenu.js
+import { useState, useRef } from "react";
+import Link from "next/link";
+import { DesktopDropdownIcon } from "@/components/Icons/icons";
+import { useClickOutside } from "@/hooks/useClickOutside";
+
+export default function DesktopDropDownMenu({
+  menuTitle,
+  subPages,
+  handlePageChange,
+  nested = false,
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isManual, setIsManual] = useState(false);
+  const [openSubIndex, setOpenSubIndex] = useState(null);
+  const dropdownRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    if (!isManual) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleButtonClick = (event) => {
+    event.stopPropagation();
+    setIsOpen(!isOpen);
+    setIsManual(!isManual);
+  };
+
+  useClickOutside([dropdownRef], () => {
+    if (isOpen) {
+      setIsOpen(false);
+      setIsManual(false);
+    }
+  });
+
+  return (
+    <div
+      ref={dropdownRef}
+      // onMouseEnter={handleMouseEnter} // if you want hover behavior
+      className="relative inline-block"
+    >
+      {/* Top-level button (e.g., "Scorecard") */}
+      <button
+        onClick={handleButtonClick}
+        className="
+        inline-flex items-center
+        p-2
+        text-lovesBlack dark:text-lovesWhite
+        text-lg font-medium font-futura-bold
+        cursor-pointer hover:text-lovesPrimaryRed 
+         dark:hover:bg-darkBg  dark:hover:text-lovesPrimaryRed
+      "
+      >
+        <span>{menuTitle}</span>
+        <DesktopDropdownIcon isOpen={isOpen} className="ml-2" />
+      </button>
+
+      {isOpen && (
+        <div
+          className={` absolute top-full
+        ${nested ? "left-full" : "left-[-120px]"}
+        z-50 mt-2 bg-lovesWhite dark:bg-darkBg
+        shadow-lg w-60 min-w-[200px]
+        border border-lovesGray rounded-lg
+        divide-y divide-lovesGray`}
+        >
+          {subPages.map((subPage, idx) => {
+            // If this subPage is also a dropdown, show an inline "accordion" for sub-sub items
+            if (subPage.isDropdown && subPage.subPages?.length > 0) {
+              const subIsOpen = openSubIndex === idx;
+
+              return (
+                <div key={subPage.name} className="p-2">
+                  {/* Row for subPage title & icon */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // toggle sub-accordion
+                      if (subIsOpen) {
+                        setOpenSubIndex(null);
+                      } else {
+                        setOpenSubIndex(idx);
+                      }
+                    }}
+                    className="flex items-center justify-between w-full text-left"
+                  >
+                    <span className="text-lovesBlack dark:text-lovesWhite text-lg font-medium font-futura-bold">
+                      {subPage.name}
+                    </span>
+                    {/* Arrow icon for sub-accordion */}
+                    <DesktopDropdownIcon isOpen={subIsOpen} />
+                  </button>
+
+                  {/* Inline sub-list if open */}
+                  {subIsOpen && (
+                    <div className="mt-2  pl-3">
+                      {subPage.subPages.map((nestedItem) => (
+                        <Link
+                          key={nestedItem.name}
+                          href={nestedItem.path}
+                          onClick={() => {
+                            handlePageChange(nestedItem.name);
+                            setIsOpen(false);
+                            setOpenSubIndex(null);
+                          }}
+                          className="
+                          block w-full py-1
+                          text-lovesBlack dark:text-lovesWhite
+                          text-lg font-medium font-futura-bold
+                          hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
+                        "
+                        >
+                          {nestedItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            } else {
+              // Otherwise it's a normal link
+              return (
+                <Link
+                  key={subPage.name}
+                  href={subPage.path}
+                  onClick={() => {
+                    handlePageChange(subPage.name);
+                    setIsOpen(false);
+                    setOpenSubIndex(null);
+                  }}
+                  className="
+                  block w-full p-2
+                  text-lovesBlack dark:text-lovesWhite
+                  text-lg font-medium font-futura-bold
+                  hover:bg-lovesGray dark:hover:bg-lovesWhite
+                  dark:hover:text-lovesBlack
+                "
+                >
+                  {subPage.name}
+                </Link>
+              );
+            }
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
