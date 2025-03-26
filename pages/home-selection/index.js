@@ -6,7 +6,7 @@ import { GET_ALL_MANAGERS } from "@/graphql/queries";
 export default function HomeSelection() {
   const { data, loading, error } = useQuery(GET_ALL_MANAGERS);
 
-  console.log(data, error, loading);
+  console.log(data, error);
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
