@@ -17,7 +17,7 @@ export default function HomeSelection() {
       Array.isArray(location.background) &&
       location.background.length > 0
     ) {
-      return `http://localhost:1337${location.background[0].url}`;
+      return `http://192.168.0.23:1337${location.background[0].url}`;
     }
     return "/fallback.jpg"; // fallback image if not available
   };
@@ -44,6 +44,7 @@ export default function HomeSelection() {
           <Image
             src={getBackgroundUrl(locations[0])}
             alt={getBackgroundAlt(locations[0])}
+            unoptimized
             fill
             className="object-cover filter brightness-50"
           />
@@ -57,6 +58,7 @@ export default function HomeSelection() {
           <Image
             src={getBackgroundUrl(locations[1])}
             alt={getBackgroundAlt(locations[1])}
+            unoptimized
             fill
             className="object-cover filter brightness-50"
           />

@@ -26,6 +26,11 @@
         "videos",
         "audios"
       ]
+    },
+    "uuid": {
+      "type": "uid",
+      "targetField": "city",
+      "required": true
     }
   }
 }

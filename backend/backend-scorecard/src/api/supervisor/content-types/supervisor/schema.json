@@ -50,6 +50,10 @@
         "Dominican Republic"
       ],
       "required": true
+    },
+    "uuid": {
+      "type": "uid",
+      "targetField": "name"
     }
   }
 }

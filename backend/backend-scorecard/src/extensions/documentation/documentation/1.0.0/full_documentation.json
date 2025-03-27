@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2025-03-27T01:07:31.643Z"
+    "x-generation-date": "2025-03-27T02:43:45.976Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -4354,7 +4354,8 @@
               "name",
               "department",
               "role",
-              "location"
+              "location",
+              "uuid"
             ],
             "type": "object",
             "properties": {
@@ -4400,6 +4401,9 @@
                   "Oklahoma City",
                   "Dominican Republic"
                 ]
+              },
+              "uuid": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -4463,7 +4467,8 @@
           "name",
           "department",
           "role",
-          "location"
+          "location",
+          "uuid"
         ],
         "properties": {
           "id": {
@@ -4562,6 +4567,9 @@
                         "Oklahoma City",
                         "Dominican Republic"
                       ]
+                    },
+                    "uuid": {
+                      "type": "string"
                     },
                     "createdAt": {
                       "type": "string",
@@ -4931,6 +4939,9 @@
                             }
                           }
                         },
+                        "uuid": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -4998,6 +5009,9 @@
                         }
                       }
                     }
+                  },
+                  "uuid": {
+                    "type": "string"
                   },
                   "createdAt": {
                     "type": "string",
@@ -5081,6 +5095,9 @@
                   "Dominican Republic"
                 ]
               },
+              "uuid": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -5140,6 +5157,9 @@
               "Oklahoma City",
               "Dominican Republic"
             ]
+          },
+          "uuid": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -5247,6 +5267,9 @@
                   ],
                   "example": "string or id"
                 }
+              },
+              "uuid": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -5426,6 +5449,9 @@
                                     "Oklahoma City",
                                     "Dominican Republic"
                                   ]
+                                },
+                                "uuid": {
+                                  "type": "string"
                                 },
                                 "createdAt": {
                                   "type": "string",
@@ -5773,6 +5799,9 @@
                               "Dominican Republic"
                             ]
                           },
+                          "uuid": {
+                            "type": "string"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -5826,6 +5855,9 @@
                           }
                         }
                       }
+                    },
+                    "uuid": {
+                      "type": "string"
                     },
                     "createdAt": {
                       "type": "string",
@@ -5905,6 +5937,9 @@
                     }
                   }
                 },
+                "uuid": {
+                  "type": "string"
+                },
                 "createdAt": {
                   "type": "string",
                   "format": "date-time"
@@ -5972,6 +6007,9 @@
                 }
               }
             }
+          },
+          "uuid": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -7151,7 +7189,8 @@
           "data": {
             "required": [
               "city",
-              "background"
+              "background",
+              "uuid"
             ],
             "type": "object",
             "properties": {
@@ -7171,6 +7210,9 @@
                   ],
                   "example": "string or id"
                 }
+              },
+              "uuid": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -7232,7 +7274,8 @@
         "type": "object",
         "required": [
           "city",
-          "background"
+          "background",
+          "uuid"
         ],
         "properties": {
           "id": {
@@ -7845,6 +7888,9 @@
               }
             }
           },
+          "uuid": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -8028,6 +8074,9 @@
                     }
                   }
                 },
+                "uuid": {
+                  "type": "string"
+                },
                 "createdAt": {
                   "type": "string",
                   "format": "date-time"
@@ -8146,6 +8195,9 @@
                   ],
                   "example": "string or id"
                 }
+              },
+              "uuid": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -8334,6 +8386,9 @@
                                     "Oklahoma City",
                                     "Dominican Republic"
                                   ]
+                                },
+                                "uuid": {
+                                  "type": "string"
                                 },
                                 "createdAt": {
                                   "type": "string",
@@ -8681,6 +8736,9 @@
                               "Dominican Republic"
                             ]
                           },
+                          "uuid": {
+                            "type": "string"
+                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -8734,6 +8792,9 @@
                           }
                         }
                       }
+                    },
+                    "uuid": {
+                      "type": "string"
                     },
                     "createdAt": {
                       "type": "string",
@@ -8802,6 +8863,9 @@
                     }
                   }
                 }
+              },
+              "uuid": {
+                "type": "string"
               },
               "createdAt": {
                 "type": "string",
@@ -8880,6 +8944,9 @@
                 }
               }
             }
+          },
+          "uuid": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -9015,6 +9082,9 @@
                   "Oklahoma City",
                   "Dominican Republic"
                 ]
+              },
+              "uuid": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -9212,6 +9282,9 @@
                                     }
                                   }
                                 }
+                              },
+                              "uuid": {
+                                "type": "string"
                               },
                               "createdAt": {
                                 "type": "string",
@@ -9533,6 +9606,9 @@
                             }
                           }
                         },
+                        "uuid": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -9615,6 +9691,9 @@
                         "Dominican Republic"
                       ]
                     },
+                    "uuid": {
+                      "type": "string"
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -9674,6 +9753,9 @@
                     "Oklahoma City",
                     "Dominican Republic"
                   ]
+                },
+                "uuid": {
+                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",
@@ -9768,6 +9850,9 @@
               "Oklahoma City",
               "Dominican Republic"
             ]
+          },
+          "uuid": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
