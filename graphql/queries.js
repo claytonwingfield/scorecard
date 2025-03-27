@@ -82,6 +82,10 @@ const GET_ALL_LOCATIONS = gql`
     locations {
       documentId
       city
+      background {
+        url
+        alternativeText
+      }
       createdAt
       updatedAt
       publishedAt

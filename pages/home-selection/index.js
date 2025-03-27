@@ -11,6 +11,28 @@ export default function HomeSelection() {
 
   const locations = data?.locations || [];
 
+  const getBackgroundUrl = (location) => {
+    if (
+      location.background &&
+      Array.isArray(location.background) &&
+      location.background.length > 0
+    ) {
+      return `http://localhost:1337${location.background[0].url}`;
+    }
+    return "/fallback.jpg"; // fallback image if not available
+  };
+
+  const getBackgroundAlt = (location) => {
+    if (
+      location.background &&
+      Array.isArray(location.background) &&
+      location.background.length > 0
+    ) {
+      return location.background[0].alternativeText || "Background Image";
+    }
+    return "Background Image";
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -20,27 +42,27 @@ export default function HomeSelection() {
           className="group relative flex-1 cursor-pointer"
         >
           <Image
-            src="/okc.jpg"
-            alt="Oklahoma City Background"
+            src={getBackgroundUrl(locations[0])}
+            alt={getBackgroundAlt(locations[0])}
             fill
             className="object-cover filter brightness-50"
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <h1 className="text-white text-3xl font-futura-bold text-center">
-              {locations[1].city} <br /> Contact Center
+              {locations[0].city} <br /> Contact Center
             </h1>
           </div>
         </Link>
         <Link href="/dashboard/santo-domingo" className="group relative flex-1">
           <Image
-            src="/dr.jpg"
-            alt="Santo Domingo Background"
+            src={getBackgroundUrl(locations[1])}
+            alt={getBackgroundAlt(locations[1])}
             fill
             className="object-cover filter brightness-50"
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <h1 className="text-white text-3xl font-futura-bold text-center">
-              Contact Us <br /> {locations[0].city}
+              Contact Us <br /> {locations[1].city}
             </h1>
           </div>
         </Link>
