@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * scordcard controller
+ * scorecard controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::scordcard.scordcard');
+module.exports = createCoreController('api::scorecard.scorecard');

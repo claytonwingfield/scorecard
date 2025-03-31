@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * scordcard router
+ * scorecard router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::scordcard.scordcard');
+module.exports = createCoreRouter('api::scorecard.scorecard');

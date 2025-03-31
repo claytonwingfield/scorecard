@@ -59,11 +59,11 @@
       "targetField": "name",
       "required": true
     },
-    "scorecards": {
+    "scorecard": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::scordcard.scordcard",
-      "mappedBy": "agent"
+      "relation": "manyToOne",
+      "target": "api::scorecard.scorecard",
+      "inversedBy": "agents"
     }
   }
 }

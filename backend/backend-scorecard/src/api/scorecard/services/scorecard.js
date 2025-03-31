@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * scordcard service
+ * scorecard service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::scordcard.scordcard');
+module.exports = createCoreService('api::scorecard.scorecard');

@@ -1,9 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "scordcards",
+  "collectionName": "scorecards",
   "info": {
-    "singularName": "scordcard",
-    "pluralName": "scordcards",
+    "singularName": "scorecard",
+    "pluralName": "scorecards",
     "displayName": "scorecard",
     "description": ""
   },
@@ -15,22 +15,20 @@
       "type": "date",
       "required": true
     },
-    "agent": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::agent.agent",
-      "inversedBy": "scorecards"
-    },
     "aht": {
-      "type": "time",
-      "required": false,
-      "unique": false
+      "type": "time"
     },
     "quality": {
       "type": "decimal"
     },
     "overall": {
       "type": "decimal"
+    },
+    "agents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::agent.agent",
+      "mappedBy": "scorecard"
     }
   }
 }

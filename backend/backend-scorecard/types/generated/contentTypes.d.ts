@@ -417,9 +417,9 @@ export interface ApiAgentAgent extends Struct.CollectionTypeSchema {
       ]
     > &
       Schema.Attribute.Required;
-    scorecards: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::scordcard.scordcard'
+    scorecard: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::scorecard.scorecard'
     >;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     supervisor: Schema.Attribute.Relation<
@@ -514,7 +514,7 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
   };
   attributes: {
     background: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
+      'images' | 'videos' | 'audios' | 'files',
       true
     > &
       Schema.Attribute.Required;
@@ -594,19 +594,19 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiScordcardScordcard extends Struct.CollectionTypeSchema {
-  collectionName: 'scordcards';
+export interface ApiScorecardScorecard extends Struct.CollectionTypeSchema {
+  collectionName: 'scorecards';
   info: {
     description: '';
     displayName: 'scorecard';
-    pluralName: 'scordcards';
-    singularName: 'scordcard';
+    pluralName: 'scorecards';
+    singularName: 'scorecard';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    agent: Schema.Attribute.Relation<'manyToOne', 'api::agent.agent'>;
+    agents: Schema.Attribute.Relation<'oneToMany', 'api::agent.agent'>;
     aht: Schema.Attribute.Time;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -615,7 +615,7 @@ export interface ApiScordcardScordcard extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::scordcard.scordcard'
+      'api::scorecard.scorecard'
     > &
       Schema.Attribute.Private;
     overall: Schema.Attribute.Decimal;
@@ -1191,7 +1191,7 @@ declare module '@strapi/strapi' {
       'api::global.global': ApiGlobalGlobal;
       'api::location.location': ApiLocationLocation;
       'api::manager.manager': ApiManagerManager;
-      'api::scordcard.scordcard': ApiScordcardScordcard;
+      'api::scorecard.scorecard': ApiScorecardScorecard;
       'api::supervisor.supervisor': ApiSupervisorSupervisor;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
