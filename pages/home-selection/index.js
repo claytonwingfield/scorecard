@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_LOCATIONS } from "@/graphql/queries";
+import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 export default function HomeSelection() {
   const { data, loading, error } = useQuery(GET_ALL_LOCATIONS);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingAnimation />;
   if (error) return <p>Error: {error.message}</p>;
 
   const locations = data?.locations || [];

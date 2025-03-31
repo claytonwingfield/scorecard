@@ -93,10 +93,21 @@ const GET_ALL_LOCATIONS = gql`
   }
 `;
 
+const GET_LOGO = gql`
+  query GetLogo {
+    logo {
+      company
+      image {
+        url
+      }
+    }
+  }
+`;
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
   GET_ALL_AGENTS,
   GET_ALL_DEPARTMENTS,
   GET_ALL_LOCATIONS,
+  GET_LOGO,
 };

@@ -9,16 +9,42 @@ import MobileDropDownMenu from "./mobileDropDownMenu";
 import { useTheme } from "next-themes";
 import { flushSync } from "react-dom";
 import * as Switch from "../Effects/Switch/Switch";
-
+import { useQuery } from "@apollo/client";
 import { IconMoon, IconSun } from "@/components/Icons/icons";
+import { GET_LOGO } from "@/graphql/queries";
+import LoadingAnimation from "../Effects/Loading/LoadingAnimation";
 
 export default function Header() {
+  const { data, loading, error } = useQuery(GET_LOGO);
   const { isMenuOpen, setIsMenuOpen, currentPage, handlePageChange, pages } =
     useNavigation();
 
   const { theme, setTheme } = useTheme();
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef(null);
+
+  if (loading) return <LoadingAnimation />;
+  if (error) return <p>Error: {error.message}</p>;
+  if (!data || !data.logo) return <p>No logo data available</p>;
+
+  const getLogoUrl = (logo) => {
+    if (
+      logo.image &&
+      Array.isArray(logo.image) &&
+      logo.image.length > 0 &&
+      logo.image[0].url
+    ) {
+      return logo.image[0].url.startsWith("http")
+        ? logo.image[0].url
+        : `http://172.26.132.93:1337${logo.image[0].url}`;
+    }
+    return "/fallback-image.png";
+  };
+
+  // Helper to get the alt text for the logo image
+  const getLogoAlt = (logo) => {
+    return logo.company || "Logo";
+  };
 
   const toggleDarkMode = async (isDarkMode) => {
     if (
@@ -80,7 +106,12 @@ export default function Header() {
           {/* Logo + Current Page Title */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center p-1">
-              <Image alt="Love's Logo" src="/Logo.png" width={60} height={60} />
+              <Image
+                alt={getLogoAlt(data.logo)}
+                src={getLogoUrl(data.logo)}
+                width={60}
+                height={60}
+              />
             </Link>
             <h1 className="font-futura-bold text-lovesBlack dark:text-lovesWhite lg:text-2xl text-xl mt-3">
               {currentPage}
