@@ -16,12 +16,6 @@
       "required": true,
       "unique": true
     },
-    "managers": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::manager.manager",
-      "mappedBy": "department"
-    },
     "supervisors": {
       "type": "relation",
       "relation": "oneToMany",
@@ -31,6 +25,12 @@
     "uuid": {
       "type": "uid",
       "targetField": "name"
+    },
+    "managers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manager.manager",
+      "mappedBy": "departments"
     }
   }
 }

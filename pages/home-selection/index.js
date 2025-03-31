@@ -17,9 +17,9 @@ export default function HomeSelection() {
       Array.isArray(location.background) &&
       location.background.length > 0
     ) {
-      return `http://192.168.0.23:1337${location.background[0].url}`;
+      return `http://172.26.132.93:1337${location.background[0].url}`;
     }
-    return "/fallback.jpg"; // fallback image if not available
+    return "/fallback.jpg";
   };
 
   const getBackgroundAlt = (location) => {

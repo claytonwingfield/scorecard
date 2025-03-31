@@ -16,9 +16,9 @@
       "required": true,
       "unique": true
     },
-    "department": {
+    "departments": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::department.department",
       "inversedBy": "managers"
     },

@@ -449,7 +449,7 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       'api::department.department'
     > &
       Schema.Attribute.Private;
-    managers: Schema.Attribute.Relation<'oneToMany', 'api::manager.manager'>;
+    managers: Schema.Attribute.Relation<'manyToMany', 'api::manager.manager'>;
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
@@ -549,8 +549,8 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    department: Schema.Attribute.Relation<
-      'manyToOne',
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
       'api::department.department'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
