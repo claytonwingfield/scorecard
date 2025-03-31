@@ -22,12 +22,6 @@
       "target": "api::agent.agent",
       "mappedBy": "supervisor"
     },
-    "department": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::department.department",
-      "inversedBy": "supervisors"
-    },
     "role": {
       "type": "enumeration",
       "enum": [
@@ -54,6 +48,12 @@
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "departments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::department.department",
+      "inversedBy": "supervisors"
     }
   }
 }

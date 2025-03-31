@@ -43,6 +43,18 @@
     "slug": {
       "type": "uid",
       "targetField": "name"
+    },
+    "managers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manager.manager",
+      "inversedBy": "sr_managers"
+    },
+    "sr_managers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manager.manager",
+      "mappedBy": "managers"
     }
   }
 }

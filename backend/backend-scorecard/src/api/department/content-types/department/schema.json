@@ -18,9 +18,9 @@
     },
     "supervisors": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::supervisor.supervisor",
-      "mappedBy": "department"
+      "mappedBy": "departments"
     },
     "slug": {
       "type": "uid",

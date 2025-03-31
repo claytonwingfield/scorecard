@@ -460,7 +460,7 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'>;
     supervisors: Schema.Attribute.Relation<
-      'oneToMany',
+      'manyToMany',
       'api::supervisor.supervisor'
     >;
     updatedAt: Schema.Attribute.DateTime;
@@ -563,6 +563,7 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
       'api::manager.manager'
     > &
       Schema.Attribute.Private;
+    managers: Schema.Attribute.Relation<'manyToMany', 'api::manager.manager'>;
     name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
@@ -579,6 +580,10 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Required;
     slug: Schema.Attribute.UID<'name'>;
+    sr_managers: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::manager.manager'
+    >;
     supervisors: Schema.Attribute.Relation<
       'manyToMany',
       'api::supervisor.supervisor'
@@ -638,8 +643,8 @@ export interface ApiSupervisorSupervisor extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    department: Schema.Attribute.Relation<
-      'manyToOne',
+    departments: Schema.Attribute.Relation<
+      'manyToMany',
       'api::department.department'
     >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
