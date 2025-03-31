@@ -27,7 +27,7 @@
         "audios"
       ]
     },
-    "uuid": {
+    "slug": {
       "type": "uid",
       "targetField": "city",
       "required": true

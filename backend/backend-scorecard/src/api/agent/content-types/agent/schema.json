@@ -54,10 +54,16 @@
       ],
       "required": true
     },
-    "uuid": {
+    "slug": {
       "type": "uid",
       "targetField": "name",
       "required": true
+    },
+    "scorecards": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::scordcard.scordcard",
+      "mappedBy": "agent"
     }
   }
 }

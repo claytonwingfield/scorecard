@@ -51,7 +51,7 @@
       ],
       "required": true
     },
-    "uuid": {
+    "slug": {
       "type": "uid",
       "targetField": "name"
     }

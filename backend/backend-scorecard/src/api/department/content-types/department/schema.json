@@ -22,7 +22,7 @@
       "target": "api::supervisor.supervisor",
       "mappedBy": "department"
     },
-    "uuid": {
+    "slug": {
       "type": "uid",
       "targetField": "name"
     },

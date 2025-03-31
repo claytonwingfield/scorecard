@@ -417,6 +417,11 @@ export interface ApiAgentAgent extends Struct.CollectionTypeSchema {
       ]
     > &
       Schema.Attribute.Required;
+    scorecards: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::scordcard.scordcard'
+    >;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     supervisor: Schema.Attribute.Relation<
       'manyToOne',
       'api::supervisor.supervisor'
@@ -424,7 +429,6 @@ export interface ApiAgentAgent extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uuid: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
   };
 }
 
@@ -454,6 +458,7 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'>;
     supervisors: Schema.Attribute.Relation<
       'oneToMany',
       'api::supervisor.supervisor'
@@ -461,7 +466,6 @@ export interface ApiDepartmentDepartment extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uuid: Schema.Attribute.UID<'name'>;
   };
 }
 
@@ -527,10 +531,10 @@ export interface ApiLocationLocation extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'city'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uuid: Schema.Attribute.UID<'city'> & Schema.Attribute.Required;
   };
 }
 
@@ -574,6 +578,7 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
       ]
     > &
       Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'name'>;
     supervisors: Schema.Attribute.Relation<
       'manyToMany',
       'api::supervisor.supervisor'
@@ -581,7 +586,39 @@ export interface ApiManagerManager extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uuid: Schema.Attribute.UID<'name'>;
+  };
+}
+
+export interface ApiScordcardScordcard extends Struct.CollectionTypeSchema {
+  collectionName: 'scordcards';
+  info: {
+    description: '';
+    displayName: 'scorecard';
+    pluralName: 'scordcards';
+    singularName: 'scordcard';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    agent: Schema.Attribute.Relation<'manyToOne', 'api::agent.agent'>;
+    aht: Schema.Attribute.Time;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    date: Schema.Attribute.Date & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::scordcard.scordcard'
+    > &
+      Schema.Attribute.Private;
+    overall: Schema.Attribute.Decimal;
+    publishedAt: Schema.Attribute.DateTime;
+    quality: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -628,10 +665,10 @@ export interface ApiSupervisorSupervisor extends Struct.CollectionTypeSchema {
       ]
     > &
       Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'name'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    uuid: Schema.Attribute.UID<'name'>;
   };
 }
 
@@ -1149,6 +1186,7 @@ declare module '@strapi/strapi' {
       'api::global.global': ApiGlobalGlobal;
       'api::location.location': ApiLocationLocation;
       'api::manager.manager': ApiManagerManager;
+      'api::scordcard.scordcard': ApiScordcardScordcard;
       'api::supervisor.supervisor': ApiSupervisorSupervisor;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

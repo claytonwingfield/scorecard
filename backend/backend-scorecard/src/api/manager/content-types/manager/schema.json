@@ -40,7 +40,7 @@
       "target": "api::supervisor.supervisor",
       "mappedBy": "managers"
     },
-    "uuid": {
+    "slug": {
       "type": "uid",
       "targetField": "name"
     }
