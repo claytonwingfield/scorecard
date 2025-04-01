@@ -3,15 +3,12 @@ import { Listbox } from "@headlessui/react";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/20/solid";
 
 export default function ColumnVisibility({
-  // Remove “allColumns”
-  // and add “activeTab” so we know which set to show
   activeTab,
   overviewColumns,
   agentColumns,
   columnVisibility,
   handleColumnVisibilityChange,
 }) {
-  // 1) Decide which columns to display based on the tab
   const activeColumns =
     (activeTab === "agent" ? agentColumns : overviewColumns) || [];
 
@@ -30,7 +27,7 @@ export default function ColumnVisibility({
       <h3 className="text-xl font-futura-bold font-medium text-lovesBlack lg:mb-3 mb-5 text-center dark:text-lovesWhite">
         Column Controls
       </h3>
-      {/* 2) Render only “activeColumns” */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
         {activeColumns.map((table) => {
           const { tableName, label, columns } = table;

@@ -23,7 +23,6 @@ import { Transition, Listbox } from "@headlessui/react";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 export default function DetailHomeFilters({
-  // Props passed in
   activeFilters,
   handleDateRangeSelect,
   fromDate,
@@ -51,33 +50,24 @@ export default function DetailHomeFilters({
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
 
-  // Date range saving
   const saveRange = (close) => {
     if (handleDateRangeSelect) {
       handleDateRangeSelect({ from: fromDate, to: toDate });
     }
-    close(); // Close the Disclosure panel
-    // toggleDropdown(null); // Optional: If you have other dropdowns to manage
+    close();
   };
 
-  // Clear date range function
   const clearRange = () => {
     setFromDate(null);
     setToDate(null);
     setSelectedDateRange(null);
   };
 
-  // -----------------------------
-  // 1) Manager list
-  // -----------------------------
   const managerList = useMemo(() => {
     const uniqueManagers = [...new Set(allTeamData.map((d) => d.manager))];
     return uniqueManagers.map((m) => ({ value: m, label: m }));
   }, [allTeamData]);
 
-  // -----------------------------
-  // 2) Filter data by selected manager
-  // -----------------------------
   const filteredByManagers = useMemo(() => {
     const selectedManagers = activeFilters
       .filter((f) => f.type === "Manager")
@@ -89,9 +79,6 @@ export default function DetailHomeFilters({
     return allTeamData.filter((row) => selectedManagers.includes(row.manager));
   }, [allTeamData, activeFilters]);
 
-  // -----------------------------
-  // 3) Supervisor list
-  // -----------------------------
   const supervisorList = useMemo(() => {
     const uniqueSupervisors = [
       ...new Set(filteredByManagers.map((d) => d.supervisor)),
@@ -99,9 +86,6 @@ export default function DetailHomeFilters({
     return uniqueSupervisors.map((s) => ({ value: s, label: s }));
   }, [filteredByManagers]);
 
-  // -----------------------------
-  // 4) Filter by selected supervisor
-  // -----------------------------
   const filteredByManagersAndSupervisors = useMemo(() => {
     const selectedSupervisors = activeFilters
       .filter((f) => f.type === "Supervisor")
@@ -116,9 +100,6 @@ export default function DetailHomeFilters({
     );
   }, [filteredByManagers, activeFilters]);
 
-  // -----------------------------
-  // 5) Agent list
-  // -----------------------------
   const agentList = useMemo(() => {
     const uniqueAgents = [
       ...new Set(filteredByManagersAndSupervisors.map((d) => d.agent)),
@@ -126,9 +107,6 @@ export default function DetailHomeFilters({
     return uniqueAgents.map((a) => ({ value: a, label: a }));
   }, [filteredByManagersAndSupervisors]);
 
-  // -----------------------------
-  // 6) Build filter options
-  // -----------------------------
   const dynamicFilterOptions = [
     {
       id: "managerFilter",
@@ -159,22 +137,16 @@ export default function DetailHomeFilters({
     },
   ];
   const canSubmit = activeFilters.length > 1;
-  // -----------------------------
-  // 7) Handle Search (UPDATED LOGIC)
-  // -----------------------------
+
   const formatActiveFilters = () => {
-    // Define the allowed filter types
     const allowedTypes = ["Manager", "Supervisor", "Agent"];
 
-    // Filter the activeFilters to include only allowed types
     const selectedFilters = activeFilters.filter((filter) =>
       allowedTypes.includes(filter.type)
     );
 
-    // If no allowed filters are active, return the default message
     if (selectedFilters.length === 0) return "No Filters";
 
-    // Map and join the selected filters into a string
     return selectedFilters.map((filter, index) => (
       <span key={index}>
         {`${filter.type}: ${filter.label}`}
@@ -187,23 +159,20 @@ export default function DetailHomeFilters({
     <section className="mt-2 py-4 relative">
       <div className="w-full max-w-full mx-auto flex justify-center items-center ">
         <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack">
-          {/* Filters Section */}
           <Disclosure defaultOpen>
             {({ open }) => (
               <div className="w-full md:w-1/2 lg:pr-12">
-                {/* Disclosure Button */}
                 <Disclosure.Button className="flex items-center justify-between w-full">
                   <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite lg:mb-3 mb-1">
                     Filters
                   </h6>
-                  {/* Chevron Icon */}
+
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
                     } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
                   />
                 </Disclosure.Button>
-                {/* Disclosure Panel */}
 
                 <Transition
                   show={open}
@@ -217,7 +186,6 @@ export default function DetailHomeFilters({
                   <Disclosure.Panel className="mt-2">
                     <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
                     <div className="lg:space-y-6 space-y-2">
-                      {/* Iterate over dynamic filter options */}
                       {dynamicFilterOptions.map((filterCategory) => (
                         <div
                           key={filterCategory.id}
@@ -313,16 +281,14 @@ export default function DetailHomeFilters({
                     leaveTo="opacity-0 -translate-y-2"
                   >
                     <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                      {/* Lottie Animation - Centered Background */}
                       <div className="absolute inset-0 flex justify-center items-center z-0">
                         <Lottie
                           animationData={filterBackground}
                           loop
-                          className="w-48 h-48 lg:w-full lg:h-80 opacity-40" // Adjust sizes as needed
+                          className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
                         />
                       </div>
 
-                      {/* Active Filters - Centered Texts */}
                       <div className="flex flex-col items-center z-10 px-4">
                         <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
                           Selected Filters
@@ -340,23 +306,21 @@ export default function DetailHomeFilters({
             )}
           </Disclosure>
           <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
-          {/* Date Range Section */}
+
           <Disclosure defaultOpen>
             {({ open, close }) => (
               <div className="w-full md:w-1/2 lg:mt-0 mt-8">
-                {/* Disclosure Button */}
                 <Disclosure.Button className="flex items-center justify-between w-full">
                   <p className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite mb-3">
                     Date Range
                   </p>
-                  {/* Chevron Icon */}
+
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
                     } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
                   />
                 </Disclosure.Button>
-                {/* Disclosure Panel */}
 
                 <Transition
                   show={open}
@@ -401,7 +365,7 @@ export default function DetailHomeFilters({
                         {fromDate && toDate && (
                           <button
                             type="button"
-                            onClick={() => saveRange(close)} // Pass the close function to collapse the panel
+                            onClick={() => saveRange(close)}
                             className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack dark:bg-darkLightGray dark:text-lovesBlack text-sm font-futura-bold text-lovesWhite shadow"
                           >
                             Save Date Range
@@ -423,16 +387,14 @@ export default function DetailHomeFilters({
                     leaveTo="opacity-0 -translate-y-2"
                   >
                     <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                      {/* Lottie Animation - Centered Background */}
                       <div className="absolute inset-0 flex justify-center items-center z-0">
                         <Lottie
                           animationData={filterBackground}
                           loop
-                          className="w-48 h-48 lg:w-full lg:h-80 opacity-40" // Adjust sizes as needed
+                          className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
                         />
                       </div>
 
-                      {/* Active Filters - Centered Texts */}
                       <div className="flex flex-col items-center z-10 px-4">
                         <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
                           Date Range

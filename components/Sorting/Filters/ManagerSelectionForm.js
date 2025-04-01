@@ -20,15 +20,14 @@ export default function ManagerSelectionForm({}) {
   const router = useRouter();
   const [selectedManager, setSelectedManager] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  // const allTeamData = customerServiceData.allTeamData;
+
   const dataSets = customerServiceData.dataSets;
-  // Date range state
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [selectedDateRange, setSelectedDateRange] = useState(null);
 
-  // Build unique manager list from dataSets (or allTeamData if you prefer)
   const managerList = useMemo(() => {
     const managersSet = new Set();
     dataSets.forEach((set) => {
@@ -39,7 +38,6 @@ export default function ManagerSelectionForm({}) {
     return Array.from(managersSet).map((mgr) => ({ value: mgr, label: mgr }));
   }, [dataSets]);
 
-  // Utility to format a date as YYYY-MM-DD
   const formatDateParam = (date) =>
     date ? date.toISOString().split("T")[0] : "";
 
@@ -57,7 +55,7 @@ export default function ManagerSelectionForm({}) {
 
   const handleSearch = () => {
     if (!selectedManager) return;
-    // Build activeFilters with the selected manager
+
     const activeFilters = [{ type: "Manager", label: selectedManager.value }];
 
     performSearch({
@@ -93,8 +91,6 @@ export default function ManagerSelectionForm({}) {
           </h1>
           <div className="mt-4 w-full max-w-full mx-auto flex justify-center items-center">
             <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack">
-              {/* Manager Selection Section */}
-
               <Disclosure defaultOpen>
                 {({ open }) => (
                   <div className="w-full md:w-1/2 lg:pr-12">
@@ -196,16 +192,14 @@ export default function ManagerSelectionForm({}) {
                         leaveTo="opacity-0 -translate-y-2"
                       >
                         <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                          {/* Lottie Animation - Centered Background */}
                           <div className="absolute inset-0 flex justify-center items-center z-0">
                             <Lottie
                               animationData={filterBackground}
                               loop
-                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40" // Adjust sizes as needed
+                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
                             />
                           </div>
 
-                          {/* Active Filters - Centered Texts */}
                           <div className="flex flex-col items-center z-10 px-4">
                             <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
                               Selected Filters
@@ -222,7 +216,7 @@ export default function ManagerSelectionForm({}) {
                   </div>
                 )}
               </Disclosure>
-              {/* Date Range Section */}
+
               <Disclosure defaultOpen>
                 {({ open, close }) => (
                   <div className="w-full md:w-1/2 lg:mt-0 mt-8">
@@ -292,16 +286,14 @@ export default function ManagerSelectionForm({}) {
                         leaveTo="opacity-0 -translate-y-2"
                       >
                         <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                          {/* Lottie Animation - Centered Background */}
                           <div className="absolute inset-0 flex justify-center items-center z-0">
                             <Lottie
                               animationData={filterBackground}
                               loop
-                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40" // Adjust sizes as needed
+                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
                             />
                           </div>
 
-                          {/* Active Filters - Centered Texts */}
                           <div className="flex flex-col items-center z-10 px-4">
                             <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
                               Date Range

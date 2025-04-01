@@ -1,4 +1,3 @@
-// desktopDropDownMenu.js
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { DesktopDropdownIcon } from "@/components/Icons/icons";
@@ -35,12 +34,7 @@ export default function DesktopDropDownMenu({
   });
 
   return (
-    <div
-      ref={dropdownRef}
-      // onMouseEnter={handleMouseEnter} // if you want hover behavior
-      className="relative inline-block"
-    >
-      {/* Top-level button (e.g., "Scorecard") */}
+    <div ref={dropdownRef} className="relative inline-block">
       <button
         onClick={handleButtonClick}
         className="
@@ -66,17 +60,15 @@ export default function DesktopDropDownMenu({
         divide-y divide-lovesGray`}
         >
           {subPages.map((subPage, idx) => {
-            // If this subPage is also a dropdown, show an inline "accordion" for sub-sub items
             if (subPage.isDropdown && subPage.subPages?.length > 0) {
               const subIsOpen = openSubIndex === idx;
 
               return (
                 <div key={subPage.name} className="p-2">
-                  {/* Row for subPage title & icon */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      // toggle sub-accordion
+
                       if (subIsOpen) {
                         setOpenSubIndex(null);
                       } else {
@@ -88,11 +80,10 @@ export default function DesktopDropDownMenu({
                     <span className="text-lovesBlack dark:text-lovesWhite text-lg font-medium font-futura-bold">
                       {subPage.name}
                     </span>
-                    {/* Arrow icon for sub-accordion */}
+
                     <DesktopDropdownIcon isOpen={subIsOpen} />
                   </button>
 
-                  {/* Inline sub-list if open */}
                   {subIsOpen && (
                     <div className="mt-2  pl-3">
                       {subPage.subPages.map((nestedItem) => (
@@ -119,7 +110,6 @@ export default function DesktopDropDownMenu({
                 </div>
               );
             } else {
-              // Otherwise it's a normal link
               return (
                 <Link
                   key={subPage.name}

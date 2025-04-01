@@ -112,4 +112,6 @@ coverage
 ############################
 # Strapi
 ############################
-!/.tmp/data.db
+# Ignore all files in .tmp except the database
+.tmp/*
+!.tmp/data.db

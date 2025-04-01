@@ -15,14 +15,11 @@ import CustomTooltip from "./CustomTooltip";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
-// Inside your component:
-
 const averageScoreGoal = "95%";
 const adherenceGoal = "88%";
 const qualityGoal = "88%";
 const averageHandleTimeGoal = "5:30 - 6:30";
 
-// Returns goal value (as a string) based on the metric key.
 function getGoalForMetric(yDataKey) {
   if (yDataKey === "mtdScore") return averageScoreGoal;
   if (yDataKey === "adherence") return adherenceGoal;
@@ -32,8 +29,6 @@ function getGoalForMetric(yDataKey) {
   return "";
 }
 
-// Normalize the AHT input. If the string doesn’t include a colon but has a dot,
-// assume it represents minutes.seconds and convert "6.3" to "6:30"
 const normalizeTimeStr = (timeStr) => {
   if (typeof timeStr !== "string") return timeStr;
   if (timeStr.includes(":")) return timeStr;
@@ -41,7 +36,7 @@ const normalizeTimeStr = (timeStr) => {
     const parts = timeStr.split(".");
     let minutes = parts[0];
     let seconds = parts[1];
-    // If seconds is a single digit, assume it represents tens of seconds.
+
     if (seconds.length === 1) {
       seconds = seconds + "0";
     }
@@ -56,7 +51,6 @@ const convertTimeToMinutes = (timeStr) => {
   return parseInt(minutes, 10) + parseInt(seconds, 10) / 60;
 };
 
-// Custom dot renderer that always draws a black circle.
 const renderBlackDot = (props) => {
   const { cx, cy } = props;
   return <circle cx={cx} cy={cy} r={4} fill="#000" />;
@@ -84,7 +78,6 @@ const LineChartTime = forwardRef(
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
-    // For AHT, we use a fixed domain from 5:00 to 7:00.
     const fixedAHTDomain = [
       convertTimeToMinutes("5:00"),
       convertTimeToMinutes("7:00"),
@@ -167,14 +160,13 @@ const LineChartTime = forwardRef(
       }
     }
     console.log(convertTimeToMinutes("6:30"));
-    // For non-AHT charts, force the y-axis domain to include the goal value.
+
     const yValues = chartData.map((item) => item[yDataKey]);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
 
     let goalValue;
     if (yDataKey === "AHT" || yDataKey === "ahtTeam") {
-      // For AHT, goals are 5:30 and 6:30.
       goalValue = null;
     } else if (yDataKey === "mtdScore") {
       goalValue = parseFloat(averageScoreGoal.replace("%", ""));
@@ -192,14 +184,11 @@ const LineChartTime = forwardRef(
             Math.ceil(Math.max(yMax, goalValue)),
           ];
 
-    // Compute gradient offsets:
-    // For non-AHT: above goal = green, below = red.
     const goalOffset =
       yDataKey === "AHT" || yDataKey === "ahtTeam"
         ? null
         : ((yMax - goalValue) / (yMax - yMin)) * 100;
 
-    // For AHT: between 5:30 and 6:30 = green, outside = red.
     let computedHighOffset, computedLowOffset;
     if (yDataKey === "AHT" || yDataKey === "ahtTeam") {
       const fixedMin = fixedAHTDomain[0];
@@ -212,7 +201,6 @@ const LineChartTime = forwardRef(
         100;
     }
 
-    // For AHT, format ticks as mm:ss.
     const formatTimeTick = (value) => {
       const minutes = Math.floor(value);
       const seconds = Math.round((value - minutes) * 60);
@@ -263,7 +251,6 @@ const LineChartTime = forwardRef(
     const shouldRotateLabels = chartData.length > 7;
     const shouldPadLabels = chartData.length > 7;
 
-    // Build the legend payload conditionally.
     const legendPayload =
       yDataKey === "AHT" || yDataKey === "ahtTeam"
         ? [
@@ -327,7 +314,6 @@ const LineChartTime = forwardRef(
                 bottom: 0,
               }}
             >
-              {/* Gradient definitions for the line stroke */}
               <defs>
                 <filter
                   id="shadow"
@@ -504,7 +490,6 @@ const LineChartTime = forwardRef(
                 }}
               />
 
-              {/* Render the line with a gradient stroke and custom black dots */}
               <Line
                 dataKey={yDataKey}
                 stroke="url(#lineColor)"
@@ -527,7 +512,6 @@ const LineChartTime = forwardRef(
                 alwaysShow
               />
 
-              {/* Reference Lines for non-AHT charts */}
               {yDataKey === "mtdScore" && (
                 <ReferenceLine
                   y={parseFloat(averageScoreGoal.replace("%", ""))}
@@ -549,7 +533,6 @@ const LineChartTime = forwardRef(
                   strokeWidth={4}
                 />
               )}
-              {/* For AHT, display two reference lines at 5:30 and 6:30 */}
             </ComposedChart>
           </ResponsiveContainer>
         </div>

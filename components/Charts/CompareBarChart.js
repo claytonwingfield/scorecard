@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useMemo, forwardRef, useEffect, useState } from "react";
+import React, { useMemo, forwardRef } from "react";
 import {
   ComposedChart,
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  Cell,
   LabelList,
   ResponsiveContainer,
 } from "recharts";
-import CustomTooltip from "./CustomTooltip";
+
 import { useTheme } from "next-themes";
 
 const averageScoreGoal = "95%";
@@ -34,7 +30,7 @@ const CompareBarChart = forwardRef(
     {
       data,
       xDataKey,
-      // Instead of a single yDataKey, we know our data objects have both mainValue and comparedValue
+
       managers,
       comparisonManager,
     },
@@ -43,9 +39,7 @@ const CompareBarChart = forwardRef(
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
-    // Here you might still want to sort or do minimal processing.
     const chartData = useMemo(() => {
-      // Assuming data is already numeric in mainValue and comparedValue
       return data.sort((a, b) => {
         const keyA = (a[xDataKey]?.toString() ?? "").toLowerCase();
         const keyB = (b[xDataKey]?.toString() ?? "").toLowerCase();
@@ -62,7 +56,7 @@ const CompareBarChart = forwardRef(
       const min = Math.min(...values);
       const max = Math.max(...values);
       const range = max - min;
-      // For Average Score, use a lower padding factor to zoom in more.
+
       const paddingFactor =
         chartData[0]?.metric === "Average Score" ? 0.5 : 0.1;
 
@@ -72,9 +66,8 @@ const CompareBarChart = forwardRef(
 
     const computedTicks = useMemo(() => {
       const [min, max] = xDomain;
-      // Check if the metric is "Average Score"
+
       if (chartData[0]?.metric === "Average Score") {
-        // If range is zero or very narrow, force a default range.
         if (min === max) {
           const val = Math.floor(min);
           return [val - 1, val, val + 1];

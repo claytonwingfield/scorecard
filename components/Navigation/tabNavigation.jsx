@@ -3,7 +3,6 @@ import React from "react";
 export default function TabNavigation({ activeTab, onTabChange }) {
   return (
     <div className="flex justify-center ">
-      {/* Increase the container width here */}
       <div className="mt-4 px-4  lg:py-0 lg:pt-4 w-full max-w-xl ">
         <div className="relative dark:bg-darkBg dark:rounded-lg ">
           <div
@@ -11,7 +10,7 @@ export default function TabNavigation({ activeTab, onTabChange }) {
               activeTab === "overview"
                 ? "translate-x-0"
                 : activeTab === "agent"
-                ? "translate-x-full" // Adjust these values as necessary
+                ? "translate-x-full"
                 : "translate-x-[200%]"
             }`}
           />

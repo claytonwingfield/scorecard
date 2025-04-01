@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-// Custom hook that encapsulates the state & labels
 export default function useDisplayOptions() {
-  // 1) The same default state
   const [displayOptions, setDisplayOptions] = useState({
     showCharts: false,
     resizableTables: false,
@@ -10,7 +8,6 @@ export default function useDisplayOptions() {
     showColumnVisibility: false,
   });
 
-  // 2) The same label map
   const displayOptionLabels = {
     showCharts: "Showing Charts",
     resizableTables: "Resizable Tables",
@@ -18,7 +15,6 @@ export default function useDisplayOptions() {
     showColumnVisibility: "Hide Column Controls",
   };
 
-  // 3) Return them
   return {
     displayOptions,
     setDisplayOptions,

@@ -1,5 +1,3 @@
-// components/Sorting/Layout/Hooks/useAgentLayout.js
-
 import { useMemo } from "react";
 
 export default function useAgentLayout({
@@ -11,16 +9,13 @@ export default function useAgentLayout({
   const visibleAgentLayout = useMemo(() => {
     if (!originalAgentLayout) return [];
 
-    // 1) Filter out hidden tables
     let userLayout = originalAgentLayout.filter(
       (item) => !hiddenTables.includes(item.i)
     );
 
-    // 2) If "showCharts" => chartLayout
     if (displayOptions.showCharts) {
       return chartLayout;
     } else {
-      // 3) Revert sizes to original
       userLayout = userLayout.map((item) => {
         const originalItem = originalAgentLayout.find((o) => o.i === item.i);
         return {

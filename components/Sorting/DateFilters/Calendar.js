@@ -106,10 +106,9 @@ export default function Calendar({
     }
   }, [fromDate, toDate, setFromDate, setToDate, setSelectedDateRange]);
   useEffect(() => {
-    // If fromDate and toDate match “start-of-month to today,” set MTD
     if (fromDate && toDate) {
       const now = new Date();
-      // Zero out the time to compare just dates
+
       now.setHours(0, 0, 0, 0);
 
       const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -124,12 +123,9 @@ export default function Calendar({
       ) {
         setSelectedDateRange("MTD");
       } else {
-        // If it's some other range, set "custom" so that none of the preset buttons are active
         setSelectedDateRange("custom");
       }
-    }
-    // Else if either is null, do nothing or set "custom"
-    else {
+    } else {
       setSelectedDateRange("custom");
     }
   }, [fromDate, toDate, setSelectedDateRange]);

@@ -45,7 +45,6 @@ export default function MobileDropDownMenu({
       {isOpen && (
         <div className="flex flex-col space-y-1 ml-2 divide-y divide-lovesGray">
           {subPages.map((subPage) => {
-            // If we detect a nested dropdown, go deeper
             if (subPage.isDropdown && subPage.subPages?.length > 0) {
               return (
                 <MobileDropDownMenu
@@ -57,7 +56,6 @@ export default function MobileDropDownMenu({
                 />
               );
             } else {
-              // Otherwise it's a link
               return (
                 <Link
                   key={subPage.name}

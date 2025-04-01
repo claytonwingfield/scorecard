@@ -1,4 +1,3 @@
-// useDateRange.js
 import { useState } from "react";
 
 function getStartOfMonth() {
@@ -7,7 +6,6 @@ function getStartOfMonth() {
 }
 
 export function useDateRange() {
-  // Default: fromDate = first day of this month, toDate = today
   const [fromDate, setFromDate] = useState(() => getStartOfMonth());
   const [toDate, setToDate] = useState(() => new Date());
   const [currentDate, setCurrentDate] = useState(new Date());

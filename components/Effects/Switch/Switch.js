@@ -1,5 +1,3 @@
-// Effects/Switch/Switch.js
-
 import { forwardRef } from "react";
 
 export const Root = forwardRef(

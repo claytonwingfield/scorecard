@@ -11,18 +11,15 @@ export default function useOverviewLayout({
   const visibleLayout = useMemo(() => {
     if (!originalLayout) return [];
 
-    // 1) Filter out hidden tables
     let userLayout = originalLayout.filter(
       (item) => !hiddenTables.includes(item.i)
     );
 
     let finalLayout = userLayout;
 
-    // 2) If "showCharts" is true, we return the chart layout
     if (displayOptions.showCharts) {
       return chartLayout;
     } else {
-      // 3) Revert sizes to original
       finalLayout = userLayout.map((item) => {
         const originalItem = originalLayout.find((o) => o.i === item.i);
         return {
@@ -33,7 +30,6 @@ export default function useOverviewLayout({
       });
     }
 
-    // 4) If Supervisor is hidden => expand
     const isSupervisorHidden = !finalLayout.some(
       (item) => item.i === "ScoreCardTable"
     );

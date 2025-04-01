@@ -1,9 +1,5 @@
-// components/Tables/Hooks/useDisableResizableTables.js
 import { useCallback } from "react";
 
-/**
- * Custom hook for disabling resizable tables and removing that filter from activeFilters.
- */
 export default function useDisableResizableTables({
   setDisplayOptions,
   setActiveFilters,

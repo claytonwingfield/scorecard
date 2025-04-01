@@ -11,7 +11,6 @@ export default function useDisplayOptionChange({
 }) {
   const handleDisplayOptionChange = useCallback(
     (option, isChecked) => {
-      // Update local state
       setDisplayOptions((prev) => ({ ...prev, [option]: isChecked }));
 
       if (isChecked) {

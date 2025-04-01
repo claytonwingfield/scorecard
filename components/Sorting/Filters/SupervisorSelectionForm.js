@@ -22,13 +22,12 @@ export default function SupervisorSelectionForm({}) {
   const [selectedSupervisor, setSelectedSupervisor] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dataSets = customerServiceData.dataSets;
-  // Date range state
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [selectedDateRange, setSelectedDateRange] = useState(null);
 
-  // Build unique supervisor list from dataSets
   const supervisorList = useMemo(() => {
     const supervisorsSet = new Set();
     dataSets.forEach((set) => {
@@ -42,7 +41,6 @@ export default function SupervisorSelectionForm({}) {
     }));
   }, [dataSets]);
 
-  // Utility to format a date as YYYY-MM-DD
   const formatDateParam = (date) =>
     date ? date.toISOString().split("T")[0] : "";
 
@@ -60,7 +58,7 @@ export default function SupervisorSelectionForm({}) {
 
   const handleSearch = () => {
     if (!selectedSupervisor) return;
-    // Build activeFilters with the selected supervisor
+
     const activeFilters = [
       { type: "Supervisor", label: selectedSupervisor.value },
     ];
@@ -99,7 +97,6 @@ export default function SupervisorSelectionForm({}) {
           </h1>
           <div className="mt-4 w-full max-w-full mx-auto flex justify-center items-center">
             <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack">
-              {/* Supervisor Selection Section */}
               <Disclosure defaultOpen>
                 {({ open }) => (
                   <div className="w-full md:w-1/2 lg:pr-12">
@@ -224,7 +221,7 @@ export default function SupervisorSelectionForm({}) {
                   </div>
                 )}
               </Disclosure>
-              {/* Date Range Section */}
+
               <Disclosure defaultOpen>
                 {({ open, close }) => (
                   <div className="w-full md:w-1/2 lg:mt-0 mt-8">

@@ -50,7 +50,6 @@ const BarChart = forwardRef(
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
-    // Track if viewport is mobile
     const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
       const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -59,9 +58,7 @@ const BarChart = forwardRef(
       return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    // Process & optionally group data
     const chartData = useMemo(() => {
-      // Convert e.g. "95%" or "6:30" to numeric for chart
       const processedData = data.map((item) => ({
         ...item,
         [yDataKey]: parseFloat(
@@ -81,7 +78,7 @@ const BarChart = forwardRef(
             groupedData[groupKey].count += 1;
           }
         });
-        // Average the grouped metric
+
         finalData = Object.values(groupedData).map((item) => ({
           [xDataKey]: item[groupByKey],
           [yDataKey]: item[yDataKey] / item.count,
@@ -93,7 +90,6 @@ const BarChart = forwardRef(
         }));
       }
 
-      // Sort data so categories appear in alphabetical (or numeric) order
       return finalData.sort((a, b) => {
         const keyA = (a[xDataKey]?.toString() ?? "").toLowerCase();
         const keyB = (b[xDataKey]?.toString() ?? "").toLowerCase();
@@ -101,7 +97,6 @@ const BarChart = forwardRef(
       });
     }, [data, xDataKey, yDataKey, groupByKey, disableGrouping]);
 
-    // For custom Y ticks
     function computeTicks(data, yKey) {
       if (!data.length) return [];
       const values = data.map((d) => d[yKey]);
@@ -124,7 +119,6 @@ const BarChart = forwardRef(
       return ticks;
     }
 
-    // For dynamic coloring: green if above (or in) goal, red if out of goal
     const getBarFill = (entry) => {
       let goalValue;
       if (yDataKey === "mtdScore") {
@@ -147,14 +141,12 @@ const BarChart = forwardRef(
       return "#FF0000";
     };
 
-    // For the average line in tooltip
     const average = useMemo(() => {
       if (!chartData.length) return "0.00";
       const total = chartData.reduce((sum, item) => sum + item[yDataKey], 0);
       return (total / chartData.length).toFixed(2);
     }, [chartData, yDataKey]);
 
-    // For the reference line
     const yValues = chartData.map((item) => item[yDataKey]);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
@@ -170,7 +162,7 @@ const BarChart = forwardRef(
       const [low, high] = averageHandleTimeGoal.split(" - ");
       const lowVal = parseFloat(low.replace(":", "."));
       const highVal = parseFloat(high.replace(":", "."));
-      goalValue = (lowVal + highVal) / 2; // approximate midpoint
+      goalValue = (lowVal + highVal) / 2;
     }
 
     const goalOffset = ((yMax - goalValue) / (yMax - yMin)) * 100;
@@ -199,7 +191,6 @@ const BarChart = forwardRef(
       );
     };
 
-    // Custom Y-Axis Tick
     const CustomYAxisTick = ({ x, y, payload, isDarkMode }) => {
       return (
         <text
@@ -216,12 +207,9 @@ const BarChart = forwardRef(
       );
     };
 
-    // If you want the same “filter out Goal: when isMobile” behavior as your line chart:
     const renderCustomLegend = (props) => {
-      // Recharts passes the “payload” array of legend items
       const { payload } = props;
 
-      // On mobile, remove any items that start with "Goal:"
       const legendPayload = isMobile
         ? payload.filter((entry) => !entry.value.startsWith("Goal:"))
         : payload;
@@ -229,7 +217,6 @@ const BarChart = forwardRef(
       return (
         <div className="flex justify-center items-center space-x-4 font-futura-bold">
           {legendPayload.map((entry, index) => {
-            // Keep your existing logic to style them
             if (entry.value.startsWith("Average:")) {
               return (
                 <div key={`legend-${index}`} className="flex items-center">
@@ -287,7 +274,6 @@ const BarChart = forwardRef(
               entry.value === "Quality" ||
               entry.value === "AHT"
             ) {
-              // The gradient square for the main bar
               return (
                 <div key={`legend-${index}`} className="flex items-center">
                   <div
@@ -302,7 +288,6 @@ const BarChart = forwardRef(
               );
             }
 
-            // Default (for any others)
             return (
               <div key={`legend-${index}`} className="flex items-center">
                 {entry.type === "square" ? (
@@ -344,7 +329,6 @@ const BarChart = forwardRef(
               }}
             >
               <defs>
-                {/* Gradient: color transitions for bars based on goal */}
                 {yDataKey === "AHT" || yDataKey === "ahtTeam" ? (
                   (() => {
                     const [low, high] = averageHandleTimeGoal.split(" - ");
@@ -393,7 +377,6 @@ const BarChart = forwardRef(
                 </filter>
               </defs>
 
-              {/* Grid */}
               <CartesianGrid
                 vertical={false}
                 horizontal={true}
@@ -401,13 +384,11 @@ const BarChart = forwardRef(
                 stroke={isDarkMode ? "#ccc" : "#000"}
               />
 
-              {/* X-Axis */}
               <XAxis
                 dataKey={xDataKey}
                 type="category"
                 stroke={isDarkMode ? "#fff" : "#000"}
                 tick={
-                  // Hide the X axis labels entirely on smaller devices if you prefer
                   isMobile ? (
                     false
                   ) : (
@@ -427,7 +408,6 @@ const BarChart = forwardRef(
                 }
               />
 
-              {/* Y-Axis */}
               <YAxis
                 type="number"
                 allowDecimals={false}
@@ -439,7 +419,6 @@ const BarChart = forwardRef(
                 tick={<CustomYAxisTick isDarkMode={isDarkMode} />}
               />
 
-              {/* Tooltip */}
               <Tooltip
                 content={
                   <CustomTooltip
@@ -458,10 +437,6 @@ const BarChart = forwardRef(
                 labelStyle={{ color: isDarkMode ? "#fff" : "#000" }}
               />
 
-              {/* 
-                Legend with mobile filtering to hide "Goal:" 
-                items for smaller screens, if you want. 
-              */}
               <Legend
                 content={renderCustomLegend}
                 layout="horizontal"
@@ -474,8 +449,6 @@ const BarChart = forwardRef(
                     ? "80px"
                     : "10px",
                 }}
-                // We still define a payload for “Score / Average / Goal,”
-                // but our custom legend can filter out items on mobile if needed.
                 payload={[
                   {
                     value: legendNames[yDataKey] || yDataKey,
@@ -495,7 +468,6 @@ const BarChart = forwardRef(
                 ]}
               />
 
-              {/* Bars */}
               <Bar
                 dataKey={yDataKey}
                 barSize={60}
@@ -510,7 +482,6 @@ const BarChart = forwardRef(
                 ))}
               </Bar>
 
-              {/* ReferenceLine for each metric's goal */}
               {yDataKey === "mtdScore" && (
                 <ReferenceLine
                   y={parseFloat(averageScoreGoal.replace("%", ""))}
@@ -535,12 +506,12 @@ const BarChart = forwardRef(
               {yDataKey === "AHT" && (
                 <>
                   <ReferenceLine
-                    y={parseFloat("5.30")} // Start of range
+                    y={parseFloat("5.30")}
                     stroke="#9dca7e"
                     strokeWidth={4}
                   />
                   <ReferenceLine
-                    y={parseFloat("6.30")} // End of range
+                    y={parseFloat("6.30")}
                     stroke="#9dca7e"
                     strokeWidth={4}
                   />

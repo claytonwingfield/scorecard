@@ -230,19 +230,16 @@ export default function MetricsDashboard({
   const [previousTab, setPreviousTab] = useState(activeTab);
 
   function hasCustomTimeFrame(filters) {
-    // "Date Range" is the type, "MTD" is the default label
     return filters.some((f) => f.type === "Date Range" && f.label !== "MTD");
   }
 
   function hasManagerSupervisorAgent(filters) {
-    // The 'type' field is exactly "Manager", "Supervisor" or "Agent"
     return filters.some((f) =>
       ["Manager", "Supervisor", "Agent"].includes(f.type)
     );
   }
 
   useEffect(() => {
-    // Only run on tab changes
     if (activeTab !== previousTab) {
       if (
         activeTab === "detail" &&
@@ -252,7 +249,7 @@ export default function MetricsDashboard({
         setShowModal(true);
       }
     }
-    setPreviousTab(activeTab); // update for next render
+    setPreviousTab(activeTab);
   }, [activeTab, activeFilters, previousTab]);
 
   const handleKeepFilters = () => {
@@ -262,9 +259,6 @@ export default function MetricsDashboard({
   };
   const handleClearFilters = () => {
     setActiveFilters((prevFilters) => {
-      // 1. Remove Manager, Supervisor, Agent
-      // 2. Remove any Date Range that is NOT MTD
-      // 3. Keep everything else
       const cleanedFilters = prevFilters.filter((f) => {
         const isRoleFilter = ["Manager", "Supervisor", "Agent"].includes(
           f.type
@@ -272,14 +266,9 @@ export default function MetricsDashboard({
         const isDateRange = f.type === "Date Range";
         const isMTD = isDateRange && f.label === "MTD";
 
-        // We want to KEEP the filter if:
-        // - It's NOT a role filter
-        // - If it's a date-range filter, it must be MTD
-        // - Or it's some other type of filter we want to preserve
         return !isRoleFilter && (!isDateRange || isMTD);
       });
 
-      // 4. If we have no Date Range filter at all, add MTD
       const hasMTD = cleanedFilters.some(
         (f) => f.type === "Date Range" && f.label === "MTD"
       );
@@ -290,11 +279,9 @@ export default function MetricsDashboard({
       return cleanedFilters;
     });
 
-    // Close the modal
     setShowModal(false);
   };
 
-  // 4. Switch tabs
   const handleTabChange = (newTab) => {
     setActiveTab(newTab);
   };
@@ -321,7 +308,6 @@ export default function MetricsDashboard({
   if (isLoading) {
     return (
       <>
-        {/* <Header /> */}
         <LoadingAnimation />
       </>
     );
@@ -455,14 +441,12 @@ export default function MetricsDashboard({
                 preventCollision={isMobile}
                 onLayoutChange={handleLayoutChange}
               >
-                {/* handleMeasuredHeightChange */}
                 {renderTablesList(agentTables)}
               </ResponsiveGridLayout>
             </>
           )}
 
           <div className="bg-lovesWhite dark:bg-darkBg px-4 lg:px-8">
-            {/* Modal */}
             {showModal && (
               <DetailModel
                 onKeepFilters={handleKeepFilters}
@@ -471,7 +455,6 @@ export default function MetricsDashboard({
               />
             )}
 
-            {/* Main Content */}
             {activeTab === "detail" && (
               <>
                 <DetailHomeFilters

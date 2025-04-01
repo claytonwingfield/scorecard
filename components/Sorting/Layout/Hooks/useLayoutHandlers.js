@@ -20,13 +20,12 @@ export default function useLayoutHandlers({
     }
   }, [originalLayout, fullLayout, setOriginalLayout]);
 
-  // (B) - If originalAgentLayout is null but fullAgentLayout has items, init:
   useEffect(() => {
     if (!originalAgentLayout && fullAgentLayout.length > 0) {
       setOriginalAgentLayout(JSON.parse(JSON.stringify(fullAgentLayout)));
     }
   }, [originalAgentLayout, fullAgentLayout, setOriginalAgentLayout]);
-  // 1) handleLayoutSelect
+
   const handleLayoutSelect = useCallback(
     (selectedLayout) => {
       setFullLayout(selectedLayout);
@@ -35,7 +34,6 @@ export default function useLayoutHandlers({
     [setFullLayout, setOriginalLayout]
   );
 
-  // 2) handleAgentLayoutSelect
   const handleAgentLayoutSelect = useCallback(
     (selectedLayout) => {
       setFullAgentLayout(selectedLayout);
@@ -44,7 +42,6 @@ export default function useLayoutHandlers({
     [setFullAgentLayout, setOriginalAgentLayout]
   );
 
-  // 3) handleRevertToDefault
   const handleRevertToDefault = useCallback(() => {
     setFullLayout(overviewLayout);
     setOriginalLayout(JSON.parse(JSON.stringify(overviewLayout)));
@@ -56,7 +53,6 @@ export default function useLayoutHandlers({
     disableResizableTables,
   ]);
 
-  // 4) handleRevertAgentToDefault
   const handleRevertAgentToDefault = useCallback(() => {
     setFullAgentLayout(agentLayout);
     setOriginalAgentLayout(JSON.parse(JSON.stringify(agentLayout)));
@@ -68,7 +64,6 @@ export default function useLayoutHandlers({
     disableResizableTables,
   ]);
 
-  // Return them so the component can use them
   return {
     handleLayoutSelect,
     handleAgentLayoutSelect,

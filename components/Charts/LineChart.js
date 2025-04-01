@@ -19,7 +19,6 @@ const adherenceGoal = "88%";
 const qualityGoal = "88%";
 const averageHandleTimeGoal = "5:30 - 6:30";
 
-// Returns goal value (as a string) based on the metric key.
 function getGoalForMetric(yDataKey) {
   if (yDataKey === "mtdScore") return averageScoreGoal;
   if (yDataKey === "adherence") return adherenceGoal;
@@ -51,13 +50,11 @@ const LineChart = forwardRef(
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
-    // Converts a "mm:ss" string into minutes (e.g., "5:30" -> 5.5)
     const convertTimeToMinutes = (timeStr) => {
       const [minutes, seconds] = timeStr.split(":");
       return parseInt(minutes, 10) + parseInt(seconds, 10) / 60;
     };
 
-    // For AHT, we use a fixed domain from 5:00 to 7:00.
     const fixedAHTDomain = [
       convertTimeToMinutes("5:00"),
       convertTimeToMinutes("7:00"),
@@ -140,14 +137,12 @@ const LineChart = forwardRef(
       }
     }
 
-    // For non-AHT charts, force the y-axis domain to include the goal value.
     const yValues = chartData.map((item) => item[yDataKey]);
     const yMin = Math.min(...yValues);
     const yMax = Math.max(...yValues);
 
     let goalValue;
     if (yDataKey === "AHT" || yDataKey === "ahtTeam") {
-      // For AHT, goals are 5:30 and 6:30.
       goalValue = null;
     } else if (yDataKey === "mtdScore") {
       goalValue = parseFloat(averageScoreGoal.replace("%", ""));
@@ -165,7 +160,6 @@ const LineChart = forwardRef(
             Math.ceil(Math.max(yMax, goalValue)),
           ];
 
-    // For AHT, compute fixed gradient offsets.
     let computedHighOffset, computedLowOffset;
     if (yDataKey === "AHT" || yDataKey === "ahtTeam") {
       const fixedMin = fixedAHTDomain[0];
@@ -177,13 +171,12 @@ const LineChart = forwardRef(
         ((fixedMax - convertTimeToMinutes("5:30")) / (fixedMax - fixedMin)) *
         100;
     }
-    // For non-AHT charts, compute goalOffset (used in gradient).
+
     const goalOffset =
       yDataKey === "AHT" || yDataKey === "ahtTeam"
         ? null
         : ((yMax - goalValue) / (yMax - yMin)) * 100;
 
-    // For AHT, format ticks as mm:ss.
     const formatTimeTick = (value) => {
       const minutes = Math.floor(value);
       const seconds = Math.round((value - minutes) * 60);
@@ -234,7 +227,6 @@ const LineChart = forwardRef(
     const shouldRotateLabels = chartData.length > 7;
     const shouldPadLabels = chartData.length > 7;
 
-    // Build the legend payload conditionally.
     const legendPayload =
       yDataKey === "AHT" || yDataKey === "ahtTeam"
         ? [
@@ -288,7 +280,6 @@ const LineChart = forwardRef(
               <defs>
                 {yDataKey === "AHT" || yDataKey === "ahtTeam" ? (
                   <linearGradient id="areaColor" x1="0" y1="0" x2="0" y2="1">
-                    {/* Above 6:30 and below 5:30 are red; in between is green */}
                     <stop offset="0%" stopColor="#FF0000" />
                     <stop
                       offset={`${computedHighOffset}%`}
@@ -460,7 +451,6 @@ const LineChart = forwardRef(
                 fillOpacity={1}
               />
 
-              {/* Reference Lines for non-AHT charts */}
               {yDataKey === "mtdScore" && (
                 <ReferenceLine
                   y={parseFloat(averageScoreGoal.replace("%", ""))}
@@ -482,7 +472,7 @@ const LineChart = forwardRef(
                   strokeWidth={4}
                 />
               )}
-              {/* For AHT, display two reference lines */}
+
               {(yDataKey === "AHT" || yDataKey === "ahtTeam") && (
                 <>
                   <ReferenceLine

@@ -41,7 +41,6 @@ export default function Header() {
     return "/fallback-image.png";
   };
 
-  // Helper to get the alt text for the logo image
   const getLogoAlt = (logo) => {
     return logo.company || "Logo";
   };
@@ -100,10 +99,8 @@ export default function Header() {
         />
       </Head>
 
-      {/* Header container */}
       <header className="bg-lovesWhite dark:bg-darkBg dark:shadow-darkLightGray dark:shadow-sm shadow-lg w-full">
         <nav className="flex items-center justify-between lg:px-6 px-3 py-4 w-full">
-          {/* Logo + Current Page Title */}
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center p-1">
               <Image
@@ -117,7 +114,7 @@ export default function Header() {
               {currentPage}
             </h1>
           </div>
-          {/* DESKTOP NAV (md+) */}
+
           <div className="hidden md:flex items-center space-x-6 ml-auto">
             {pages.map((page) => (
               <div key={page.name}>
@@ -146,7 +143,6 @@ export default function Header() {
           </div>
 
           <div className="flex items-center space-x-5 md:ml-3">
-            {/* MOBILE TOGGLE BUTTON */}
             <button
               className="md:hidden text-lovesBlack dark:text-lovesWhite flex items-center h-10"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -154,7 +150,6 @@ export default function Header() {
               {mobileHamburgerIcon}
             </button>
 
-            {/* DARK-MODE SWITCH */}
             <Switch.Root
               className="flex items-center h-10 lg:mb-0 mb-3"
               checked={theme === "dark"}
@@ -171,7 +166,6 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* MOBILE NAV DROPDOWN */}
         {isMenuOpen && (
           <div className="z-50 md:hidden bg-lovesWhite dark:bg-darkBg shadow-lg w-full px-4 pb-4 space-y-2 rounded-lg">
             {pages.map((page) => (

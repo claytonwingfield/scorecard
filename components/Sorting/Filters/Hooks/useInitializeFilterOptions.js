@@ -1,4 +1,3 @@
-// components/Sorting/Filters/Hooks/useInitializeFilterOptions.js
 import { useEffect } from "react";
 
 export default function useInitializeFilterOptions({

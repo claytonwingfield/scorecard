@@ -19,7 +19,7 @@ export default function useNavigation() {
       name: "Dashboard",
       path: "/dashboard/santo-domingo",
     },
-    // Default Scorecard dropdown (non-DR)
+
     {
       name: "Scorecard",
       isDropdown: true,
@@ -162,7 +162,7 @@ export default function useNavigation() {
         },
       ],
     },
-    // DR Scorecard dropdown (DR version)
+
     {
       name: "Scorecard",
       isDropdown: true,
@@ -226,9 +226,7 @@ export default function useNavigation() {
     },
   ];
 
-  // Filter navigation items
   const filteredPages = pages.filter((page) => {
-    // For Scorecard dropdowns, use existing logic.
     if (page.name === "Scorecard") {
       if (router.pathname === "/") {
         return false;
@@ -241,26 +239,24 @@ export default function useNavigation() {
       }
       return page.isDr !== true;
     }
-    // For Dashboard link
+
     if (page.name === "Dashboard") {
-      // Hide Dashboard link on Home page
       if (router.pathname === "/") {
         return false;
       }
-      // For Santo Domingo routes, show the Dashboard link that routes to /dashboard/santo-domingo
+
       if (
         router.pathname.startsWith("/dashboard/santo-domingo") ||
         router.pathname.startsWith("/santo-domingo")
       ) {
         return page.path === "/dashboard/santo-domingo";
       }
-      // For all other routes, show the Oklahoma City Dashboard link
+
       return page.path === "/dashboard/oklahoma-city";
     }
     return true;
   });
 
-  // Flatten navigation for current page detection.
   const allPages = filteredPages.flatMap((page) => {
     if (page.isDropdown && page.subPages) {
       return page.subPages.flatMap((sub) =>
@@ -270,14 +266,12 @@ export default function useNavigation() {
     return page;
   });
 
-  // Optional: Define custom names for dashboard routes.
   const dashboardNames = {
     "/dashboard/oklahoma-city": "Oklahoma City Dashboard",
     "/dashboard/santo-domingo": "Santo Domingo Dashboard",
   };
 
   useEffect(() => {
-    // Check if current route matches one of the dashboard routes.
     if (dashboardNames[router.pathname]) {
       setCurrentPage(dashboardNames[router.pathname]);
       return;

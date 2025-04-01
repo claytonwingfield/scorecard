@@ -6,6 +6,7 @@
   "scripts": {
     "build": "strapi build",
     "console": "strapi console",
+    "seed": "node ./scripts/seed.js",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
     "develop": "strapi develop",

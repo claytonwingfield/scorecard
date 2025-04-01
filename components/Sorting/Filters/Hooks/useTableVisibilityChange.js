@@ -1,5 +1,3 @@
-// components/Sorting/Filters/Hooks/useTableVisibilityChange.js
-
 import { useCallback } from "react";
 
 export default function useTableVisibilityChange({
@@ -46,7 +44,6 @@ export default function useTableVisibilityChange({
           setSelectedVisibilityOption((prev) => [...prev, optionValue]);
           setHiddenTables((prev) => [...prev, optionValue]);
 
-          // Look up label from the correct array (overview vs. agent)
           const tableLabel = activeVisibilityArray.find(
             (opt) => opt.value === optionValue
           )?.label;
@@ -87,7 +84,6 @@ export default function useTableVisibilityChange({
             )
           );
 
-          // If we're unchecking the last hidden table => revert to Show All
           if (hiddenTables.length === 1 && hiddenTables[0] === optionValue) {
             setSelectedVisibilityOption(["All"]);
             setActiveFilters((prev) => [

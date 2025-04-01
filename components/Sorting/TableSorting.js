@@ -59,26 +59,22 @@ export default function TableSorting({
   const isDateFilterOpen = openDropdown === "date";
   const isFilterOpen = openDropdown === "filters";
 
-  // --- 1) Build Manager list from allTeamData
   const managerList = useMemo(() => {
     const uniqueManagers = [...new Set(allTeamData.map((d) => d.manager))];
     return uniqueManagers.map((m) => ({ value: m, label: m }));
   }, [allTeamData]);
 
-  // 2) Filter data by the selected manager(s)
   const filteredByManagers = useMemo(() => {
     const selectedManagers = activeFilters
       .filter((f) => f.type === "Manager")
       .map((f) => f.label);
 
-    // If no manager is selected, allow all data
     if (selectedManagers.length === 0) {
       return allTeamData;
     }
     return allTeamData.filter((row) => selectedManagers.includes(row.manager));
   }, [allTeamData, activeFilters]);
 
-  // 3) Build supervisor list from manager-filtered data
   const supervisorList = useMemo(() => {
     const uniqueSupervisors = [
       ...new Set(filteredByManagers.map((d) => d.supervisor)),
@@ -86,7 +82,6 @@ export default function TableSorting({
     return uniqueSupervisors.map((s) => ({ value: s, label: s }));
   }, [filteredByManagers]);
 
-  // 4) Filter by the selected supervisor(s)
   const filteredByManagersAndSupervisors = useMemo(() => {
     const selectedSupervisors = activeFilters
       .filter((f) => f.type === "Supervisor")
@@ -101,7 +96,6 @@ export default function TableSorting({
     );
   }, [filteredByManagers, activeFilters]);
 
-  // 5) Build agent list from manager+supervisor-filtered data
   const agentList = useMemo(() => {
     const uniqueAgents = [
       ...new Set(filteredByManagersAndSupervisors.map((d) => d.agent)),
@@ -113,7 +107,7 @@ export default function TableSorting({
     {
       id: "managerFilter",
       name: "Manager",
-      // Convert your managerList to { type: "Manager", value: "...", label: "..." }
+
       options: managerList.map((mgr) => ({
         type: "Manager",
         value: mgr.value,
@@ -209,7 +203,6 @@ export default function TableSorting({
         <FiltersDropdown
           isOpen={isFilterOpen}
           filtersDropdownRef={filtersDropdownRef}
-          // filterOptions={filterOptions}
           activeFilters={activeFilters}
           handleFilterChange={handleFilterChange}
           filterOptions={dynamicFilterOptions}

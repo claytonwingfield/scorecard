@@ -1,5 +1,3 @@
-// components/Sorting/Filters/Hooks/useRemoveFilter.js
-
 import { useCallback } from "react";
 
 export default function useRemoveFilter({
@@ -10,7 +8,6 @@ export default function useRemoveFilter({
 }) {
   const removeFilter = useCallback(
     (filterToRemove) => {
-      // Remove the filter from activeFilters
       setActiveFilters((prevFilters) =>
         prevFilters.filter((filter) => {
           const isSameType = filter.type === filterToRemove.type;
@@ -23,7 +20,6 @@ export default function useRemoveFilter({
         })
       );
 
-      // Additional logic for certain filter types
       if (filterToRemove.type === "Column Visibility") {
         const { table, label } = filterToRemove;
         if (label === "Show All" || label === "All Columns Hidden") {

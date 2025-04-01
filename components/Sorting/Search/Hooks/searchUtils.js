@@ -1,4 +1,3 @@
-// utils/searchUtils.js
 export function performSearch({
   activeFilters,
   fromDate,
@@ -8,10 +7,8 @@ export function performSearch({
   router,
   setIsLoading,
 }) {
-  // Set loading state
   setIsLoading(true);
 
-  // Utility to format a date as YYYY-MM-DD
   const dateToParam = (date) =>
     date ? date.toISOString().split("T")[0] : undefined;
 
@@ -30,9 +27,7 @@ export function performSearch({
     to: dateToParam(toDate),
   };
 
-  // Delay execution by 5 seconds (if needed)
   setTimeout(() => {
-    // 1) If Agent(s) exist, agent is top priority
     if (selectedAgents.length > 0) {
       router.push({
         pathname: "/customer-service/daily-metrics/agent",
@@ -47,7 +42,6 @@ export function performSearch({
       return;
     }
 
-    // 2) If only a Supervisor is chosen (no Manager, no Agent)
     if (
       selectedSupervisors.length > 0 &&
       selectedManagers.length === 0 &&
@@ -69,7 +63,7 @@ export function performSearch({
         query: {
           ...dateQuery,
           dataSets: JSON.stringify(dataSets),
-          supervisor: sup, // Now singular!
+          supervisor: sup,
           managers: managerOfSupervisor,
           agents: allAgentsUnderSupervisor.join(","),
         },
@@ -77,16 +71,14 @@ export function performSearch({
       return;
     }
 
-    // 3) If Manager + Supervisor are chosen (and no Agent)
     if (
       selectedSupervisors.length > 0 &&
       selectedManagers.length > 0 &&
       selectedAgents.length === 0
     ) {
-      // For simplicity, assume only one manager & one supervisor are picked.
       const mgr = selectedManagers[0];
       const sup = selectedSupervisors[0];
-      // Filter rows matching that manager and supervisor
+
       const rows = allTeamData.filter(
         (d) => d.manager === mgr && d.supervisor === sup
       );
@@ -94,13 +86,12 @@ export function performSearch({
         ...new Set(rows.map((r) => r.agent).filter(Boolean)),
       ];
 
-      // Corrected branch 3
       router.push({
         pathname: "/customer-service/daily-metrics/supervisor",
         query: {
           ...dateQuery,
           dataSets: JSON.stringify(dataSets),
-          supervisor: sup, // Changed here
+          supervisor: sup,
           managers: mgr,
           agents: agentsUnderManagerAndSupervisor.join(","),
         },
@@ -109,7 +100,6 @@ export function performSearch({
       return;
     }
 
-    // 4) If only Manager is chosen => gather ALL supervisors & agents under that manager
     if (selectedManagers.length > 0 && selectedSupervisors.length === 0) {
       const mgr = selectedManagers[0];
       const rowsForManager = allTeamData.filter((d) => d.manager === mgr);
@@ -134,7 +124,6 @@ export function performSearch({
       return;
     }
 
-    // 5) Fallback: If Manager + Supervisor are chosen but no Agent
     if (selectedManagers.length > 0) {
       router.push({
         pathname: "/customer-service/daily-metrics/manager",
@@ -148,7 +137,6 @@ export function performSearch({
       return;
     }
 
-    // Otherwise, no valid filters have been selected.
     alert("Please select a Manager, Supervisor, or Agent before searching.");
   }, 5000);
 }

@@ -7,13 +7,12 @@ const CustomTooltip = ({
   average,
   goal,
   isDarkMode,
-  xDataKey, // added prop
+  xDataKey,
 }) => {
   if (!active || !payload?.length) {
     return null;
   }
 
-  // If the xDataKey is "date", show "Date:" instead of "Name:"
   const labelTitle = xDataKey === "date" ? "Date" : "Name";
 
   return (

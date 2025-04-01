@@ -12,17 +12,14 @@ export default function DisplayOptions({
   handleTableVisibilityChange,
   activeTab,
 }) {
-  // 1) Returns the correct set of visibility options (overview vs. agent)
   const getActiveVisibilityOptions = () => {
     return activeTab === "agent"
       ? agentTableVisibilityOptions
       : tableVisibilityOptions;
   };
 
-  // 2) A single “show all” function that uses whichever set of options is active
   const handleShowAll = () => {
     if (!selectedVisibilityOption.includes("All")) {
-      // If we’re not currently showing all, then switch to All
       setSelectedVisibilityOption(["All"]);
       getActiveVisibilityOptions()
         .filter((option) => option.value !== "All")
@@ -31,24 +28,19 @@ export default function DisplayOptions({
         });
       handleTableVisibilityChange("All", true);
     } else {
-      // If we already have “All,” then clear it
       setSelectedVisibilityOption([]);
       handleTableVisibilityChange("All", false);
     }
   };
 
-  // 3) Toggle a single option on/off
   const toggleOption = (optionValue) => {
     if (selectedVisibilityOption.includes(optionValue)) {
-      // Turn off this option
       setSelectedVisibilityOption(
         selectedVisibilityOption.filter((val) => val !== optionValue)
       );
       handleTableVisibilityChange(optionValue, false);
     } else {
-      // Turn on this option
       if (selectedVisibilityOption.includes("All")) {
-        // If “All” was selected, turn that off first
         setSelectedVisibilityOption([optionValue]);
         handleTableVisibilityChange("All", false);
         handleTableVisibilityChange(optionValue, true);
@@ -59,8 +51,6 @@ export default function DisplayOptions({
     }
   };
 
-  // 4) Compute the text for the Listbox button, depending on activeTab
-  //    But we can unify it—just look up from the correct array:
   const isShowAll = selectedVisibilityOption.includes("All");
   const getDisplayTextForActiveTab = () => {
     const activeOptions = getActiveVisibilityOptions();
@@ -79,7 +69,6 @@ export default function DisplayOptions({
     return "Multiple Tables Hidden";
   };
 
-  // 5) Ensure “All” is selected on initial load if we start empty
   useEffect(() => {
     if (selectedVisibilityOption.length === 0) {
       setSelectedVisibilityOption(["All"]);
@@ -91,7 +80,6 @@ export default function DisplayOptions({
     handleTableVisibilityChange,
   ]);
 
-  // 6) Render
   return (
     <div className="space-y-4">
       <div>
@@ -122,7 +110,6 @@ export default function DisplayOptions({
             </Listbox.Button>
 
             <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkLightGray shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
-              {/* “Show All” Option */}
               <Listbox.Option
                 key="All"
                 value="All"
@@ -150,7 +137,6 @@ export default function DisplayOptions({
 
               <div className="border-t border-lovesGray my-1"></div>
 
-              {/* Loop through whichever array is active */}
               {getActiveVisibilityOptions()
                 .filter((option) => option.value !== "All")
                 .map((option) => (
