@@ -13,12 +13,13 @@ export default function HomeSelection() {
   const locations = data?.locations || [];
 
   const getBackgroundUrl = (location) => {
+    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
     if (
       location.background &&
       Array.isArray(location.background) &&
       location.background.length > 0
     ) {
-      return `http://172.26.132.93:1337${location.background[0].url}`;
+      return `${baseUrl}${location.background[0].url}`;
     }
     return "/fallback.jpg";
   };

@@ -103,6 +103,30 @@ const GET_LOGO = gql`
     }
   }
 `;
+
+const GET_NAVIGATION = gql`
+  query Navigation {
+    nav {
+      NavigationItem {
+        name
+        path
+        isDropdown
+        isDominicanRepublic
+        headerName
+        subPages {
+          name
+          path
+          headerName
+          extraSubPages {
+            name
+            path
+            headerName
+          }
+        }
+      }
+    }
+  }
+`;
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
@@ -110,4 +134,5 @@ export {
   GET_ALL_DEPARTMENTS,
   GET_ALL_LOCATIONS,
   GET_LOGO,
+  GET_NAVIGATION,
 };

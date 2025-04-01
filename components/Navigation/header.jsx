@@ -28,6 +28,7 @@ export default function Header() {
   if (!data || !data.logo) return <p>No logo data available</p>;
 
   const getLogoUrl = (logo) => {
+    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_BASE_URL;
     if (
       logo.image &&
       Array.isArray(logo.image) &&
@@ -36,7 +37,7 @@ export default function Header() {
     ) {
       return logo.image[0].url.startsWith("http")
         ? logo.image[0].url
-        : `http://172.26.132.93:1337${logo.image[0].url}`;
+        : `${baseUrl}${logo.image[0].url}`;
     }
     return "/fallback-image.png";
   };

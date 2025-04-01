@@ -1,270 +1,74 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useQuery } from "@apollo/client";
+import { GET_NAVIGATION } from "@/graphql/queries";
 
 export default function useNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("Home");
+  const [navPages, setNavPages] = useState([]);
   const router = useRouter();
 
-  const pages = [
-    {
-      name: "Home",
-      path: "/",
-    },
-    {
-      name: "Dashboard",
-      path: "/dashboard/oklahoma-city",
-    },
-    {
-      name: "Dashboard",
-      path: "/dashboard/santo-domingo",
-    },
+  const { data, loading, error } = useQuery(GET_NAVIGATION);
 
-    {
-      name: "Scorecard",
-      isDropdown: true,
-      isDr: false,
-      subPages: [
-        {
-          name: "Help Desk",
-          path: "/help-desk/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-        {
-          name: "Customer Service",
-          path: "/customer-service/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-        {
-          name: "Electronic Dispatch",
-          path: "/electronic-dispatch/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-        {
-          name: "Written Communication",
-          path: "/written-communication/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-        {
-          name: "Resolutions",
-          path: "/resolutions/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-      ],
-    },
+  const transformNavigationItem = (item) => {
+    const newItem = { ...item };
 
-    {
-      name: "Scorecard",
-      isDropdown: true,
-      isDr: true,
-      subPages: [
-        {
-          name: "Help Desk",
-          path: "/santo-domingo/help-desk/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/santo-domingo/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/santo-domingo/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/santo-domingo/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/santo-domingo/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-        {
-          name: "Customer Service",
-          path: "/santo-domingo/customer-service/daily-metrics",
-          isDropdown: true,
-          subPages: [
-            {
-              name: "Scorecard",
-              path: "/santo-domingo/customer-service/daily-metrics",
-              headerName: "Customer Service",
-            },
-            {
-              name: "Manager",
-              path: "/santo-domingo/customer-service/daily-metrics/manager",
-              headerName: "CS Manager",
-            },
-            {
-              name: "Supervisor",
-              path: "/santo-domingo/customer-service/daily-metrics/supervisor",
-              headerName: "CS Supervisor",
-            },
-            {
-              name: "Agent",
-              path: "/santo-domingo/customer-service/daily-metrics/agent",
-              headerName: "CS Agent",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+    if (item.extraSubPages && item.extraSubPages.length > 0) {
+      newItem.subPages = item.extraSubPages.map(transformNavigationItem);
+      newItem.isDropdown = true;
+    } else if (item.subPages && item.subPages.length > 0) {
+      newItem.subPages = item.subPages.map(transformNavigationItem);
+    } else {
+      newItem.subPages = [];
+    }
+    return newItem;
+  };
 
-  const filteredPages = pages.filter((page) => {
+  useEffect(() => {
+    if (data && data.nav && data.nav.NavigationItem) {
+      const transformedPages = data.nav.NavigationItem.map(
+        transformNavigationItem
+      );
+      setNavPages(transformedPages);
+    }
+  }, [data]);
+
+  const filteredPages = navPages.filter((page) => {
     if (page.name === "Scorecard") {
-      if (router.pathname === "/") {
-        return false;
-      }
+      if (router.pathname === "/") return false;
+
       if (
         router.pathname.startsWith("/dashboard/santo-domingo") ||
         router.pathname.startsWith("/santo-domingo")
       ) {
-        return page.isDr === true;
+        return page.isDominicanRepublic === true;
       }
-      return page.isDr !== true;
+      return page.isDominicanRepublic !== true;
     }
-
     if (page.name === "Dashboard") {
-      if (router.pathname === "/") {
-        return false;
-      }
-
+      if (router.pathname === "/") return false;
       if (
         router.pathname.startsWith("/dashboard/santo-domingo") ||
         router.pathname.startsWith("/santo-domingo")
       ) {
         return page.path === "/dashboard/santo-domingo";
       }
-
       return page.path === "/dashboard/oklahoma-city";
     }
     return true;
   });
 
-  const allPages = filteredPages.flatMap((page) => {
-    if (page.isDropdown && page.subPages) {
-      return page.subPages.flatMap((sub) =>
-        sub.isDropdown && sub.subPages ? sub.subPages : sub
-      );
+  const findPageByPath = (pagesArray, path) => {
+    for (const page of pagesArray) {
+      if (page.path === path) return page;
+      if (page.subPages && page.subPages.length > 0) {
+        const found = findPageByPath(page.subPages, path);
+        if (found) return found;
+      }
     }
-    return page;
-  });
+    return null;
+  };
 
   const dashboardNames = {
     "/dashboard/oklahoma-city": "Oklahoma City Dashboard",
@@ -276,13 +80,13 @@ export default function useNavigation() {
       setCurrentPage(dashboardNames[router.pathname]);
       return;
     }
-    const current = allPages.find((p) => p.path === router.pathname);
+    const current = findPageByPath(filteredPages, router.pathname);
     if (current) {
       setCurrentPage(current.headerName || current.name);
     } else {
       setCurrentPage("Page Not Found");
     }
-  }, [router.pathname, allPages]);
+  }, [router.pathname, filteredPages]);
 
   const handlePageChange = (pageName) => {
     setCurrentPage(pageName);
@@ -295,5 +99,7 @@ export default function useNavigation() {
     currentPage,
     handlePageChange,
     pages: filteredPages,
+    loading,
+    error,
   };
 }
