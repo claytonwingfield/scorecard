@@ -40,7 +40,7 @@ export default function DesktopDropDownMenu({
         className="
         inline-flex items-center
         p-2
-        text-lovesBlack dark:text-lovesWhite
+        text-lovesBlack dark:text-darkPrimaryText
         text-lg font-medium font-futura-bold
         cursor-pointer hover:text-lovesPrimaryRed 
          dark:hover:bg-darkBg  dark:hover:text-lovesPrimaryRed
@@ -77,7 +77,7 @@ export default function DesktopDropDownMenu({
                     }}
                     className="flex items-center justify-between w-full text-left"
                   >
-                    <span className="text-lovesBlack dark:text-lovesWhite text-lg font-medium font-futura-bold">
+                    <span className="text-lovesBlack dark:text-darkPrimaryText text-lg font-medium font-futura-bold">
                       {subPage.name}
                     </span>
 
@@ -97,7 +97,7 @@ export default function DesktopDropDownMenu({
                           }}
                           className="
                           block w-full py-1
-                          text-lovesBlack dark:text-lovesWhite
+                          text-lovesBlack dark:text-darkPrimaryText
                           text-lg font-medium font-futura-bold
                           hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
                         "
@@ -121,10 +121,10 @@ export default function DesktopDropDownMenu({
                   }}
                   className="
                   block w-full p-2
-                  text-lovesBlack dark:text-lovesWhite
+                  text-lovesBlack dark:text-darkPrimaryText
                   text-lg font-medium font-futura-bold
-                  hover:bg-lovesGray dark:hover:bg-lovesWhite
-                  dark:hover:text-lovesBlack
+                  hover:bg-lovesGray dark:hover:bg-darkPrimaryText
+                  dark:hover:text-darkBg
                 "
                 >
                   {subPage.name}

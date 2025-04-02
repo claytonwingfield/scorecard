@@ -145,9 +145,9 @@ export default function Calendar({
                     <button
                       onClick={() => handleDateRangeChange(option.value)}
                       className={classNames(
-                        "w-full border border-lovesGray dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-lovesBlack dark:hover:bg-darkLightGray dark:hover:text-lovesBlack hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
+                        "w-full border border-lovesGray dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-lovesBlack dark:hover:bg-darkPrimaryText dark:hover:text-darkBg hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
                         selectedDateRange === option.value &&
-                          "bg-lovesBlack text-lovesWhite dark:bg-darkLightGray dark:text-lovesBlack" // <--- Make sure it's text-lovesWhite
+                          "bg-lovesBlack text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg" // <--- Make sure it's text-lovesWhite
                       )}
                     >
                       {option.label}
@@ -163,36 +163,36 @@ export default function Calendar({
             showButtons ? "md:col-span-9" : "md:col-span-12"
           } border border-lovesGray rounded-lg shadow-md shadow-lovesGray dark:shadow-sm flex flex-col `}
         >
-          <div className="flex items-center justify-between text-lovesBlack  font-futura-bold dark:text-lovesWhite p-3">
+          <div className="flex items-center justify-between text-lovesBlack  font-futura-bold dark:text-darkPrimaryText p-3">
             <button
               type="button"
-              className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-lovesWhite "
+              className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-darkPrimaryText "
               onClick={() => handleNavigateMonth(-1)}
             >
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
               <span className="sr-only">Previous month</span>
             </button>
-            <div className="flex-auto text-md font-futura-bold text-center">
+            <div className="flex-auto text-md font-futura-bold text-center dark:text-darkPrimaryText">
               {displayedDate.toLocaleString("default", { month: "long" })}{" "}
               {displayedDate.getFullYear()}
             </div>
             <button
               type="button"
-              className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-lovesWhite "
+              className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-darkPrimaryText "
               onClick={() => handleNavigateMonth(1)}
             >
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
               <span className="sr-only">Next month</span>
             </button>
           </div>
-          <div className="mt-2 grid grid-cols-7 text-xs text-lovesBlack font-futura dark:text-lovesWhite ">
+          <div className="mt-2 grid grid-cols-7 text-xs text-lovesBlack font-futura dark:text-darkPrimaryText ">
             {["M", "T", "W", "T", "F", "S", "S"].map((day) => (
               <div key={day} className="text-center ">
                 {day}
               </div>
             ))}
           </div>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lovesWhite  dark:bg-darkBg  text-md font-futura shadow ring-1 ring-lovesGray flex-grow rounded-bl-lg rounded-br-lg">
+          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lovesWhite  dark:bg-darkBg  text-md font-futura shadow ring-1 ring-darkPrimaryText flex-grow rounded-bl-lg rounded-br-lg">
             {days.map((day, dayIdx) => {
               const isSelected = isSelectedDate(day.date, fromDate, toDate);
               const isToday =
@@ -213,13 +213,13 @@ export default function Calendar({
                     isSelected &&
                       !isStartOfRange &&
                       !isEndOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkLightGray dark:text-lovesBlack",
+                      "bg-lovesBlack  text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg",
 
                     isStartOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkLightGray dark:text-lovesBlack lg:rounded-l-full rounded-l-none",
+                      "bg-lovesBlack  text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg lg:rounded-l-full rounded-l-none",
 
                     isEndOfRange &&
-                      "bg-lovesBlack dark:bg-darkLightGray dark:text-lovesBlack  text-lovesWhite lg:rounded-r-full rounded-r-none",
+                      "bg-lovesBlack dark:bg-darkPrimaryText dark:text-darkBg  text-lovesWhite lg:rounded-r-full rounded-r-none",
 
                     dayIdx === 0 && "rounded-tl-lg",
                     dayIdx === 6 && "rounded-tr-lg",

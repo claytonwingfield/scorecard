@@ -101,19 +101,19 @@ export default function FilterCalendarToggle({
     rounded-lg
     px-2
     transition-colors
-    duration-300
+    duration-300  dark:border-darkBorder
   `;
 
   const calendarButtonClasses = showCalendar
-    ? `${baseButton} bg-lovesBlack text-white`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white`;
+    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const filterButtonClasses = showFilters
-    ? `${baseButton} bg-lovesBlack text-white`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white`;
+    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
   const compareButtonClasses = showComparison
-    ? `${baseButton} bg-lovesBlack text-white`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white`;
+    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const getTextContainerClasses = (isOpen) => {
     let base = `
@@ -153,9 +153,9 @@ export default function FilterCalendarToggle({
               absolute mt-2
               w-[360px] left-[-200px]
               md:w-[700px] md:left-[-595px]
-              bg-white dark:bg-gray-800
-              border border-lovesBlack
-              shadow-sm shadow-lovesBlack
+              bg-white dark:bg-darkBg 
+              border border-lovesBlack dark:border-darkBorder
+              shadow-sm shadow-lovesBlack dark:shadow-darkBorder
               rounded-lg p-4
               z-50
             "
@@ -173,7 +173,7 @@ export default function FilterCalendarToggle({
 
             <div className="mt-6 flex flex-col">
               {fromDate && toDate && (
-                <div className="mb-6 text-center text-md font-futura-bold text-lovesBlack dark:text-lovesWhite">
+                <div className="mb-6 text-center text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                   From: {fromDate.toLocaleDateString()} &nbsp; to &nbsp;{" "}
                   {toDate.toLocaleDateString()}
                 </div>
@@ -192,7 +192,7 @@ export default function FilterCalendarToggle({
                   <button
                     type="button"
                     onClick={saveRange}
-                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack dark:bg-lovesWhite dark:text-lovesBlack text-md font-futura-bold text-lovesWhite shadow"
+                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack dark:bg-darkPrimaryText dark:text-darkBg text-md font-futura-bold text-lovesWhite shadow"
                   >
                     Save Date Range
                   </button>
@@ -225,16 +225,16 @@ export default function FilterCalendarToggle({
       absolute mt-2
       left-[-145px]
       w-[250px]
-      bg-white dark:bg-gray-800
-      border border-gray-300 dark:border-gray-700
+      bg-white dark:bg-darkCompBg
+      border border-gray-300 dark:border-darkBorder
       rounded-lg shadow-lg p-4
       z-50
     "
               >
-                <h1 className="text-lovesBlack text-md font-futura-bold">
+                <h1 className="text-lovesBlack text-md font-futura-bold dark:text-darkPrimaryText">
                   Filter Departments
                 </h1>
-                <div className="border-b border-gray-300 my-2"></div>
+                <div className="border-b border-gray-300 dark:border-darkBorder my-2"></div>
 
                 {departmentOptions.map((option) => (
                   <div
@@ -251,7 +251,7 @@ export default function FilterCalendarToggle({
                       <span className="w-4 mr-2" />
                     )}
 
-                    <span className="text-md text-lovesBlack dark:text-lovesWhite font-futura-bold hover:text-lovesPrimaryRed">
+                    <span className="text-md text-lovesBlack dark:text-darkPrimaryText font-futura-bold hover:text-lovesPrimaryRed">
                       {option.label}
                     </span>
                   </div>

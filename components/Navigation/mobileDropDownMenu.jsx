@@ -30,13 +30,13 @@ export default function MobileDropDownMenu({
       <div className="flex items-center justify-between w-full ">
         <button
           onClick={handleButtonClick}
-          className="text-lovesBlack text-xl mb-1 mt-1 font-medium font-futura-bold dark:text-lovesWhite  cursor-pointer hover:text-lovesPrimaryRed flex-grow text-left"
+          className="text-lovesBlack text-xl mb-1 mt-1 font-medium font-futura-bold dark:text-darkPrimaryText  cursor-pointer hover:text-lovesPrimaryRed flex-grow text-left"
         >
           {menuTitle}
         </button>
         <button
           onClick={handleButtonClick}
-          className="text-lovesBlack dark:text-lovesWhite"
+          className="text-lovesBlack dark:text-darkPrimaryText"
         >
           <MobileDropDownIcon isOpen={isOpen} />
         </button>
@@ -64,7 +64,7 @@ export default function MobileDropDownMenu({
                     handlePageChange(subPage.name);
                     setIsOpen(false);
                   }}
-                  className="block text-lovesBlack dark:text-lovesWhite text-lg font-medium font-futura-bold pt-2 hover:text-lovesPrimaryRed"
+                  className="block text-lovesBlack dark:text-darkPrimaryText text-lg font-medium font-futura-bold pt-2 hover:text-lovesPrimaryRed"
                 >
                   {subPage.name}
                 </Link>

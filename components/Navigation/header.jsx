@@ -100,7 +100,7 @@ export default function Header() {
         />
       </Head>
 
-      <header className="bg-lovesWhite dark:bg-darkBg dark:shadow-darkLightGray dark:shadow-sm shadow-lg w-full">
+      <header className="bg-lovesWhite dark:bg-darkBg dark:shadow-none  shadow-lg w-full">
         <nav className="flex items-center justify-between lg:px-6 px-3 py-4 w-full">
           <div className="flex items-center space-x-3">
             <Link href="/" className="flex items-center p-1">
@@ -111,7 +111,7 @@ export default function Header() {
                 height={60}
               />
             </Link>
-            <h1 className="font-futura-bold text-lovesBlack dark:text-lovesWhite lg:text-2xl text-xl mt-3">
+            <h1 className="font-futura-bold text-lovesBlack dark:text-darkPrimaryText lg:text-2xl text-xl mt-3">
               {currentPage}
             </h1>
           </div>
@@ -131,7 +131,7 @@ export default function Header() {
                     onClick={() => handlePageChange(page.name)}
                     className="
             inline-flex items-center
-            text-lovesBlack dark:text-lovesWhite
+            text-lovesBlack dark:text-darkPrimaryText
             text-lg font-medium font-futura-bold 
             cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
           "
@@ -145,7 +145,7 @@ export default function Header() {
 
           <div className="flex items-center space-x-5 md:ml-3">
             <button
-              className="md:hidden text-lovesBlack dark:text-lovesWhite flex items-center h-10"
+              className="md:hidden text-lovesBlack dark:text-darkPrimaryText flex items-center h-10"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {mobileHamburgerIcon}
@@ -183,7 +183,7 @@ export default function Header() {
                     onClick={() => handlePageChange(page.name)}
                     className="
                       block
-                      text-lovesBlack dark:text-lovesWhite
+                      text-lovesBlack dark:text-darkPrimaryText
                       text-xl font-medium font-futura-bold
                       cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
                     "

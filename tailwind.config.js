@@ -32,8 +32,13 @@ module.exports = {
         smooth: "smooth",
       },
       colors: {
-        darkLightGray: "#C0C4C4",
         darkBg: "#121212",
+        darkPrimaryText: "#E0E0E0",
+        darkSecondaryText: "#B0B0B0",
+        darkCompBg: "#282828",
+        darkBorder: "#404040",
+        darkLightGray: "#B3B3B3",
+
         lovesBlack: "#000000",
         lovesWhite: "#FFFFFF",
         lovesGray: "#D3D3D4",

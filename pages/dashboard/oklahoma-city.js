@@ -173,15 +173,15 @@ const StatCardComponent = ({
     : "text-white";
 
   const cardBg = isActive
-    ? "bg-lovesWhite"
+    ? "bg-lovesWhite dark:bg-darkBg"
     : animationFinished
     ? bgColorClass
-    : "bg-lovesWhite";
+    : "bg-lovesWhite dark:bg-darkPrimaryText";
 
   return (
     <div
       onClick={onClick}
-      className={`cursor-pointer relative rounded-lg shadow-md shadow-lovesBlack overflow-hidden dark:border ${
+      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden dark:border ${
         qualifies ? "dark:border-lovesGreen" : "dark:border-lovesPrimaryRed"
       } ${cardBg}`}
       style={{ transition: "background-color 1s ease-in-out" }}
@@ -421,12 +421,12 @@ export default function OklahomaCity() {
   const [showCalendar, setShowCalendar] = useState(false);
 
   return (
-    <div className="bg-lovesWhite dark:bg-lovesBlack min-h-screen">
+    <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
       <div className="px-5 sm:px-6 lg:px-10 mt-4 flex items-center justify-between">
         <div
-          className="text-lovesBlack dark:text-lovesWhite font-futura-bold 
-                     border border-lovesBlack shadow-sm shadow-lovesBlack 
+          className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
+                     border border-lovesBlack shadow-sm shadow-lovesBlack  dark:border-darkBorder
                      rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
           onClick={() => setShowCalendar(true)}
         >
@@ -462,14 +462,14 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="group bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-4">
+          <div className="group bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
               <Link href="/customer-service/daily-metrics">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
                     Customer Service
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </Link>
             </div>
@@ -503,7 +503,7 @@ export default function OklahomaCity() {
             <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
               <button
                 onClick={() => toggleExpand("Customer Service")}
-                className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
               >
                 {expandedRows["Customer Service"]
                   ? "Collapse Chart"
@@ -522,14 +522,14 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-8">
+          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
               <Link href="/help-desk/daily-metrics">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
                     Help Desk
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </Link>
             </div>
@@ -561,7 +561,7 @@ export default function OklahomaCity() {
               <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
                 <button
                   onClick={() => toggleExpand("Help Desk")}
-                  className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
                 >
                   {expandedRows["Help Desk"]
                     ? "Collapse Chart"
@@ -581,14 +581,14 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-8">
+          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
               <Link href="/electronic-dispatch/daily-metrics">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
                     Electronic Dispatch
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </Link>
             </div>
@@ -620,7 +620,7 @@ export default function OklahomaCity() {
               <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
                 <button
                   onClick={() => toggleExpand("Electronic Dispatch")}
-                  className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
                 >
                   {expandedRows["Electronic Dispatch"]
                     ? "Collapse Chart"
@@ -640,14 +640,14 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-8">
+          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
               <Link href="/written-communication/daily-metrics">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
                     Written Communication
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </Link>
             </div>
@@ -680,7 +680,7 @@ export default function OklahomaCity() {
               <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
                 <button
                   onClick={() => toggleExpand("Written Communication")}
-                  className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
                 >
                   {expandedRows["Written Communication"]
                     ? "Collapse Chart"
@@ -700,14 +700,14 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-8 mb-12">
+          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
               <Link href="/resolutions/daily-metrics">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
                     Resolutions
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </Link>
             </div>
@@ -740,7 +740,7 @@ export default function OklahomaCity() {
               <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
                 <button
                   onClick={() => toggleExpand("Resolutions")}
-                  className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
                 >
                   {expandedRows["Resolutions"]
                     ? "Collapse Chart"

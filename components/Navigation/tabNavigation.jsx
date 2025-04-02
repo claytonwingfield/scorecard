@@ -15,14 +15,14 @@ export default function TabNavigation({ activeTab, onTabChange }) {
             }`}
           />
 
-          <ul className=" text-md font-futura-bold font-medium text-center text-lovesBlack dark:text-lovesWhite dark:border darkborder-darkLightGray dark:shadow-darkLightGray rounded-lg shadow-sm shadow-lovesBlack flex p-1 relative z-10">
+          <ul className=" text-md font-futura-bold font-medium text-center text-lovesBlack dark:text-darkPrimaryText dark:border dark:border-darkPrimaryText dark:shadow-darkPrimaryText rounded-lg shadow-sm shadow-lovesBlack flex p-1 relative z-10">
             <li className="w-full focus-within:z-10">
               <button
                 onClick={() => onTabChange("overview")}
                 className={`inline-block w-full py-1 px-2 rounded-lg transition-colors duration-300 ${
                   activeTab === "overview"
                     ? "text-lovesWhite  "
-                    : "text-lovesBlack dark:text-lovesWhite "
+                    : "text-lovesBlack dark:text-darkPrimaryText "
                 }`}
                 aria-current={activeTab === "overview" ? "page" : undefined}
               >
@@ -35,7 +35,7 @@ export default function TabNavigation({ activeTab, onTabChange }) {
                 className={`inline-block w-full py-1 px-2 rounded-lg transition-colors duration-300 ${
                   activeTab === "agent"
                     ? "text-lovesWhite "
-                    : "text-lovesBlack dark:text-lovesWhite "
+                    : "text-lovesBlack dark:text-darkPrimaryText "
                 }`}
                 aria-current={activeTab === "agent" ? "page" : undefined}
               >
@@ -48,7 +48,7 @@ export default function TabNavigation({ activeTab, onTabChange }) {
                 className={`inline-block w-full py-1 px-2 rounded-lg transition-colors duration-300 ${
                   activeTab === "detail"
                     ? "text-lovesWhite "
-                    : "text-lovesBlack dark:text-lovesWhite "
+                    : "text-lovesBlack dark:text-darkPrimaryText "
                 }`}
                 aria-current={activeTab === "detail" ? "page" : undefined}
               >

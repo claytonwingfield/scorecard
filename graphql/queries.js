@@ -77,14 +77,17 @@ const GET_ALL_DEPARTMENTS = gql`
   }
 `;
 
-const GET_ALL_LOCATIONS = gql`
-  query Location {
-    locations {
+const GET_HOME_PAGE = gql`
+  query HomePage {
+    homePage {
       documentId
-      city
-      background {
-        url
-        alternativeText
+      slug
+      imageSection {
+        background {
+          url
+        }
+        city
+        text
       }
       createdAt
       updatedAt
@@ -144,7 +147,7 @@ export {
   GET_ALL_MANAGERS,
   GET_ALL_AGENTS,
   GET_ALL_DEPARTMENTS,
-  GET_ALL_LOCATIONS,
+  GET_HOME_PAGE,
   GET_LOGO,
   GET_NAVIGATION,
   GET_404,
