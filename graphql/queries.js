@@ -134,9 +134,7 @@ const GET_404 = gql`
       description
       buttonText
       url
-      image {
-        url
-      }
+      code
     }
   }
 `;

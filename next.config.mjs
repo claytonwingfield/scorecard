@@ -12,7 +12,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", process.env.NEXT_PUBLIC_STRAPI_HOSTNAME],
+    domains: ["localhost", "172.26.132.93"],
   },
 };
 
