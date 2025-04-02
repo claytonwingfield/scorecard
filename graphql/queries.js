@@ -127,6 +127,20 @@ const GET_NAVIGATION = gql`
     }
   }
 `;
+const GET_404 = gql`
+  query GET_NOT_FOUND_PAGE {
+    notFoundPage {
+      title
+      description
+      buttonText
+      url
+      image {
+        url
+      }
+    }
+  }
+`;
+
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
@@ -135,4 +149,5 @@ export {
   GET_ALL_LOCATIONS,
   GET_LOGO,
   GET_NAVIGATION,
+  GET_404,
 };
