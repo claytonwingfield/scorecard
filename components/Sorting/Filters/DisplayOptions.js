@@ -83,7 +83,7 @@ export default function DisplayOptions({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite mb-1">
+        <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText mb-1">
           Table Visibility
         </h3>
         <Listbox
@@ -95,34 +95,38 @@ export default function DisplayOptions({
         >
           <div className="relative z-49">
             <Listbox.Button
-              className="relative dark:bg-darkLightGray w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray"
+              className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray dark:border-darkBorder"
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="block truncate dark:text-lovesBlack font-futura">
+              <span className="block truncate dark:text-darkPrimaryText font-futura">
                 {getDisplayTextForActiveTab()}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <ChevronDownIcon
-                  className="h-5 w-5 text-lovesBlack "
+                  className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText "
                   aria-hidden="true"
                 />
               </span>
             </Listbox.Button>
 
-            <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkLightGray shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+            <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
               <Listbox.Option
                 key="All"
                 value="All"
                 className={({ active }) =>
                   `cursor-default select-none relative py-2 pl-10 pr-4 ${
-                    active ? "text-lovesBlack bg-lovesGray" : "text-lovesBlack"
+                    active
+                      ? "text-lovesBlack bg-lovesGray dark:bg-darkBg"
+                      : "text-lovesBlack dark:text-darkPrimaryText"
                   }`
                 }
                 onClick={handleShowAll}
               >
                 {({ active }) => (
                   <>
-                    <span className="block truncate">Show All</span>
+                    <span className="block truncate dark:text-darkPrimaryText">
+                      Show All
+                    </span>
                     {isShowAll && (
                       <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                         <CheckIcon
@@ -135,7 +139,7 @@ export default function DisplayOptions({
                 )}
               </Listbox.Option>
 
-              <div className="border-t border-lovesGray my-1"></div>
+              <div className="border-t dark:border-darkBorder border-lovesGray my-1"></div>
 
               {getActiveVisibilityOptions()
                 .filter((option) => option.value !== "All")
@@ -146,8 +150,8 @@ export default function DisplayOptions({
                     className={({ active }) =>
                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                         active
-                          ? "text-lovesBlack bg-lovesGray"
-                          : "text-lovesBlack"
+                          ? "text-lovesBlack dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
+                          : "text-lovesBlack dark:text-darkPrimaryText"
                       }`
                     }
                     onClick={() => toggleOption(option.value)}
@@ -172,13 +176,13 @@ export default function DisplayOptions({
         </Listbox>
       </div>
       <div className="lg:max-w-64 max-w-80">
-        <h3 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite mb-2">
+        <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText mb-2">
           Display Options
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-3 pl-3">
           <div className="space-y-4">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-md font-futura text-lovesBlack dark:text-lovesWhite flex-1">
+              <span className="text-md font-futura text-lovesBlack dark:text-darkPrimaryText flex-1">
                 Show Search Bar
               </span>
               <div className="relative">
@@ -195,7 +199,7 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showSearchBar
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-lovesGray dark:bg-darkBg"
+                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div
@@ -208,7 +212,7 @@ export default function DisplayOptions({
           </div>
           <div className="space-y-4 ">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-md font-futura text-lovesBlack dark:text-lovesWhite flex-1">
+              <span className="text-md font-futura text-lovesBlack dark:text-darkPrimaryText flex-1">
                 Show Charts
               </span>
               <div className="relative">
@@ -225,7 +229,7 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showCharts
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-lovesGray dark:bg-darkBg"
+                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div
@@ -238,7 +242,7 @@ export default function DisplayOptions({
           </div>
           <div className="space-y-2">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-md font-futura text-lovesBlack dark:text-lovesWhite flex-1">
+              <span className="text-md font-futura text-lovesBlack dark:text-darkPrimaryText flex-1">
                 Column Controls
               </span>
               <div className="relative">
@@ -259,7 +263,7 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showColumnVisibility
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-lovesGray dark:bg-darkBg"
+                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
 
@@ -274,7 +278,7 @@ export default function DisplayOptions({
 
           <div className="space-y-4 hidden lg:block">
             <label className="flex items-center justify-between cursor-pointer">
-              <span className="text-md font-futura text-lovesBlack dark:text-lovesWhite flex-1">
+              <span className="text-md font-futura text-lovesBlack dark:text-darkPrimaryText flex-1">
                 Change Layout
               </span>
               <div className="relative">
@@ -294,7 +298,7 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.resizableTables
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-lovesGray dark:bg-darkBg"
+                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div

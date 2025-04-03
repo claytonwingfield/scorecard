@@ -47,7 +47,7 @@ export default function FiltersDropdown({
         >
           <div
             ref={filtersDropdownRef}
-            className="px-4 sm:px-6 lg:px-8 py-4 border-r-lovesBlack shadow-sm shadow-lovesBlack "
+            className="px-4 sm:px-6 lg:px-8 py-4 border-r-lovesBlack dark:border-darkBorder shadow-sm shadow-lovesBlack dark:shadow-darkBorder"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -59,7 +59,7 @@ export default function FiltersDropdown({
                         (categoryRefs.current[filterCategory.name] = el)
                       }
                     >
-                      <h3 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite">
+                      <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                         {filterCategory.name}
                       </h3>
                       <Listbox
@@ -75,8 +75,8 @@ export default function FiltersDropdown({
                         multiple
                       >
                         <div className="mt-1 relative">
-                          <Listbox.Button className="relative dark:bg-darkLightGray w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray">
-                            <span className="block truncate text-lovesBlack ">
+                          <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray dark:border-darkBorder">
+                            <span className="block truncate text-lovesBlack dark:text-darkPrimaryText ">
                               {activeFilters
                                 .filter((f) => f.type === filterCategory.name)
                                 .map((f) => f.label)
@@ -84,12 +84,12 @@ export default function FiltersDropdown({
                             </span>
                             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                               <ChevronDownIcon
-                                className="h-5 w-5 text-lovesBlack "
+                                className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
                                 aria-hidden="true"
                               />
                             </span>
                           </Listbox.Button>
-                          <Listbox.Options className="absolute dark:bg-darkLightGray mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+                          <Listbox.Options className="absolute dark:bg-darkBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
                             {filterCategory.options.map((option) => (
                               <Listbox.Option
                                 key={option.value}
@@ -97,8 +97,8 @@ export default function FiltersDropdown({
                                 className={({ active }) =>
                                   `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                     active
-                                      ? "text-lovesBlack bg-lovesGray"
-                                      : "text-lovesBlack"
+                                      ? "text-lovesBlack bg-lovesGray dark:bg-darkBg dark:text-darkPrimaryText"
+                                      : "text-lovesBlack dark:text-darkPrimaryText"
                                   }`
                                 }
                               >

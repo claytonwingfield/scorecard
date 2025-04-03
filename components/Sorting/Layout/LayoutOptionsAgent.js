@@ -76,7 +76,7 @@ export default function LayoutOptionsAgent({
 }) {
   const [selectedLayoutIndex, setSelectedLayoutIndex] = useState(null);
   return (
-    <div className="bg-lovesBlack dark:border dark:border-lovesWhite p-8 rounded-lg">
+    <div className="bg-lovesBlack dark:border dark:border-darkPrimaryText p-8 rounded-lg">
       <div className="mb-3 text-lg font-futura-bold text-lovesWhite flex items-center justify-center gap-x-6 space-y-3">
         <h2>Quick Layouts</h2>
       </div>

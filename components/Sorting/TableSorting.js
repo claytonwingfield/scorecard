@@ -141,29 +141,29 @@ export default function TableSorting({
           <h2 id="filter-heading" className="sr-only ">
             Filters
           </h2>
-          <div className="bg-lovesWhite dark:bg-darkBg pb-4 mt-4 border-t-lovesGray shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkLightGray dark:border-b dark:border-lovesGray">
+          <div className="bg-lovesWhite dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
             <div
               ref={containerRef}
               className="mx-auto flex max-w-full items-center space-x-4 px-4 sm:px-6 lg:px-8 pt-3"
             >
               <button
                 onClick={() => toggleDropdown("date")}
-                className="group inline-flex justify-center items-center text-md font-futura-bold  text-lovesBlack dark:text-lovesWhite hover:text-lovesBlack dark:hover:text-lovesWhite"
+                className="group inline-flex justify-center items-center text-md font-futura-bold  text-lovesBlack dark:text-darkPrimaryText hover:text-lovesBlack dark:hover:text-darkPrimaryText"
               >
                 Date
                 <ChevronDownIcon
                   aria-hidden="true"
-                  className="-mr-1 ml-1 h-5 w-5 shrink-0 text-lovesBlack  group-hover:text-lovesBlack dark:group-hover:text-lovesWhite dark:text-lovesWhite dark:hover:text-lovesWhite"
+                  className="-mr-1 ml-1 h-5 w-5 shrink-0 text-lovesBlack  group-hover:text-lovesBlack dark:group-hover:text-darkPrimaryText dark:text-darkPrimaryText dark:hover:text-darkPrimaryText"
                 />
               </button>
               <button
                 onClick={() => toggleDropdown("filters")}
-                className="group inline-flex justify-center items-center text-md font-futura-bold text-lovesBlack hover:text-lovesBlack dark:text-lovesWhite dark:hover:text-lovesWhite"
+                className="group inline-flex justify-center items-center text-md font-futura-bold text-lovesBlack hover:text-lovesBlack dark:text-darkPrimaryText dark:hover:text-darkPrimaryText"
               >
                 Filters
                 <ChevronDownIcon
                   aria-hidden="true"
-                  className="-mr-1 ml-1 h-5 w-5 shrink-0 text-lovesBlack  group-hover:text-lovesBlack dark:group-hover:text-lovesWhite dark:text-lovesWhite"
+                  className="-mr-1 ml-1 h-5 w-5 shrink-0 text-lovesBlack  group-hover:text-lovesBlack dark:group-hover:text-darkPrimaryText dark:text-darkPrimaryText"
                 />
               </button>
             </div>
@@ -174,14 +174,16 @@ export default function TableSorting({
           <h2 id="filter-heading" className="sr-only ">
             Filters
           </h2>
-          <div className="bg-lovesWhite dark:bg-darkBg pb-4 mt-4 border-t-lovesGray shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkLightGray dark:border-b dark:border-lovesGray">
+          <div className="bg-lovesWhite dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
             <div className="mx-auto flex max-w-full items-center space-x-4 px-4 sm:px-6 lg:px-8 pt-3">
-              <p className="font-futura-bold">Select Filters Below</p>
+              <p className="font-futura-bold dark:text-darkPrimaryText">
+                Select Filters Below
+              </p>
             </div>
           </div>
         </section>
       )}
-      <div className="bg-lovesWhite dark:bg-darkBg dark:shadow-md dark:shadow-darkLightGray">
+      <div className="bg-lovesWhite dark:bg-darkCompBg dark:shadow-md dark:shadow-darkBorder">
         <DateFilterDropdown
           isOpen={isDateFilterOpen}
           dateDropdownRef={dateDropdownRef}

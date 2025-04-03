@@ -95,13 +95,13 @@ export default function ManagerSelectionForm({}) {
                 {({ open }) => (
                   <div className="w-full md:w-1/2 lg:pr-12">
                     <Disclosure.Button className="flex items-center justify-between w-full">
-                      <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite lg:mb-3 mb-1">
+                      <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText lg:mb-3 mb-1">
                         Manager
                       </h6>
                       <ChevronUpIcon
                         className={`${
                           open ? "transform rotate-180" : ""
-                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
+                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
                       />
                     </Disclosure.Button>
                     <Transition
@@ -114,10 +114,10 @@ export default function ManagerSelectionForm({}) {
                       leaveTo="opacity-0 -translate-y-2"
                     >
                       <Disclosure.Panel className="mt-2">
-                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
+                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkCompBg" />
                         <div className="lg:space-y-6 space-y-2">
                           <div>
-                            <h3 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite">
+                            <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                               Select Manager
                             </h3>
                             <Listbox
@@ -125,7 +125,7 @@ export default function ManagerSelectionForm({}) {
                               onChange={setSelectedManager}
                             >
                               <div className="relative">
-                                <Listbox.Button className="relative dark:bg-darkLightGray w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray">
+                                <Listbox.Button className="relative dark:bg-darkCompBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray">
                                   <span className="block truncate text-lovesBlack">
                                     {selectedManager
                                       ? selectedManager.label
@@ -138,7 +138,7 @@ export default function ManagerSelectionForm({}) {
                                     />
                                   </span>
                                 </Listbox.Button>
-                                <Listbox.Options className="absolute dark:bg-darkLightGray mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
+                                <Listbox.Options className="absolute dark:bg-darkCompBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
                                   {managerList.map((option) => (
                                     <Listbox.Option
                                       key={option.value}
@@ -201,11 +201,11 @@ export default function ManagerSelectionForm({}) {
                           </div>
 
                           <div className="flex flex-col items-center z-10 px-4">
-                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
+                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
                               Selected Filters
                             </h2>
                             <div className="mt-2">
-                              <p className="font-futura-bold text-md text-lovesBlack dark:text-lovesWhite text-center">
+                              <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
                                 {formatActiveFilters()}
                               </p>
                             </div>
@@ -221,13 +221,13 @@ export default function ManagerSelectionForm({}) {
                 {({ open, close }) => (
                   <div className="w-full md:w-1/2 lg:mt-0 mt-8">
                     <Disclosure.Button className="flex items-center justify-between w-full">
-                      <p className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite mb-3">
+                      <p className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText mb-3">
                         Date Range
                       </p>
                       <ChevronUpIcon
                         className={`${
                           open ? "transform rotate-180" : ""
-                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
+                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
                       />
                     </Disclosure.Button>
                     <Transition
@@ -240,7 +240,7 @@ export default function ManagerSelectionForm({}) {
                       leaveTo="opacity-0 -translate-y-2"
                     >
                       <Disclosure.Panel className="mt-2">
-                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
+                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkCompBg" />
                         <Calendar
                           currentDate={currentDate}
                           setCurrentDate={setCurrentDate}
@@ -258,7 +258,7 @@ export default function ManagerSelectionForm({}) {
                             <button
                               type="button"
                               onClick={clearRange}
-                              className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed text-sm font-futura-bold text-lovesWhite shadow"
+                              className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                             >
                               Clear Date Range
                             </button>
@@ -267,7 +267,8 @@ export default function ManagerSelectionForm({}) {
                             <button
                               type="button"
                               onClick={() => saveRange(close)}
-                              className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack dark:bg-darkLightGray dark:text-lovesBlack text-sm font-futura-bold text-lovesWhite shadow"
+                              className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack 
+                              dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2 dark:border-darkBorder"
                             >
                               Save Date Range
                             </button>
@@ -295,11 +296,11 @@ export default function ManagerSelectionForm({}) {
                           </div>
 
                           <div className="flex flex-col items-center z-10 px-4">
-                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
+                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
                               Date Range
                             </h2>
                             <div className="mt-2">
-                              <p className="font-futura-bold text-md text-lovesBlack dark:text-lovesWhite text-center">
+                              <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
                                 From: {fromDate.toLocaleDateString()} To:{" "}
                                 {toDate.toLocaleDateString()}
                               </p>

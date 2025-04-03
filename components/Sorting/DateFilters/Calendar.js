@@ -130,7 +130,7 @@ export default function Calendar({
     }
   }, [fromDate, toDate, setSelectedDateRange]);
   return (
-    <div className="bg-lovesWhite dark:bg-darkBg  flex flex-col flex-grow">
+    <div className="bg-lovesWhite dark:bg-darkCompBg  flex flex-col flex-grow">
       <div
         className={`grid grid-cols-1 md:grid-cols-12 gap-6 flex-grow ${
           buttonsPosition === "left" ? "" : "md:flex-row-reverse"

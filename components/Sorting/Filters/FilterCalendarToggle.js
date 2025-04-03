@@ -153,9 +153,9 @@ export default function FilterCalendarToggle({
               absolute mt-2
               w-[360px] left-[-200px]
               md:w-[700px] md:left-[-595px]
-              bg-white dark:bg-darkBg 
-              border border-lovesBlack dark:border-darkBorder
-              shadow-sm shadow-lovesBlack dark:shadow-darkBorder
+              bg-white dark:bg-darkCompBg 
+              border border-lovesBlack dark:border-darkLightGray
+              shadow-sm shadow-lovesBlack 
               rounded-lg p-4
               z-50
             "
@@ -183,7 +183,7 @@ export default function FilterCalendarToggle({
                   <button
                     type="button"
                     onClick={clearRange}
-                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesPrimaryRed px-3 py-2 text-md font-futura-bold text-lovesWhite shadow"
+                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesPrimaryRed px-3 py-2 text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Clear Date Range
                   </button>
@@ -192,7 +192,8 @@ export default function FilterCalendarToggle({
                   <button
                     type="button"
                     onClick={saveRange}
-                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack dark:bg-darkPrimaryText dark:text-darkBg text-md font-futura-bold text-lovesWhite shadow"
+                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack 
+                            dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2  dark:border-darkBorder"
                   >
                     Save Date Range
                   </button>
@@ -226,7 +227,7 @@ export default function FilterCalendarToggle({
       left-[-145px]
       w-[250px]
       bg-white dark:bg-darkCompBg
-      border border-gray-300 dark:border-darkBorder
+      border border-gray-300 dark:border-darkLightGray
       rounded-lg shadow-lg p-4
       z-50
     "

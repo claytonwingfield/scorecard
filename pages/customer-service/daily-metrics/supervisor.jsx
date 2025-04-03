@@ -417,7 +417,7 @@ export default function SupervisorDailyMetricsPage() {
       <div className="px-4 sm:px-6 lg:px-8 mt-4">
         <div className="lg:hidden">
           <nav aria-label="Breadcrumb" className="mb-2">
-            <ol className="flex space-x-4 rounded-md bg-lovesWhite dark:bg-lovesGray px-4 py-1 shadow-sm shadow-lovesBlack">
+            <ol className="flex space-x-4 rounded-md bg-lovesWhite dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack">
               <li className="flex">
                 <div className="flex items-center">
                   <Link
@@ -437,7 +437,7 @@ export default function SupervisorDailyMetricsPage() {
                       viewBox="0 0 24 44"
                       preserveAspectRatio="none"
                       aria-hidden="true"
-                      className="w-6 shrink-0 text-lovesGray dark:text-lovesBlack"
+                      className="w-6 shrink-0 text-lovesGray dark:text-darkPrimaryText"
                     >
                       <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                     </svg>
@@ -455,7 +455,7 @@ export default function SupervisorDailyMetricsPage() {
           </nav>
 
           <div className="flex items-center text-center justify-center pt-4">
-            <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-lovesWhite">
+            <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
               {supervisor}
             </h1>
           </div>
@@ -469,13 +469,13 @@ export default function SupervisorDailyMetricsPage() {
         {/* Desktop Layout */}
         <div className="hidden lg:block relative h-16">
           <div className="flex items-center justify-center h-full">
-            <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-lovesWhite">
+            <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
               {supervisor}
             </h1>
           </div>
           <div className="absolute inset-y-0 left-0 flex items-center px-8">
             <nav aria-label="Breadcrumb">
-              <ol className="flex space-x-4 rounded-md bg-lovesWhite dark:bg-lovesGray px-4 py-1 shadow-sm shadow-lovesBlack">
+              <ol className="flex space-x-4 rounded-md bg-lovesWhite dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack">
                 <li className="flex">
                   <div className="flex items-center">
                     <Link
@@ -498,7 +498,7 @@ export default function SupervisorDailyMetricsPage() {
                         viewBox="0 0 24 44"
                         preserveAspectRatio="none"
                         aria-hidden="true"
-                        className="w-6 shrink-0 text-lovesGray dark:text-lovesBlack"
+                        className="w-6 shrink-0 text-lovesGray dark:text-darkPrimaryText"
                       >
                         <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                       </svg>
@@ -516,14 +516,14 @@ export default function SupervisorDailyMetricsPage() {
             </nav>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center px-16">
-            <h3 className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite pr-4">
+            <h3 className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText pr-4">
               Date Range: {formattedFrom} - {formattedTo}
             </h3>
           </div>
         </div>
 
         <div className="lg:px-8">
-          <dl className="mt-5 py-2 px-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack rounded-lg">
+          <dl className="mt-5 py-2 px-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack rounded-lg">
             {statCards.map((item, index) => {
               const bgColorClass = getBgColor(item.name, item.stat);
               const qualifies = bgColorClass.trim() === "bg-lovesGreen";
@@ -544,10 +544,10 @@ export default function SupervisorDailyMetricsPage() {
         </div>
 
         <div className="mt-4 p-8 hidden lg:block">
-          <div className="h-full overflow-hidden dark:ring-0 ring-1 ring-lovesBlack rounded-lg bg-lovesBlack dark:bg-darkLightGray pb-2">
+          <div className="h-full overflow-hidden dark:ring-0 ring-1 ring-lovesBlack rounded-lg bg-lovesBlack dark:bg-darkCompBg pb-2">
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between bg-lovesBlack dark:bg-darkLightGray pl-4 pt-2 pb-4">
-                <h2 className="text-xl font-futura-bold text-lovesWhite dark:text-lovesBlack">
+              <div className="flex items-center justify-between bg-lovesBlack dark:bg-darkCompBg pl-4 pt-2 pb-4">
+                <h2 className="text-xl font-futura-bold text-lovesWhite dark:text-darkPrimaryText">
                   Performance Chart
                 </h2>
                 <div className="flex space-x-2 pr-2">
@@ -564,7 +564,7 @@ export default function SupervisorDailyMetricsPage() {
                           </span>
                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                             <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-lovesWhite"
+                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
                               aria-hidden="true"
                             />
                           </span>
@@ -577,8 +577,8 @@ export default function SupervisorDailyMetricsPage() {
                               className={({ active }) =>
                                 `${
                                   active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkLightGray font-futura-bold"
-                                    : "text-lovesBlack dark:text-lovesWhite font-futura"
+                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
+                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
                                 } cursor-default select-none relative py-2 pl-10 pr-4`
                               }
                             >
@@ -621,7 +621,7 @@ export default function SupervisorDailyMetricsPage() {
                           <span className="block truncate">{metric}</span>
                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                             <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-lovesWhite"
+                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
                               aria-hidden="true"
                             />
                           </span>
@@ -634,8 +634,8 @@ export default function SupervisorDailyMetricsPage() {
                               className={({ active }) =>
                                 `${
                                   active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkLightGray font-futura-bold"
-                                    : "text-lovesBlack dark:text-lovesWhite font-futura"
+                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
+                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
                                 } cursor-default select-none relative py-2 pl-10 pr-4`
                               }
                             >
@@ -678,7 +678,7 @@ export default function SupervisorDailyMetricsPage() {
                           <span className="block truncate">{chartType}</span>
                           <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                             <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-lovesWhite"
+                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
                               aria-hidden="true"
                             />
                           </span>
@@ -691,8 +691,8 @@ export default function SupervisorDailyMetricsPage() {
                               className={({ active }) =>
                                 `${
                                   active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkLightGray font-futura-bold"
-                                    : "text-lovesBlack dark:text-lovesWhite font-futura"
+                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
+                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
                                 } cursor-default select-none relative py-2 pl-10 pr-4`
                               }
                             >
@@ -756,16 +756,16 @@ export default function SupervisorDailyMetricsPage() {
         </div>
 
         <div className="lg:p-8 py-4">
-          <div className="bg-lovesBlack dark:bg-darkLightGray shadow-md shadow-lovesBlack dark:shadow-darkLightGray rounded-md p-1.5 w-full max-w-full no-scrollbar">
+          <div className="bg-lovesBlack dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder rounded-md p-1.5 w-full max-w-full no-scrollbar">
             <div className="flex-grow overflow-y-auto no-scrollbar">
               <table className="min-w-full divide-y divide-lovesBlack">
-                <thead className="bg-lovesBlack dark:bg-darkLightGray">
+                <thead className="bg-lovesBlack dark:bg-darkCompBg">
                   <tr>
                     {columnsToDisplay.map((col, index) => (
                       <th
                         key={col.key}
                         onClick={() => handleSort(col.key)}
-                        className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-lovesBlack sm:pl-6 cursor-pointer ${getTextAlignment(
+                        className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
                           index
                         )}`}
                         title="Click to sort"
@@ -784,13 +784,13 @@ export default function SupervisorDailyMetricsPage() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-lovesBlack dark:divide-lovesGray bg-lovesWhite dark:bg-darkBg">
+                <tbody className="divide-y divide-lovesBlack dark:divide-darkBorder bg-lovesWhite dark:bg-darkBg">
                   {sortedAggregatedData.map((item, rowIndex) => (
                     <tr key={rowIndex}>
                       {columnsToDisplay.map((col, colIndex) => (
                         <td
                           key={col.key}
-                          className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-lovesWhite sm:pl-6 ${getTextAlignment(
+                          className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-darkPrimaryText sm:pl-6 ${getTextAlignment(
                             colIndex
                           )}`}
                         >

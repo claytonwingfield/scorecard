@@ -158,19 +158,19 @@ export default function DetailHomeFilters({
   return (
     <section className="mt-2 py-4 relative">
       <div className="w-full max-w-full mx-auto flex justify-center items-center ">
-        <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack">
+        <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkCompBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack dark:border-2 dark:border-darkBorder">
           <Disclosure defaultOpen>
             {({ open }) => (
               <div className="w-full md:w-1/2 lg:pr-12">
                 <Disclosure.Button className="flex items-center justify-between w-full">
-                  <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite lg:mb-3 mb-1">
+                  <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText lg:mb-3 mb-1">
                     Filters
                   </h6>
 
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
-                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
+                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
                   />
                 </Disclosure.Button>
 
@@ -184,7 +184,7 @@ export default function DetailHomeFilters({
                   leaveTo="opacity-0 -translate-y-2"
                 >
                   <Disclosure.Panel className="mt-2">
-                    <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
+                    <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkBorder" />
                     <div className="lg:space-y-6 space-y-2">
                       {dynamicFilterOptions.map((filterCategory) => (
                         <div
@@ -193,7 +193,7 @@ export default function DetailHomeFilters({
                             (categoryRefs.current[filterCategory.name] = el)
                           }
                         >
-                          <h3 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite">
+                          <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                             {filterCategory.name}
                           </h3>
                           <Listbox
@@ -209,8 +209,8 @@ export default function DetailHomeFilters({
                             multiple
                           >
                             <div className="mt-1 relative">
-                              <Listbox.Button className="relative dark:bg-darkLightGray w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray">
-                                <span className="block truncate text-lovesBlack">
+                              <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray dark:text-darkPrimaryText dark:border-2 dark:border-darkBorder">
+                                <span className="block truncate text-lovesBlack dark:text-darkPrimaryText">
                                   {activeFilters
                                     .filter(
                                       (f) => f.type === filterCategory.name
@@ -221,12 +221,12 @@ export default function DetailHomeFilters({
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <ChevronDownIcon
-                                    className="h-5 w-5 text-lovesBlack"
+                                    className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
                                     aria-hidden="true"
                                   />
                                 </span>
                               </Listbox.Button>
-                              <Listbox.Options className="absolute dark:bg-darkLightGray mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
+                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
                                 {filterCategory.options.map((option) => (
                                   <Listbox.Option
                                     key={option.value}
@@ -234,8 +234,8 @@ export default function DetailHomeFilters({
                                     className={({ active }) =>
                                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                         active
-                                          ? "text-lovesBlack bg-lovesGray"
-                                          : "text-lovesBlack"
+                                          ? "text-lovesBlack dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
+                                          : "text-lovesBlack dark:text-darkPrimaryText"
                                       }`
                                     }
                                   >
@@ -290,11 +290,11 @@ export default function DetailHomeFilters({
                       </div>
 
                       <div className="flex flex-col items-center z-10 px-4">
-                        <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
+                        <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
                           Selected Filters
                         </h2>
                         <div className="mt-2">
-                          <p className="font-futura-bold text-md text-lovesBlack dark:text-lovesWhite text-center">
+                          <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
                             {formatActiveFilters()}
                           </p>
                         </div>
@@ -305,20 +305,20 @@ export default function DetailHomeFilters({
               </div>
             )}
           </Disclosure>
-          <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
+          <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkPrimaryText" />
 
           <Disclosure defaultOpen>
             {({ open, close }) => (
               <div className="w-full md:w-1/2 lg:mt-0 mt-8">
                 <Disclosure.Button className="flex items-center justify-between w-full">
-                  <p className="font-futura-bold text-lg text-lovesBlack dark:text-lovesWhite mb-3">
+                  <p className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText mb-3">
                     Date Range
                   </p>
 
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
-                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-lovesWhite`}
+                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
                   />
                 </Disclosure.Button>
 
@@ -332,7 +332,7 @@ export default function DetailHomeFilters({
                   leaveTo="opacity-0 -translate-y-2"
                 >
                   <Disclosure.Panel className="mt-2">
-                    <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkLightGray" />
+                    <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkBorder" />
                     <Calendar
                       currentDate={currentDate}
                       setCurrentDate={setCurrentDate}
@@ -347,7 +347,7 @@ export default function DetailHomeFilters({
                     />
                     <div className="mt-2 flex flex-col">
                       {fromDate && toDate && (
-                        <div className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite text-center mb-2">
+                        <div className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText text-center mb-2">
                           From: {fromDate.toLocaleDateString()} To:{" "}
                           {toDate.toLocaleDateString()}
                         </div>
@@ -357,7 +357,7 @@ export default function DetailHomeFilters({
                           <button
                             type="button"
                             onClick={clearRange}
-                            className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed text-sm font-futura-bold text-lovesWhite shadow"
+                            className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                           >
                             Clear Date Range
                           </button>
@@ -366,7 +366,8 @@ export default function DetailHomeFilters({
                           <button
                             type="button"
                             onClick={() => saveRange(close)}
-                            className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack dark:bg-darkLightGray dark:text-lovesBlack text-sm font-futura-bold text-lovesWhite shadow"
+                            className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack 
+                            dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2 dark:border-darkBorder"
                           >
                             Save Date Range
                           </button>
@@ -396,11 +397,11 @@ export default function DetailHomeFilters({
                       </div>
 
                       <div className="flex flex-col items-center z-10 px-4">
-                        <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-lovesWhite text-center">
+                        <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
                           Date Range
                         </h2>
                         <div className="mt-2">
-                          <p className="font-futura-bold text-md text-lovesBlack dark:text-lovesWhite text-center">
+                          <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
                             From: {fromDate.toLocaleDateString()} To:{" "}
                             {toDate.toLocaleDateString()}
                           </p>

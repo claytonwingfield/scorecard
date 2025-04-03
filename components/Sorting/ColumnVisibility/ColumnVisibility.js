@@ -23,8 +23,8 @@ export default function ColumnVisibility({
   };
 
   return (
-    <div className="bg-lovesWhite dark:bg-darkBg rounded-lg lg:p-4 p-2 border shadow-sm shadow-lovesBlack dark:shadow-darkLightGray">
-      <h3 className="text-xl font-futura-bold font-medium text-lovesBlack lg:mb-3 mb-5 text-center dark:text-lovesWhite">
+    <div className="bg-lovesWhite dark:bg-darkBg rounded-lg lg:p-4 p-2 border shadow-sm shadow-lovesBlack dark:shadow-darkBorder">
+      <h3 className="text-xl font-futura-bold font-medium text-lovesBlack lg:mb-3 mb-5 text-center dark:text-darkPrimaryText">
         Column Controls
       </h3>
 
@@ -51,7 +51,7 @@ export default function ColumnVisibility({
 
           return (
             <div key={`ColumnVisibility-${tableName}`}>
-              <h4 className="text-md font-futura-bold text-lovesBlack dark:text-lovesWhite mb-1 text-center">
+              <h4 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText mb-1 text-center">
                 {label}
               </h4>
               <Listbox
@@ -64,7 +64,7 @@ export default function ColumnVisibility({
                 <div className="relative">
                   <Listbox.Button
                     aria-label={`Toggle column visibility for ${label}`}
-                    className="relative z-49 w-full py-2 pl-3 pr-10 text-left text-md font-futura  bg-lovesWhite dark:bg-darkLightGray dark:text-lovesBlack rounded-md cursor-pointer focus:outline-none  border border-lovesGray"
+                    className="relative z-49 w-full py-2 pl-3 pr-10 text-left text-md font-futura  bg-lovesWhite dark:bg-darkCompBg dark:text-lovesBlack rounded-md cursor-pointer focus:outline-none  border border-lovesGray"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <span className="block truncate">{getDisplayText()}</span>
@@ -76,12 +76,12 @@ export default function ColumnVisibility({
                     </span>
                   </Listbox.Button>
 
-                  <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkLightGray shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+                  <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkCompBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
                     <Listbox.Option
                       key={`${tableName}-All`}
                       value="All"
                       className={({ active }) =>
-                        `cursor-pointer select-none relative py-2 pl-10 pr-4 dark:border-b dark:border-lovesBlack ${
+                        `cursor-pointer select-none relative py-2 pl-10 pr-4 dark:border-b dark:border-darkBorder ${
                           active
                             ? "text-lovesBlack bg-lovesGray text-md font-futura"
                             : "text-lovesWhite text-md font-futura"

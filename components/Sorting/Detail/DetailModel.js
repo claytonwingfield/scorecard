@@ -10,7 +10,7 @@ export default function DetailModel({
       className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-800 bg-opacity-50"
     >
       <div className="relative p-2 w-full lg:max-w-md max-w-sm">
-        <div className="bg-white rounded-lg shadow dark:bg-darkLightGray">
+        <div className="bg-white rounded-lg shadow dark:bg-darkCompBg">
           <div className="p-5 text-center">
             <h3 className="mb-4 text-lg text-lovesBlack dark:text-lovesBlack">
               You currently have active filters. Would you like to use them?

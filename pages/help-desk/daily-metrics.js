@@ -8,7 +8,7 @@ export default function HelpDeskDailyMetrics() {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="text-lg font-futura-bold text-lovesBlack dark:text-lovesWhite">
+              <h1 className="text-lg font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                 Help Desk Scorecard
               </h1>
             </div>

@@ -43,7 +43,7 @@ export default function DesktopDropDownMenu({
         text-lovesBlack dark:text-darkPrimaryText
         text-lg font-medium font-futura-bold
         cursor-pointer hover:text-lovesPrimaryRed 
-         dark:hover:bg-darkBg  dark:hover:text-lovesPrimaryRed
+         dark:hover:bg-darkBg  dark:hover:text-lovesPrimaryRed 
       "
       >
         <span>{menuTitle}</span>
@@ -56,7 +56,7 @@ export default function DesktopDropDownMenu({
         ${nested ? "left-full" : "left-[-120px]"}
         z-50 mt-2 bg-lovesWhite dark:bg-darkBg
         shadow-lg w-60 min-w-[200px]
-        border border-lovesGray rounded-lg
+        border border-darkPrimaryText rounded-lg
         divide-y divide-lovesGray`}
         >
           {subPages.map((subPage, idx) => {
