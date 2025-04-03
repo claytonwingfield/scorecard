@@ -407,7 +407,7 @@ export default function LayoutOptions({
 }) {
   const [selectedLayoutIndex, setSelectedLayoutIndex] = useState(null);
   return (
-    <div className="bg-lovesBlack dark:bg-darkBg dark:border dark:border-darkBorder p-8 rounded-lg">
+    <div className="bg-lovesBlack dark:bg-darkCompBg dark:border dark:border-darkBorder p-8 rounded-lg">
       <div className="mb-3 text-lg font-futura-bold text-lovesWhite flex items-center justify-center gap-x-6 space-y-3">
         <h2>Quick Layouts</h2>
       </div>
@@ -448,7 +448,7 @@ export default function LayoutOptions({
         <button
           type="button"
           onClick={onSaveLayout}
-          className="inline-flex border border-lovesWhite justify-center rounded-md bg-lovesBlack px-12 py-2 text-md font-futura-bold text-lovesWhite shadow-sm hover:bg-lovesWhite hover:text-lovesBlack"
+          className="inline-flex border border-lovesWhite dark:border-2 dark:border-darkBorder justify-center rounded-md bg-lovesBlack px-12 py-2 text-md font-futura-bold text-lovesWhite shadow-sm hover:bg-lovesWhite dark:hover:bg-darkCompBg dark:hover:text-darkPrimaryText hover:text-lovesBlack"
         >
           Save
         </button>

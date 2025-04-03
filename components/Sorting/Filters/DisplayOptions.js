@@ -109,7 +109,7 @@ export default function DisplayOptions({
               </span>
             </Listbox.Button>
 
-            <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+            <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
               <Listbox.Option
                 key="All"
                 value="All"
@@ -192,7 +192,7 @@ export default function DisplayOptions({
                     handleDisplayOptionChange("showSearchBar", e.target.checked)
                   }
                   checked={displayOptions.showSearchBar}
-                  className="sr-only"
+                  className="sr-only "
                   id="toggle-show-search-bar"
                 />
                 <div
@@ -203,7 +203,7 @@ export default function DisplayOptions({
                   }`}
                 ></div>
                 <div
-                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite rounded-full transition-transform duration-300 ${
+                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite dark:text-darkPrimaryText rounded-full transition-transform duration-300 ${
                     displayOptions.showSearchBar ? "translate-x-5" : ""
                   }`}
                 ></div>

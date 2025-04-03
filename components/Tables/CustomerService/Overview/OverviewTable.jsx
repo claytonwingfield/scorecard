@@ -262,8 +262,8 @@ export default function OverviewTable({
           )
         ) : (
           <div className="flex-grow overflow-y-auto no-scrollbar">
-            <table className="min-w-full divide-y divide-lovesBlack">
-              <thead className="bg-lovesBlack dark:bg-darkCompBg">
+            <table className="min-w-full divide-y divide-lovesBlack ">
+              <thead className="bg-lovesBlack dark:bg-darkCompBg ">
                 <tr>
                   {columnsToDisplay.map((col, idx) => (
                     <th
@@ -289,11 +289,11 @@ export default function OverviewTable({
                     >
                       <span
                         className={`flex ${
-                          idx === 0 ? "justify-start" : "justify-center"
+                          idx === 0 ? "justify-start " : "justify-center"
                         } items-center`}
                       >
                         {col.label}
-                        <span className="ml-2 sm:inline hidden">
+                        <span className="ml-2 sm:inline hidden ">
                           {getSortIndicator(col.key)}
                         </span>
                       </span>
@@ -307,7 +307,7 @@ export default function OverviewTable({
                     {columnsToDisplay.map((col, colIndex) => (
                       <td
                         key={col.key}
-                        className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-lovesWhite sm:pl-6 ${getTextAlignment(
+                        className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-darkPrimaryText sm:pl-6 ${getTextAlignment(
                           colIndex
                         )}`}
                       >

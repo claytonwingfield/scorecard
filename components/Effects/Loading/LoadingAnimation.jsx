@@ -6,7 +6,7 @@ import loadingAnimation2 from "@/public/animations/loading2.json";
 
 export default function LoadingAnimation() {
   return (
-    <div className="fixed inset-0 z-50 bg-white">
+    <div className="fixed inset-0 z-50 bg-white dark:bg-darkBg">
       <div className="flex items-center justify-center h-full">
         <Lottie
           animationData={loadingAnimation2}

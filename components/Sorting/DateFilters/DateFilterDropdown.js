@@ -63,7 +63,7 @@ export default function DateFilterDropdown({
                   <button
                     type="button"
                     onClick={clearRange}
-                    className="lg:w-1/6 w-3/4 rounded-md bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
+                    className="lg:w-1/6 w-3/4 py-2 rounded-md bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Clear Date Range
                   </button>
@@ -73,7 +73,7 @@ export default function DateFilterDropdown({
                     type="button"
                     onClick={saveRange}
                     className="lg:w-1/6 w-3/4 rounded-md bg-lovesBlack 
-                    dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2 dark:border-darkBorder"
+                    dark:bg-darkBorder dark:text-darkPrimaryText  text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Save Date Range
                   </button>

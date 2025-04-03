@@ -183,7 +183,7 @@ export default function FilterCalendarToggle({
                   <button
                     type="button"
                     onClick={clearRange}
-                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesPrimaryRed px-3 py-2 text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
+                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesPrimaryRed px-3 py-2 text-md font-futura-bold text-lovesWhite dark:text-darkPrimaryText shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Clear Date Range
                   </button>
@@ -193,7 +193,7 @@ export default function FilterCalendarToggle({
                     type="button"
                     onClick={saveRange}
                     className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack 
-                            dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2  dark:border-darkBorder"
+                    dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Save Date Range
                   </button>

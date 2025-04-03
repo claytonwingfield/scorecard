@@ -220,7 +220,7 @@ const LineChartTime = forwardRef(
           dx={-10}
           dy={4}
           textAnchor="end"
-          fill={isDarkMode ? "#fff" : "#E0E0E0"}
+          fill={isDarkMode ? "#E0E0E0" : "#000000"}
           className="font-futura-bold"
         >
           {text}
@@ -238,7 +238,7 @@ const LineChartTime = forwardRef(
           dy={16}
           transform={transform}
           textAnchor={textAnchor}
-          fill={isDarkMode ? "#fff" : "#E0E0E0"}
+          fill={isDarkMode ? "#E0E0E0" : "#000000"}
           className="font-futura-bold"
         >
           {payload.value.length > 15
@@ -303,7 +303,7 @@ const LineChartTime = forwardRef(
 
     return (
       <section ref={ref} className="flex flex-grow h-full px-2">
-        <div className="w-full h-full bg-lovesWhite dark:bg-darkBg shadow-sm border-darkBorder rounded-lg">
+        <div className="w-full h-full bg-lovesWhite dark:bg-darkBg shadow-sm dark:border-darkBorder rounded-lg">
           <ResponsiveContainer width="100%" height="95%">
             <ComposedChart
               data={chartData}
@@ -463,8 +463,8 @@ const LineChartTime = forwardRef(
                               color:
                                 entry.type === "circle"
                                   ? isDarkMode
-                                    ? "#ccc"
-                                    : "#E0E0E0"
+                                    ? "#E0E0E0"
+                                    : "#000000"
                                   : entry.color,
                             }}
                           >

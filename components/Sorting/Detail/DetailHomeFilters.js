@@ -357,7 +357,7 @@ export default function DetailHomeFilters({
                           <button
                             type="button"
                             onClick={clearRange}
-                            className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
+                            className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                           >
                             Clear Date Range
                           </button>
@@ -367,7 +367,7 @@ export default function DetailHomeFilters({
                             type="button"
                             onClick={() => saveRange(close)}
                             className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack 
-                            dark:bg-darkPrimaryText dark:text-darkBg  text-sm font-futura-bold text-lovesWhite shadow dark:border-2 dark:border-darkBorder"
+                    dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                           >
                             Save Date Range
                           </button>
@@ -424,7 +424,7 @@ export default function DetailHomeFilters({
     ${
       canSubmit
         ? "bg-lovesPrimaryRed hover:bg-lovesBlack dark:hover:bg-lovesPrimaryRed text-lovesWhite"
-        : "bg-darkLightGray dark:text-lovesBlack text-lovesBlack cursor-not-allowed dark:hover:text-lovesBlack"
+        : "bg-darkLightGray dark:bg-darkCompBg dark:text-darkPrimaryText text-lovesBlack cursor-not-allowed "
     }
       font-futura-bold text-lg shadow-md shadow-lovesBlack`}
         >
@@ -440,7 +440,7 @@ export default function DetailHomeFilters({
               className={`${
                 canSubmit
                   ? "stroke-white "
-                  : "stroke-lovesBlack dark:stroke-lovesBlack dark:hover:stroke-lovesBlack"
+                  : "stroke-lovesBlack dark:stroke-darkPrimaryText dark:hover:stroke-darkPrimaryText"
               }`}
               strokeWidth="1.6"
               strokeLinecap="round"

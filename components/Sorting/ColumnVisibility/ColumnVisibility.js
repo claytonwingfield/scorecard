@@ -23,7 +23,7 @@ export default function ColumnVisibility({
   };
 
   return (
-    <div className="bg-lovesWhite dark:bg-darkBg rounded-lg lg:p-4 p-2 border shadow-sm shadow-lovesBlack dark:shadow-darkBorder">
+    <div className="bg-lovesWhite dark:bg-darkCompBg rounded-lg lg:p-4 p-2 border dark:border-2 dark:border-darkBorder shadow-sm shadow-lovesBlack dark:shadow-darkBorder">
       <h3 className="text-xl font-futura-bold font-medium text-lovesBlack lg:mb-3 mb-5 text-center dark:text-darkPrimaryText">
         Column Controls
       </h3>
@@ -64,34 +64,34 @@ export default function ColumnVisibility({
                 <div className="relative">
                   <Listbox.Button
                     aria-label={`Toggle column visibility for ${label}`}
-                    className="relative z-49 w-full py-2 pl-3 pr-10 text-left text-md font-futura  bg-lovesWhite dark:bg-darkCompBg dark:text-lovesBlack rounded-md cursor-pointer focus:outline-none  border border-lovesGray"
+                    className="relative z-49 w-full py-2 pl-3 pr-10 text-left text-md font-futura  bg-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText rounded-md cursor-pointer focus:outline-none  border border-lovesGray dark:border-darkBorder"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <span className="block truncate">{getDisplayText()}</span>
                     <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                       <ChevronDownIcon
-                        className="h-5 w-5 text-lovesBlack"
+                        className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
                         aria-hidden="true"
                       />
                     </span>
                   </Listbox.Button>
 
-                  <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkCompBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+                  <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 dark:border-2 dark:border-darkBorder overflow-auto focus:outline-none  z-50">
                     <Listbox.Option
                       key={`${tableName}-All`}
                       value="All"
                       className={({ active }) =>
                         `cursor-pointer select-none relative py-2 pl-10 pr-4 dark:border-b dark:border-darkBorder ${
                           active
-                            ? "text-lovesBlack bg-lovesGray text-md font-futura"
-                            : "text-lovesWhite text-md font-futura"
+                            ? "text-lovesBlack bg-lovesGray dark:bg-darkBg text-md font-futura dark:text-darkPrimaryText"
+                            : "text-lovesWhite text-md font-futura dark:text-darkPrimaryText"
                         }`
                       }
                       onClick={() => handleShowAll(tableName)}
                     >
                       {({ active }) => (
                         <>
-                          <span className="block truncate text-lovesBlack text-md font-futura">
+                          <span className="block truncate text-lovesBlack text-md font-futura dark:text-darkPrimaryText">
                             Hide All
                           </span>
                           {!isShowAll &&
@@ -107,7 +107,7 @@ export default function ColumnVisibility({
                       )}
                     </Listbox.Option>
 
-                    <div className="border-t border-lovesGray my-1"></div>
+                    <div className="border-t border-lovesGray dark:border-darkBorder my-1"></div>
 
                     {columns.map((col) => (
                       <Listbox.Option
@@ -116,8 +116,8 @@ export default function ColumnVisibility({
                         className={({ active }) =>
                           `cursor-pointer select-none relative py-2 pl-10 pr-4 ${
                             active
-                              ? "text-lovesBlack bg-lovesGray text-md font-futura"
-                              : "text-lovesBlack text-md font-futura"
+                              ? "text-lovesBlack bg-lovesGray text-md font-futura dark:text-darkPrimaryText dark:bg-darkBg"
+                              : "text-lovesBlack text-md font-futura dark:text-darkPrimaryText dark:bg-darkBg"
                           }`
                         }
                         onClick={() => toggleOption(tableName, col.key)}
@@ -132,7 +132,7 @@ export default function ColumnVisibility({
                             {selectedOptions.includes(col.key) && (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                                 <CheckIcon
-                                  className="h-5 w-5 text-lovesPrimaryRed"
+                                  className="h-5 w-5 text-lovesPrimaryRed dark:bg-darkBg dark:border-none"
                                   aria-hidden="true"
                                   type="checkbox"
                                   checked={selectedOptions.includes(col.key)}

@@ -145,9 +145,9 @@ export default function Calendar({
                     <button
                       onClick={() => handleDateRangeChange(option.value)}
                       className={classNames(
-                        "w-full border border-lovesGray dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-lovesBlack dark:hover:bg-darkPrimaryText dark:hover:text-darkBg hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
+                        "w-full border border-lovesGray dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-lovesBlack dark:hover:bg-darkBorder dark:hover:text-darkPrimaryText hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
                         selectedDateRange === option.value &&
-                          "bg-lovesBlack text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg" // <--- Make sure it's text-lovesWhite
+                          "bg-lovesBlack text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText" // <--- Make sure it's text-lovesWhite
                       )}
                     >
                       {option.label}
@@ -213,13 +213,13 @@ export default function Calendar({
                     isSelected &&
                       !isStartOfRange &&
                       !isEndOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg",
+                      "bg-lovesBlack  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText",
 
                     isStartOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkPrimaryText dark:text-darkBg lg:rounded-l-full rounded-l-none",
+                      "bg-lovesBlack  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText lg:rounded-l-full rounded-l-none",
 
                     isEndOfRange &&
-                      "bg-lovesBlack dark:bg-darkPrimaryText dark:text-darkBg  text-lovesWhite lg:rounded-r-full rounded-r-none",
+                      "bg-lovesBlack dark:bg-darkBorder dark:text-darkPrimaryText  text-lovesWhite lg:rounded-r-full rounded-r-none",
 
                     dayIdx === 0 && "rounded-tl-lg",
                     dayIdx === 6 && "rounded-tr-lg",

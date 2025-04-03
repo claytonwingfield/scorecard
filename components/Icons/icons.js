@@ -2,7 +2,7 @@ import React from "react";
 
 export const defaultSort = (
   <svg
-    className="dark:text-lovesBlack "
+    className="dark:text-darkPrimaryText "
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -20,7 +20,7 @@ export const defaultSort = (
 
 export const upArrow = (
   <svg
-    className="dark:text-lovesBlack"
+    className="dark:text-darkPrimaryText"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"
@@ -38,7 +38,7 @@ export const upArrow = (
 
 export const downArrow = (
   <svg
-    className="dark:text-lovesBlack"
+    className="dark:text-darkPrimaryText"
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
     viewBox="0 0 24 24"

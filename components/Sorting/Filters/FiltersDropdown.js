@@ -89,7 +89,7 @@ export default function FiltersDropdown({
                               />
                             </span>
                           </Listbox.Button>
-                          <Listbox.Options className="absolute dark:bg-darkBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none  z-50">
+                          <Listbox.Options className="absolute dark:bg-darkBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
                             {filterCategory.options.map((option) => (
                               <Listbox.Option
                                 key={option.value}

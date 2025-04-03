@@ -99,7 +99,7 @@ export default function SearchBox({
           <input
             type="search"
             id="search-dropdown"
-            className="block p-2.5 w-full text-md font-futura  text-lovesBlack border focus:outline-none border-lovesGray dark:placeholder-black rounded-lg bg-lovesWhite dark:bg-darkCompBg shadow-md dark:shadow-sm shadow-lovesGray dark:shadow-darkBorder"
+            className="block p-2.5 w-full text-md font-futura dark:text-darkPrimaryText  text-lovesBlack border focus:outline-none border-lovesGray dark:border-darkBorder dark:placeholder-darkPrimaryText rounded-lg bg-lovesWhite dark:bg-darkCompBg shadow-md dark:shadow-sm shadow-lovesGray dark:shadow-darkBorder"
             placeholder="Search Tables... "
             value={query}
             onChange={handleInputChange}
