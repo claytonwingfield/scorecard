@@ -387,7 +387,7 @@ export default function MetricsDashboard({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <div className="bg-lovesBlack  shadow-md shadow-lovesBlack  rounded-lg ml-8 mr-8 mt-4">
+          <div className="bg-darkBorder  shadow-md shadow-darkBorder  rounded-lg ml-8 mr-8 mt-4">
             {activeTab === "overview" && (
               <LayoutOptions
                 onLayoutSelect={handleLayoutSelect}

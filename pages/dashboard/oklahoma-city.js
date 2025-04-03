@@ -3,7 +3,11 @@ import Header from "@/components/Navigation/header";
 
 import React, { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronRightIcon,
+  PlusCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/20/solid";
 import bgCard from "@/public/animations/bgCard.json";
 import down from "@/public/animations/down.json";
 import award from "@/public/animations/award.json";
@@ -20,6 +24,7 @@ import {
   customerServiceAHT,
   qualityInfo,
   customerServiceAdherence,
+  allTeamData,
 } from "@/data/customerServiceData";
 import Image from "next/image";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -144,6 +149,143 @@ function getBgColor(statName, statValue) {
   }
   return "bg-lovesLightRed";
 }
+const customerServiceManagers = Array.from(
+  new Set(allTeamData.map((item) => item.manager))
+).map((managerName) => ({ name: managerName }));
+const computedCustomerServiceManagerStats = customerServiceManagers.map(
+  (manager) => {
+    const managerName = manager.name;
+    return {
+      name: managerName,
+      "Average Handle Time": averageAHTForManager(
+        customerServiceAHT,
+        managerName
+      ),
+      Adherence: averagePercentageForManager(
+        customerServiceAdherence,
+        "qualityTeam",
+        managerName
+      ),
+      Quality: averagePercentageForManager(
+        qualityInfo,
+        "qualityTeam",
+        managerName
+      ),
+      "Average Score": averagePercentageForManager(
+        customerServiceAverageScore,
+        "mtdScore",
+        managerName
+      ),
+    };
+  }
+);
+const helpDeskManagerStats = [
+  {
+    name: "Stephen Thomas",
+    "Average Handle Time": "04:46",
+    Adherence: "92%",
+    Quality: "93%",
+    "Average Score": "95%",
+  },
+  {
+    name: "Debra Scarberry",
+    "Average Handle Time": "04:51",
+    Adherence: "91%",
+    Quality: "92%",
+    "Average Score": "94%",
+  },
+];
+
+const electronicDispatchManagerStats = [
+  {
+    name: "Eric Turberville",
+    "Average Handle Time": "06:00",
+    Adherence: "90%",
+    Quality: "92%",
+    "Average Score": "94%",
+  },
+  {
+    name: "Linda McKown",
+    "Average Handle Time": "06:05",
+    Adherence: "89%",
+    Quality: "91%",
+    "Average Score": "93%",
+  },
+  {
+    name: "Kelli Marburger",
+    "Average Handle Time": "05:55",
+    Adherence: "90%",
+    Quality: "89%",
+    "Average Score": "92%",
+  },
+];
+
+const writtenCommunicationManagerStats = [
+  {
+    name: "Erik Turberville",
+    "Average Handle Time": "05:50",
+    Adherence: "91%",
+    Quality: "90%",
+    "Average Score": "93%",
+  },
+  {
+    name: "Kelli Marburger",
+    "Average Handle Time": "05:55",
+    Adherence: "90%",
+    Quality: "89%",
+    "Average Score": "92%",
+  },
+];
+
+const resolutionsManagerStats = [
+  {
+    name: "Ivy Turner",
+    "Average Handle Time": "06:10",
+    Adherence: "89%",
+    Quality: "91%",
+    "Average Score": "92%",
+  },
+  {
+    name: "Jack Hill",
+    "Average Handle Time": "06:15",
+    Adherence: "88%",
+    Quality: "90%",
+    "Average Score": "91%",
+  },
+];
+
+// Mapping for all departments
+const departmentManagerStats = {
+  "Customer Service": computedCustomerServiceManagerStats,
+  "Help Desk": helpDeskManagerStats,
+  "Electronic Dispatch": electronicDispatchManagerStats,
+  "Written Communication": writtenCommunicationManagerStats,
+  Resolutions: resolutionsManagerStats,
+};
+function averagePercentageForManager(dataArray, key, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce(
+    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+    0
+  );
+  const avg = sum / filtered.length;
+  return avg.toFixed(2) + "%";
+}
+
+// Computes average AHT in MM:SS for a manager
+function averageAHTForManager(dataArray, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    const [m, s] = cur.ahtTeam.split(":").map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const avgSeconds = sumSeconds / filtered.length;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
 
 const StatCardComponent = ({
   id,
@@ -169,20 +311,24 @@ const StatCardComponent = ({
       ? "text-lovesGreen"
       : "text-lovesPrimaryRed"
     : qualifies
-    ? "text-gray-900"
-    : "text-white";
+    ? "text-lovesGreen"
+    : "text-lovesPrimaryRed";
 
   const cardBg = isActive
-    ? "bg-lovesWhite dark:bg-darkBg"
+    ? "bg-darkCompBg dark:bg-darkBg "
     : animationFinished
-    ? bgColorClass
-    : "bg-lovesWhite dark:bg-darkPrimaryText";
-
+    ? "bg-darkBorder"
+    : "bg-lovesBlack dark:bg-darkPrimaryText";
+  const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
   return (
     <div
       onClick={onClick}
-      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden dark:border ${
-        qualifies ? "dark:border-lovesGreen" : "dark:border-lovesPrimaryRed"
+      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
+        isActive
+          ? qualifies
+            ? "shadow-lg shadow-lovesGreen dark:shadow-none dark:border-lovesGreen"
+            : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
+          : "border-lovesBlack dark:border-lovesBlack"
       } ${cardBg}`}
       style={{ transition: "background-color 1s ease-in-out" }}
     >
@@ -216,13 +362,15 @@ const StatCardComponent = ({
         }}
       >
         <dt className="flex flex-col items-center text-center">
-          <p className={`truncate text-md font-futura-bold ${textColorClass}`}>
+          <p
+            className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
+          >
             {name}
           </p>
         </dt>
         <dd className="flex flex-col items-center justify-center pt-4">
           <p
-            className={`text-2xl font-semibold font-futura-bold ${textColorClass}`}
+            className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
           >
             {stat}
           </p>
@@ -359,6 +507,13 @@ export default function OklahomaCity() {
     "Written Communication": false,
     Resolutions: false,
   });
+  const [managersExpanded, setManagersExpanded] = useState({
+    "Customer Service": false,
+    "Help Desk": false,
+    "Electronic Dispatch": false,
+    "Written Communication": false,
+    Resolutions: false,
+  });
   const [activeMetrics, setActiveMetrics] = useState({
     "Customer Service": "Average Handle Time",
     "Help Desk": "Average Handle Time",
@@ -370,9 +525,20 @@ export default function OklahomaCity() {
   const toggleExpand = (dept) => {
     setExpandedRows((prev) => ({ ...prev, [dept]: !prev[dept] }));
   };
-
+  const toggleManagerExpand = (dept) => {
+    setManagersExpanded((prev) => ({
+      ...prev,
+      [dept]: !prev[dept],
+    }));
+  };
   const [activeMetric, setActiveMetric] = useState("Average Handle Time");
-
+  const departmentManagerLinks = {
+    "Customer Service": "/customer-service/daily-metrics/manager",
+    "Help Desk": "/help-desk/daily-metrics/manager",
+    "Electronic Dispatch": "/electronic-dispatch/daily-metrics/manager",
+    "Written Communication": "/written-communication/daily-metrics/manager",
+    Resolutions: "/resolutions/daily-metrics/manager",
+  };
   const metricMap = {
     "Average Handle Time": "ahtTeam",
     Adherence: "adherence",
@@ -395,17 +561,126 @@ export default function OklahomaCity() {
   const renderChart = (dept) => {
     if (!expandedRows[dept]) return null;
     const currentMetric = activeMetrics[dept];
+
     return (
-      <div className="mt-4 h-80">
-        <LineChartTime
-          data={fakeDataMap[currentMetric]}
-          xDataKey="date"
-          yDataKey={metricMap[currentMetric]}
-          disableGrouping={true}
-        />
-      </div>
+      <>
+        {/* Main Chart */}
+        <div className="my-4 h-80">
+          <LineChartTime
+            data={fakeDataMap[currentMetric]}
+            xDataKey="date"
+            yDataKey={metricMap[currentMetric]}
+            disableGrouping={true}
+          />
+        </div>
+
+        {/* Department Managers Heading */}
+
+        {/* Conditionally render button or managers block based on managersExpanded */}
+        {!managersExpanded[dept] ? (
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => toggleManagerExpand(dept)}
+              className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+            >
+              <PlusCircleIcon className="h-6 w-6 mr-2 " />
+              Show Managers
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="border-2 border-darkBorder dark:bg-darkBg  bg-darkBorder mx-2 rounded-lg">
+              <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg mx-8 my-8 rounded-lg">
+                <div className=""></div>
+                <div className="flex items-center  mt-4 mb-2 mx-4">
+                  <Link
+                    href={departmentManagerLinks[dept] || "/default-managers"}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite hover:underline cursor-pointer">
+                      {dept} Managers
+                    </h1>
+                    <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  </Link>
+                </div>
+                <Transition
+                  show={managersExpanded[dept]}
+                  appear
+                  enter="transition ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="transition ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <div className="mt-4 text-center px-4 rounded-lg">
+                    <div className="relative">
+                      <div className="grid grid-cols-2 gap-16 ">
+                        {departmentManagerStats[dept]?.map((manager) => {
+                          const { name, ...metrics } = manager;
+                          return (
+                            <div key={name} className="mb-8 py-2 px-2">
+                              <div className="flex items-center justify-center mb-8">
+                                <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
+                                  {name}
+                                </h2>
+                                <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                              </div>
+                              <dl className="grid grid-cols-2 gap-8">
+                                {Object.entries(metrics).map(
+                                  ([metric, value], idx) => {
+                                    const bgColorClass = getBgColor(
+                                      metric,
+                                      value
+                                    );
+                                    return (
+                                      <StatCardComponent
+                                        key={metric}
+                                        id={metric}
+                                        name={metric}
+                                        stat={value}
+                                        qualifies={
+                                          bgColorClass.trim() ===
+                                          "bg-lovesGreen"
+                                        }
+                                        bgColorClass={bgColorClass}
+                                        delay={idx * 300}
+                                        isActive={
+                                          activeMetrics[dept] === metric
+                                        }
+                                        onClick={() =>
+                                          handleStatCardClick(dept, metric)
+                                        }
+                                      />
+                                    );
+                                  }
+                                )}
+                              </dl>
+                              <div className="mt-4 h-80">
+                                <LineChartTime
+                                  data={fakeDataMap[currentMetric]}
+                                  xDataKey="date"
+                                  yDataKey={metricMap[currentMetric]}
+                                  disableGrouping={true}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* Vertical divider for medium screens and above */}
+                      <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
+                    </div>
+                  </div>
+                </Transition>
+              </div>
+            </div>
+          </>
+        )}
+      </>
     );
   };
+
   const {
     currentDate,
     setCurrentDate,
@@ -426,7 +701,7 @@ export default function OklahomaCity() {
       <div className="px-5 sm:px-6 lg:px-10 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
-                     border border-lovesBlack shadow-sm shadow-lovesBlack  dark:border-darkBorder
+                     border border-lightGray shadow-sm shadow-lovesBlack  dark:border-darkBorder
                      rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
           onClick={() => setShowCalendar(true)}
         >
@@ -462,16 +737,42 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="group bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/customer-service/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/customer-service/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Customer Service
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="flex items-center space-x-2">
+                  {managersExpanded["Customer Service"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Customer Service")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Customer Service"] && (
+                    <button
+                      onClick={() => toggleExpand("Customer Service")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
+              </div>
             </div>
 
             <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -500,14 +801,18 @@ export default function OklahomaCity() {
 
             {renderChart("Customer Service")}
 
-            <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Customer Service"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
               <button
                 onClick={() => toggleExpand("Customer Service")}
-                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
               >
-                {expandedRows["Customer Service"]
-                  ? "Collapse Chart"
-                  : "Expand Chart"}
+                Expand Department
               </button>
             </div>
           </div>
@@ -522,55 +827,86 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/help-desk/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/help-desk/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Help Desk
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="flex items-center space-x-2">
+                  {managersExpanded["Help Desk"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Help Desk")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Help Desk"] && (
+                    <button
+                      onClick={() => toggleExpand("Help Desk")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
-            </div>
-            <div className="group">
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {helpDeskStats.map((item, index) => {
-                  const isActive =
-                    expandedRows["Help Desk"] &&
-                    activeMetrics["Help Desk"] === item.name;
-                  const bgColorClass = getBgColor(item.name, item.stat);
-                  return (
-                    <StatCardComponent
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      stat={item.stat}
-                      qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                      bgColorClass={bgColorClass}
-                      delay={index * 300}
-                      isActive={isActive}
-                      onClick={() =>
-                        handleStatCardClick("Help Desk", item.name)
-                      }
-                    />
-                  );
-                })}
-              </dl>
-              {renderChart("Help Desk")}
-              <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                <button
-                  onClick={() => toggleExpand("Help Desk")}
-                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
-                >
-                  {expandedRows["Help Desk"]
-                    ? "Collapse Chart"
-                    : "Expand Chart"}
-                </button>
               </div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {helpDeskStats.map((item, index) => {
+                const isActive =
+                  expandedRows["Help Desk"] &&
+                  activeMetrics["Help Desk"] === item.name;
+                const bgColorClass = getBgColor(item.name, item.stat);
+                return (
+                  <StatCardComponent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    stat={item.stat}
+                    qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                    bgColorClass={bgColorClass}
+                    delay={index * 300}
+                    isActive={isActive}
+                    onClick={() => handleStatCardClick("Help Desk", item.name)}
+                  />
+                );
+              })}
+            </dl>
+
+            {renderChart("Help Desk")}
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Help Desk"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
+              <button
+                onClick={() => toggleExpand("Help Desk")}
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
+              >
+                Expand Department
+              </button>
             </div>
           </div>
         </Transition>
+
+        {/* Electronic Dispatch */}
         <Transition
           show={selectedDepartments["Electronic Dispatch"]}
           appear
@@ -581,55 +917,88 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/electronic-dispatch/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/electronic-dispatch/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Electronic Dispatch
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="flex items-center space-x-2">
+                  {managersExpanded["Electronic Dispatch"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Electronic Dispatch")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Electronic Dispatch"] && (
+                    <button
+                      onClick={() => toggleExpand("Electronic Dispatch")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
-            </div>
-            <div className="group">
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {electronicDispatchStats.map((item, index) => {
-                  const isActive =
-                    expandedRows["Electronic Dispatch"] &&
-                    activeMetrics["Electronic Dispatch"] === item.name;
-                  const bgColorClass = getBgColor(item.name, item.stat);
-                  return (
-                    <StatCardComponent
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      stat={item.stat}
-                      qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                      bgColorClass={bgColorClass}
-                      delay={index * 300}
-                      isActive={isActive}
-                      onClick={() =>
-                        handleStatCardClick("Electronic Dispatch", item.name)
-                      }
-                    />
-                  );
-                })}
-              </dl>
-              {renderChart("Electronic Dispatch")}
-              <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                <button
-                  onClick={() => toggleExpand("Electronic Dispatch")}
-                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
-                >
-                  {expandedRows["Electronic Dispatch"]
-                    ? "Collapse Chart"
-                    : "Expand Chart"}
-                </button>
               </div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {electronicDispatchStats.map((item, index) => {
+                const isActive =
+                  expandedRows["Electronic Dispatch"] &&
+                  activeMetrics["Electronic Dispatch"] === item.name;
+                const bgColorClass = getBgColor(item.name, item.stat);
+                return (
+                  <StatCardComponent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    stat={item.stat}
+                    qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                    bgColorClass={bgColorClass}
+                    delay={index * 300}
+                    isActive={isActive}
+                    onClick={() =>
+                      handleStatCardClick("Electronic Dispatch", item.name)
+                    }
+                  />
+                );
+              })}
+            </dl>
+
+            {renderChart("Electronic Dispatch")}
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Electronic Dispatch"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
+              <button
+                onClick={() => toggleExpand("Electronic Dispatch")}
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
+              >
+                Expand Department
+              </button>
             </div>
           </div>
         </Transition>
+
+        {/* Written Communication */}
         <Transition
           show={selectedDepartments["Written Communication"]}
           appear
@@ -640,56 +1009,90 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/written-communication/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/written-communication/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Written Communication
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
-                </div>
-              </Link>
-            </div>
-            <div className="group">
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {writtenCommunicationStats.map((item, index) => {
-                  const isActive =
-                    expandedRows["Written Communication"] &&
-                    activeMetrics["Written Communication"] === item.name;
-                  const bgColorClass = getBgColor(item.name, item.stat);
-                  return (
-                    <StatCardComponent
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      stat={item.stat}
-                      qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                      bgColorClass={bgColorClass}
-                      delay={index * 300}
-                      isActive={isActive}
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="flex items-center space-x-2">
+                  {managersExpanded["Written Communication"] && (
+                    <button
                       onClick={() =>
-                        handleStatCardClick("Written Communication", item.name)
+                        toggleManagerExpand("Written Communication")
                       }
-                    />
-                  );
-                })}
-              </dl>
-              {renderChart("Written Communication")}
-
-              <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                <button
-                  onClick={() => toggleExpand("Written Communication")}
-                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
-                >
-                  {expandedRows["Written Communication"]
-                    ? "Collapse Chart"
-                    : "Expand Chart"}
-                </button>
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Written Communication"] && (
+                    <button
+                      onClick={() => toggleExpand("Written Communication")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
+                </div>
               </div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {writtenCommunicationStats.map((item, index) => {
+                const isActive =
+                  expandedRows["Written Communication"] &&
+                  activeMetrics["Written Communication"] === item.name;
+                const bgColorClass = getBgColor(item.name, item.stat);
+                return (
+                  <StatCardComponent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    stat={item.stat}
+                    qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                    bgColorClass={bgColorClass}
+                    delay={index * 300}
+                    isActive={isActive}
+                    onClick={() =>
+                      handleStatCardClick("Written Communication", item.name)
+                    }
+                  />
+                );
+              })}
+            </dl>
+
+            {renderChart("Written Communication")}
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Written Communication"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
+              <button
+                onClick={() => toggleExpand("Written Communication")}
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
+              >
+                Expand Department
+              </button>
             </div>
           </div>
         </Transition>
+
+        {/* Resolutions */}
         <Transition
           show={selectedDepartments["Resolutions"]}
           appear
@@ -700,53 +1103,83 @@ export default function OklahomaCity() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/resolutions/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/resolutions/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Resolutions
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="flex items-center space-x-2">
+                  {managersExpanded["Resolutions"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Resolutions")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Resolutions"] && (
+                    <button
+                      onClick={() => toggleExpand("Resolutions")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
-            </div>
-            <div className="group">
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {resolutionsStats.map((item, index) => {
-                  const isActive =
-                    expandedRows["Resolutions"] &&
-                    activeMetrics["Resolutions"] === item.name;
-                  const bgColorClass = getBgColor(item.name, item.stat);
-                  return (
-                    <StatCardComponent
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      stat={item.stat}
-                      qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                      bgColorClass={bgColorClass}
-                      delay={index * 300}
-                      isActive={isActive}
-                      onClick={() =>
-                        handleStatCardClick("Resolutions", item.name)
-                      }
-                    />
-                  );
-                })}
-              </dl>
-              {renderChart("Resolutions")}
-
-              <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                <button
-                  onClick={() => toggleExpand("Resolutions")}
-                  className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-lovesWhite dark:text-darkPrimaryText border border-transparent dark:border dark:border-darkBorder rounded-lg text-lovesBlack font-futura-bold text-xl"
-                >
-                  {expandedRows["Resolutions"]
-                    ? "Collapse Chart"
-                    : "Expand Chart"}
-                </button>
               </div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {resolutionsStats.map((item, index) => {
+                const isActive =
+                  expandedRows["Resolutions"] &&
+                  activeMetrics["Resolutions"] === item.name;
+                const bgColorClass = getBgColor(item.name, item.stat);
+                return (
+                  <StatCardComponent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    stat={item.stat}
+                    qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                    bgColorClass={bgColorClass}
+                    delay={index * 300}
+                    isActive={isActive}
+                    onClick={() =>
+                      handleStatCardClick("Resolutions", item.name)
+                    }
+                  />
+                );
+              })}
+            </dl>
+
+            {renderChart("Resolutions")}
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Resolutions"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
+              <button
+                onClick={() => toggleExpand("Resolutions")}
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
+              >
+                Expand Department
+              </button>
             </div>
           </div>
         </Transition>

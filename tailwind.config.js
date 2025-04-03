@@ -47,6 +47,7 @@ module.exports = {
         lovesPrimaryRed: "#FF0000",
         lovesLightRed: "#ff7f7f",
         lovesGreen: "#9dca7e",
+        lightGray: "#D9D9D9",
       },
       fontFamily: {
         futura: ['"futura-pt"', "sans-serif"],

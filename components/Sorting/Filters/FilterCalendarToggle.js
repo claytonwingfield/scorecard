@@ -105,15 +105,15 @@ export default function FilterCalendarToggle({
   `;
 
   const calendarButtonClasses = showCalendar
-    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const filterButtonClasses = showFilters
-    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
   const compareButtonClasses = showComparison
-    ? `${baseButton} bg-lovesBlack text-white dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-lovesBlack hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const getTextContainerClasses = (isOpen) => {
     let base = `
@@ -153,7 +153,7 @@ export default function FilterCalendarToggle({
               absolute mt-2
               w-[360px] left-[-200px]
               md:w-[700px] md:left-[-595px]
-              bg-white dark:bg-darkCompBg 
+              bg-lightGray dark:bg-darkCompBg 
               border border-lovesBlack dark:border-darkLightGray
               shadow-sm shadow-lovesBlack 
               rounded-lg p-4
@@ -192,7 +192,7 @@ export default function FilterCalendarToggle({
                   <button
                     type="button"
                     onClick={saveRange}
-                    className="lg:w-2/6 w-3/4 rounded-md bg-lovesBlack 
+                    className="lg:w-2/6 w-3/4 rounded-md bg-darkBorder 
                     dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Save Date Range
@@ -226,8 +226,8 @@ export default function FilterCalendarToggle({
       absolute mt-2
       left-[-145px]
       w-[250px]
-      bg-white dark:bg-darkCompBg
-      border border-gray-300 dark:border-darkLightGray
+      bg-lightGray dark:bg-darkCompBg
+      border border-darkCompBg dark:border-darkLightGray
       rounded-lg shadow-lg p-4
       z-50
     "
@@ -235,7 +235,7 @@ export default function FilterCalendarToggle({
                 <h1 className="text-lovesBlack text-md font-futura-bold dark:text-darkPrimaryText">
                   Filter Departments
                 </h1>
-                <div className="border-b border-gray-300 dark:border-darkBorder my-2"></div>
+                <div className="border-b border-lightGray dark:border-darkBorder my-2"></div>
 
                 {departmentOptions.map((option) => (
                   <div

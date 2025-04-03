@@ -303,7 +303,7 @@ const LineChartTime = forwardRef(
 
     return (
       <section ref={ref} className="flex flex-grow h-full px-2">
-        <div className="w-full h-full bg-lovesWhite dark:bg-darkBg shadow-sm dark:border-darkBorder rounded-lg">
+        <div className="w-full h-full bg-lovesWhite border-2 border-lovesBlack dark:bg-darkBg shadow-sm dark:border-darkBorder rounded-lg">
           <ResponsiveContainer width="100%" height="95%">
             <ComposedChart
               data={chartData}
@@ -454,6 +454,7 @@ const LineChartTime = forwardRef(
                                 width: 20,
                                 height: 20,
                                 backgroundColor: entry.color,
+                                borderRadius: "50%", // This makes it a circle
                               }}
                             />
                           )}

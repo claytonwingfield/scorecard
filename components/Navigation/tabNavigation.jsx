@@ -4,9 +4,9 @@ export default function TabNavigation({ activeTab, onTabChange }) {
   return (
     <div className="flex justify-center ">
       <div className="mt-4 px-4  lg:py-0 lg:pt-4 w-full max-w-xl ">
-        <div className="relative dark:bg-darkCompBg dark:rounded-lg ">
+        <div className="relative bg-lightGray dark:bg-darkCompBg dark:rounded-lg ">
           <div
-            className={`absolute top-0 left-0 h-full w-1/3 bg-lovesBlack  dark:bg-darkBg dark:border-2 dark:border-darkBorder   rounded-lg transition-transform duration-300 ease-in-out ${
+            className={`absolute top-0 left-0 h-full w-1/3 bg-darkBorder  dark:bg-darkBg dark:border-2 dark:border-darkBorder   rounded-lg transition-transform duration-300 ease-in-out ${
               activeTab === "overview"
                 ? "translate-x-0"
                 : activeTab === "agent"

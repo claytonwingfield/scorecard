@@ -72,7 +72,7 @@ export default function DateFilterDropdown({
                   <button
                     type="button"
                     onClick={saveRange}
-                    className="lg:w-1/6 w-3/4 rounded-md bg-lovesBlack 
+                    className="lg:w-1/6 w-3/4 rounded-md bg-darkBorder 
                     dark:bg-darkBorder dark:text-darkPrimaryText  text-sm font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                   >
                     Save Date Range

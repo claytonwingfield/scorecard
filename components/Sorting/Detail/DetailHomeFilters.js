@@ -158,7 +158,7 @@ export default function DetailHomeFilters({
   return (
     <section className="mt-2 py-4 relative">
       <div className="w-full max-w-full mx-auto flex justify-center items-center ">
-        <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkCompBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack dark:border-2 dark:border-darkBorder">
+        <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lightGray dark:bg-darkCompBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack dark:border-2 dark:border-darkBorder">
           <Disclosure defaultOpen>
             {({ open }) => (
               <div className="w-full md:w-1/2 lg:pr-12">
@@ -184,7 +184,7 @@ export default function DetailHomeFilters({
                   leaveTo="opacity-0 -translate-y-2"
                 >
                   <Disclosure.Panel className="mt-2">
-                    <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkBorder" />
+                    <hr className="h-px mb-4 bg-lightGray border-0 dark:bg-darkBorder" />
                     <div className="lg:space-y-6 space-y-2">
                       {dynamicFilterOptions.map((filterCategory) => (
                         <div
@@ -209,8 +209,8 @@ export default function DetailHomeFilters({
                             multiple
                           >
                             <div className="mt-1 relative">
-                              <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray dark:text-darkPrimaryText dark:border-2 dark:border-darkBorder">
-                                <span className="block truncate text-lovesBlack dark:text-darkPrimaryText">
+                              <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-darkBorder rounded-md cursor-default focus:outline-none border border-lovesGray dark:text-darkPrimaryText dark:border-2 dark:border-darkBorder">
+                                <span className="block truncate text-lovesWhite dark:text-darkPrimaryText">
                                   {activeFilters
                                     .filter(
                                       (f) => f.type === filterCategory.name
@@ -221,12 +221,12 @@ export default function DetailHomeFilters({
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <ChevronDownIcon
-                                    className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
+                                    className="h-5 w-5 text-lovesWhite dark:text-darkPrimaryText"
                                     aria-hidden="true"
                                   />
                                 </span>
                               </Listbox.Button>
-                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
+                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-lightGray shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
                                 {filterCategory.options.map((option) => (
                                   <Listbox.Option
                                     key={option.value}
@@ -234,8 +234,8 @@ export default function DetailHomeFilters({
                                     className={({ active }) =>
                                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                         active
-                                          ? "text-lovesBlack dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
-                                          : "text-lovesBlack dark:text-darkPrimaryText"
+                                          ? "text-darkBorder dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
+                                          : "text-darkBorder dark:text-darkPrimaryText"
                                       }`
                                     }
                                   >
@@ -305,7 +305,7 @@ export default function DetailHomeFilters({
               </div>
             )}
           </Disclosure>
-          <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkPrimaryText" />
+          <hr className="h-px mb-4 bg-darkBorder border-0 dark:bg-darkPrimaryText" />
 
           <Disclosure defaultOpen>
             {({ open, close }) => (
@@ -318,7 +318,7 @@ export default function DetailHomeFilters({
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
-                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
+                    } transition-transform duration-200 w-5 h-5 text-lovesWhite dark:text-darkPrimaryText`}
                   />
                 </Disclosure.Button>
 

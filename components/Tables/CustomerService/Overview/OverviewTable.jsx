@@ -85,7 +85,7 @@ export default function OverviewTable({
     index === 0 ? "text-left" : "text-center";
 
   return (
-    <div className="h-full  overflow-hidden ring-1 ring-lovesBlack dark:ring-0 rounded-lg ">
+    <div className="h-full  overflow-hidden ring-1 ring-lightGray dark:ring-0 rounded-lg ">
       <div className="flex flex-col h-full">
         {displayOptions.showCharts ? (
           <div
@@ -93,9 +93,9 @@ export default function OverviewTable({
               isMobile
                 ? "flex-col items-center"
                 : "flex-row items-center justify-between"
-            } bg-lovesBlack dark:bg-darkCompBg pl-4 pt-2 pb-4`}
+            } bg-lightGray dark:bg-darkCompBg pl-4 pt-2 pb-4`}
           >
-            <h2 className="text-xl font-futura-bold text-lovesWhite dark:text-darkPrimaryText">
+            <h2 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
               {title}
             </h2>
             <div
@@ -125,7 +125,7 @@ export default function OverviewTable({
                           />
                         </span>
                       </Listbox.Button>
-                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-white dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none ">
+                      <Listbox.Options className="absolute z-10 mt-1 w-full bg-lightGray dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none ">
                         {chartConfig.groupByOptions.map((option) => (
                           <Listbox.Option
                             key={option.value}
@@ -231,13 +231,13 @@ export default function OverviewTable({
             </div>
           </div>
         ) : (
-          <h2 className="text-md font-futura-bold text-lovesWhite dark:text-darkPrimaryText bg-lovesBlack dark:bg-darkCompBg p-3">
+          <h2 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg p-3">
             {title}
           </h2>
         )}
 
         {columnsToDisplay.length === 0 ? (
-          <div className="p-4 text-center text-lovesWhite dark:text-darkPrimaryText text-md font-futura">
+          <div className="p-4 text-center text-lovesBlack dark:text-darkPrimaryText text-md font-futura">
             No columns to display.
           </div>
         ) : displayOptions.showCharts ? (
@@ -263,13 +263,13 @@ export default function OverviewTable({
         ) : (
           <div className="flex-grow overflow-y-auto no-scrollbar">
             <table className="min-w-full divide-y divide-lovesBlack ">
-              <thead className="bg-lovesBlack dark:bg-darkCompBg ">
+              <thead className="bg-lightGray dark:bg-darkCompBg ">
                 <tr>
                   {columnsToDisplay.map((col, idx) => (
                     <th
                       key={col.key}
                       onClick={() => handleSort(col.key)}
-                      className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
+                      className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesBlack dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
                         idx
                       )}`}
                       aria-sort={

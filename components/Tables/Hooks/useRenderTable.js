@@ -24,7 +24,7 @@ export default function useRenderTable({
       return (
         <div
           key={tableName}
-          className="bg-lovesBlack dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder rounded-md p-1.5 w-full max-w-full no-scrollbar"
+          className="bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder rounded-md p-1.5 w-full max-w-full no-scrollbar"
         >
           <TableComponent
             displayOptions={displayOptions}

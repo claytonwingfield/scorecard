@@ -14,3 +14,6 @@
 .react-resizable-handle {
   cursor: nwse-resize;
 }
+.glow {
+  text-shadow: 0 0 2px currentColor;
+}

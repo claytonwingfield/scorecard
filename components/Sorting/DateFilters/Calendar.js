@@ -130,7 +130,7 @@ export default function Calendar({
     }
   }, [fromDate, toDate, setSelectedDateRange]);
   return (
-    <div className="bg-lovesWhite dark:bg-darkCompBg  flex flex-col flex-grow">
+    <div className="bg-lightGray dark:bg-darkCompBg  flex flex-col flex-grow">
       <div
         className={`grid grid-cols-1 md:grid-cols-12 gap-6 flex-grow ${
           buttonsPosition === "left" ? "" : "md:flex-row-reverse"
@@ -145,9 +145,9 @@ export default function Calendar({
                     <button
                       onClick={() => handleDateRangeChange(option.value)}
                       className={classNames(
-                        "w-full border border-lovesGray dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-lovesBlack dark:hover:bg-darkBorder dark:hover:text-darkPrimaryText hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
+                        "w-full border-2 border-darkBorder dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-darkBorder dark:hover:bg-darkBorder dark:hover:text-darkPrimaryText hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
                         selectedDateRange === option.value &&
-                          "bg-lovesBlack text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText" // <--- Make sure it's text-lovesWhite
+                          "bg-darkBorder text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText" // <--- Make sure it's text-lovesWhite
                       )}
                     >
                       {option.label}
@@ -161,7 +161,7 @@ export default function Calendar({
         <div
           className={`${
             showButtons ? "md:col-span-9" : "md:col-span-12"
-          } border border-lovesGray rounded-lg shadow-md shadow-lovesGray dark:shadow-sm flex flex-col `}
+          } border-2 border-darkBorder rounded-lg shadow-md shadow-darkBorder dark:shadow-sm flex flex-col `}
         >
           <div className="flex items-center justify-between text-lovesBlack  font-futura-bold dark:text-darkPrimaryText p-3">
             <button
@@ -192,7 +192,7 @@ export default function Calendar({
               </div>
             ))}
           </div>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lovesWhite  dark:bg-darkBg  text-md font-futura shadow ring-1 ring-darkPrimaryText flex-grow rounded-bl-lg rounded-br-lg">
+          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lightGray  dark:bg-darkBg  text-md font-futura shadow ring-1 text-lovesBlack ring-darkPrimaryText flex-grow rounded-bl-lg rounded-br-lg">
             {days.map((day, dayIdx) => {
               const isSelected = isSelectedDate(day.date, fromDate, toDate);
               const isToday =
@@ -213,13 +213,13 @@ export default function Calendar({
                     isSelected &&
                       !isStartOfRange &&
                       !isEndOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText",
+                      "bg-darkBorder  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText",
 
                     isStartOfRange &&
-                      "bg-lovesBlack  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText lg:rounded-l-full rounded-l-none",
+                      "bg-darkBorder  text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText lg:rounded-l-full rounded-l-none",
 
                     isEndOfRange &&
-                      "bg-lovesBlack dark:bg-darkBorder dark:text-darkPrimaryText  text-lovesWhite lg:rounded-r-full rounded-r-none",
+                      "bg-darkBorder dark:bg-darkBorder dark:text-darkPrimaryText  text-lovesWhite lg:rounded-r-full rounded-r-none",
 
                     dayIdx === 0 && "rounded-tl-lg",
                     dayIdx === 6 && "rounded-tr-lg",
