@@ -56,8 +56,8 @@ export default function DesktopDropDownMenu({
         ${nested ? "left-full" : "left-[-120px]"}
         z-50 mt-2 bg-lovesWhite dark:bg-darkBg
         shadow-lg w-60 min-w-[200px]
-        border border-darkPrimaryText rounded-lg
-        divide-y divide-lovesGray`}
+         rounded-lg shadow-md shadow-lovesBlack
+        divide-y divide-lovesBlack`}
         >
           {subPages.map((subPage, idx) => {
             if (subPage.isDropdown && subPage.subPages?.length > 0) {

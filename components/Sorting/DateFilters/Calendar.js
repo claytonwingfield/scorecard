@@ -163,7 +163,7 @@ export default function Calendar({
             showButtons ? "md:col-span-9" : "md:col-span-12"
           } border-2 border-darkBorder rounded-lg shadow-md shadow-darkBorder dark:shadow-sm flex flex-col `}
         >
-          <div className="flex items-center justify-between text-lovesBlack  font-futura-bold dark:text-darkPrimaryText p-3">
+          <div className="flex items-center justify-between text-lovesBlack dark:text-darkPrimaryText  font-futura-bold dark:text-darkPrimaryText p-3">
             <button
               type="button"
               className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-darkPrimaryText "
@@ -192,7 +192,7 @@ export default function Calendar({
               </div>
             ))}
           </div>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lightGray  dark:bg-darkBg  text-md font-futura shadow ring-1 text-lovesBlack ring-darkPrimaryText flex-grow rounded-bl-lg rounded-br-lg">
+          <div className="isolate mt-2 grid grid-cols-7 gap-px bg-lightGray  dark:bg-darkBg  text-md font-futura shadow ring-1 text-lovesBlack dark:text-darkPrimaryText ring-darkPrimaryText flex-grow rounded-bl-lg rounded-br-lg">
             {days.map((day, dayIdx) => {
               const isSelected = isSelectedDate(day.date, fromDate, toDate);
               const isToday =

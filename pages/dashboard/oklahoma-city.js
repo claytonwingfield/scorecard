@@ -239,18 +239,25 @@ const writtenCommunicationManagerStats = [
 
 const resolutionsManagerStats = [
   {
-    name: "Ivy Turner",
+    name: "Kurt Van Kley",
     "Average Handle Time": "06:10",
     Adherence: "89%",
     Quality: "91%",
     "Average Score": "92%",
   },
   {
-    name: "Jack Hill",
+    name: "Brian Ditmore",
     "Average Handle Time": "06:15",
     Adherence: "88%",
     Quality: "90%",
     "Average Score": "91%",
+  },
+  {
+    name: "Teri Carrier",
+    "Average Handle Time": "05:35",
+    Adherence: "91%",
+    Quality: "89%",
+    "Average Score": "89%",
   },
 ];
 
@@ -326,7 +333,7 @@ const StatCardComponent = ({
       className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
         isActive
           ? qualifies
-            ? "shadow-lg shadow-lovesGreen dark:shadow-none dark:border-lovesGreen"
+            ? "animate-glow border-lovesGreen dark:border-lovesGreen"
             : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
           : "border-lovesBlack dark:border-lovesBlack"
       } ${cardBg}`}
@@ -344,13 +351,13 @@ const StatCardComponent = ({
           </div>
         ) : (
           <div className="absolute top-2 right-3 p-2">
-            <Image
+            {/* <Image
               src={warning}
               alt="Warning"
-              width={40}
-              height={40}
+              width={20}
+              height={20}
               // style={{ width: "50px", height: "50px" }}
-            />
+            /> */}
           </div>
         ))}
 
@@ -523,7 +530,17 @@ export default function OklahomaCity() {
   });
 
   const toggleExpand = (dept) => {
-    setExpandedRows((prev) => ({ ...prev, [dept]: !prev[dept] }));
+    setExpandedRows((prev) => {
+      const isCurrentlyExpanded = prev[dept];
+      // If the department is being closed, reset the manager's expanded state.
+      if (isCurrentlyExpanded) {
+        setManagersExpanded((prevManagers) => ({
+          ...prevManagers,
+          [dept]: false,
+        }));
+      }
+      return { ...prev, [dept]: !isCurrentlyExpanded };
+    });
   };
   const toggleManagerExpand = (dept) => {
     setManagersExpanded((prev) => ({
@@ -578,7 +595,7 @@ export default function OklahomaCity() {
 
         {/* Conditionally render button or managers block based on managersExpanded */}
         {!managersExpanded[dept] ? (
-          <div className="flex justify-center mt-4">
+          <div className="lg:flex justify-center mt-4 hidden">
             <button
               onClick={() => toggleManagerExpand(dept)}
               className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
@@ -590,7 +607,7 @@ export default function OklahomaCity() {
         ) : (
           <>
             <div className="border-2 border-darkBorder dark:bg-darkBg  bg-darkBorder mx-2 rounded-lg">
-              <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg mx-8 my-8 rounded-lg">
+              <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg lg:m-8 rounded-lg">
                 <div className=""></div>
                 <div className="flex items-center  mt-4 mb-2 mx-4">
                   <Link
@@ -615,7 +632,7 @@ export default function OklahomaCity() {
                 >
                   <div className="mt-4 text-center px-4 rounded-lg">
                     <div className="relative">
-                      <div className="grid grid-cols-2 gap-16 ">
+                      <div className="grid grid-cols-2 gap-x-16 gap-y-4 ">
                         {departmentManagerStats[dept]?.map((manager) => {
                           const { name, ...metrics } = manager;
                           return (
@@ -698,11 +715,11 @@ export default function OklahomaCity() {
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
-      <div className="px-5 sm:px-6 lg:px-10 mt-4 flex items-center justify-between">
+      <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
-                     border border-lightGray shadow-sm shadow-lovesBlack  dark:border-darkBorder
-                     rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
+                     border border-lightGray shadow-sm shadow-lovesBlack border-lightGray  dark:border-darkBorder
+                     rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
           onClick={() => setShowCalendar(true)}
         >
           {fromDate && toDate
@@ -752,7 +769,7 @@ hover:underline cursor-pointer"
                   </h1>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
                 </Link>
-                <div className="flex items-center space-x-2">
+                <div className="lg:flex items-center space-x-2 hidden">
                   {managersExpanded["Customer Service"] && (
                     <button
                       onClick={() => toggleManagerExpand("Customer Service")}
@@ -765,9 +782,9 @@ hover:underline cursor-pointer"
                   {expandedRows["Customer Service"] && (
                     <button
                       onClick={() => toggleExpand("Customer Service")}
-                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText lg:px-4 lg:py-2 px-1 py-1 rounded-lg font-futura-bold"
                     >
-                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      <XCircleIcon className="lg:h-6 lg:w-6  mr-2" />
                       Close Department
                     </button>
                   )}
@@ -842,7 +859,7 @@ hover:underline cursor-pointer"
                   </h1>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
                 </Link>
-                <div className="flex items-center space-x-2">
+                <div className="lg:flex items-center space-x-2 hidden">
                   {managersExpanded["Help Desk"] && (
                     <button
                       onClick={() => toggleManagerExpand("Help Desk")}
@@ -932,7 +949,7 @@ hover:underline cursor-pointer"
                   </h1>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
                 </Link>
-                <div className="flex items-center space-x-2">
+                <div className="lg:flex items-center space-x-2 hidden">
                   {managersExpanded["Electronic Dispatch"] && (
                     <button
                       onClick={() => toggleManagerExpand("Electronic Dispatch")}
@@ -1024,7 +1041,7 @@ hover:underline cursor-pointer"
                   </h1>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
                 </Link>
-                <div className="flex items-center space-x-2">
+                <div className="lg:flex items-center space-x-2 hidden">
                   {managersExpanded["Written Communication"] && (
                     <button
                       onClick={() =>
@@ -1118,7 +1135,7 @@ hover:underline cursor-pointer"
                   </h1>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
                 </Link>
-                <div className="flex items-center space-x-2">
+                <div className="lg:flex items-center space-x-2 hidden">
                   {managersExpanded["Resolutions"] && (
                     <button
                       onClick={() => toggleManagerExpand("Resolutions")}

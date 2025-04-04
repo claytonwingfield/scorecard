@@ -96,7 +96,7 @@ export default function FilterCalendarToggle({
     group
     inline-flex items-center
     h-9
-    border border-lovesBlack
+    
     shadow-sm shadow-lovesBlack
     rounded-lg
     px-2
@@ -105,15 +105,15 @@ export default function FilterCalendarToggle({
   `;
 
   const calendarButtonClasses = showCalendar
-    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-lightGray text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lightGray hover:bg-darkBorder hover:text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const filterButtonClasses = showFilters
-    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-lightGray text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lightGray hover:bg-darkBorder hover:text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
   const compareButtonClasses = showComparison
-    ? `${baseButton} bg-darkBorder text-lovesWhite dark:bg-darkCompBg dark:text-darkPrimaryText`
-    : `${baseButton} bg-lovesWhite hover:bg-darkBorder hover:text-white dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
+    ? `${baseButton} bg-lightGray text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText`
+    : `${baseButton} bg-lightGray hover:bg-darkBorder hover:text-lovesBlack dark:bg-darkCompBg dark:text-darkPrimaryText hover:bg-darkPrimaryText`;
 
   const getTextContainerClasses = (isOpen) => {
     let base = `

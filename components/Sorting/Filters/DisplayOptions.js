@@ -95,29 +95,29 @@ export default function DisplayOptions({
         >
           <div className="relative z-49">
             <Listbox.Button
-              className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray dark:border-darkBorder"
+              className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-darkBorder rounded-md cursor-default focus:outline-none  border border-darkBorder dark:border-darkBorder"
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="block truncate dark:text-darkPrimaryText font-futura">
+              <span className="block truncate  text-lovesWhite dark:text-darkPrimaryText font-futura">
                 {getDisplayTextForActiveTab()}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <ChevronDownIcon
-                  className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText "
+                  className="h-5 w-5 text-lovesWhite dark:text-darkPrimaryText "
                   aria-hidden="true"
                 />
               </span>
             </Listbox.Button>
 
-            <Listbox.Options className="absolute mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
+            <Listbox.Options className="absolute mt-1 w-full bg-darkBorder dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1  text-md font-futura ring-1 ring-darkBorder ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
               <Listbox.Option
                 key="All"
                 value="All"
                 className={({ active }) =>
                   `cursor-default select-none relative py-2 pl-10 pr-4 ${
                     active
-                      ? "text-lovesBlack bg-lovesGray dark:bg-darkBg"
-                      : "text-lovesBlack dark:text-darkPrimaryText"
+                      ? "text-lovesWhite bg-darkBorder dark:bg-darkBg"
+                      : "text-lovesWhite dark:text-darkPrimaryText"
                   }`
                 }
                 onClick={handleShowAll}
@@ -150,8 +150,8 @@ export default function DisplayOptions({
                     className={({ active }) =>
                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                         active
-                          ? "text-lovesBlack dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
-                          : "text-lovesBlack dark:text-darkPrimaryText"
+                          ? "text-lovesWhite dark:text-darkPrimaryText bg-darkBorder dark:bg-darkBg"
+                          : "text-lovesWhite dark:text-darkPrimaryText"
                       }`
                     }
                     onClick={() => toggleOption(option.value)}
@@ -199,12 +199,14 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showSearchBar
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
+                      : "bg-darkBorder dark:bg-darkPrimaryText border-2 border-lightGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div
-                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite dark:text-darkPrimaryText rounded-full transition-transform duration-300 ${
-                    displayOptions.showSearchBar ? "translate-x-5" : ""
+                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite  dark:text-darkPrimaryText rounded-full transition-transform duration-300 ${
+                    displayOptions.showSearchBar
+                      ? "translate-x-5 bg-lovesWhite dark:bg-darkPrimaryText"
+                      : ""
                   }`}
                 ></div>
               </div>
@@ -229,12 +231,14 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showCharts
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
+                      : "bg-darkBorder dark:bg-darkPrimaryText border-2 border-lightGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div
-                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite rounded-full transition-transform duration-300 ${
-                    displayOptions.showCharts ? "translate-x-5" : ""
+                  className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite  rounded-full transition-transform duration-300 ${
+                    displayOptions.showCharts
+                      ? "translate-x-5 bg-lovesWhite dark:bg-darkPrimaryText"
+                      : ""
                   }`}
                 ></div>
               </div>
@@ -263,13 +267,15 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.showColumnVisibility
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
+                      : "bg-darkBorder dark:bg-darkPrimaryText border-2 border-lightGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
 
                 <div
                   className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite rounded-full transition-transform duration-300 ${
-                    displayOptions.showColumnVisibility ? "translate-x-5" : ""
+                    displayOptions.showColumnVisibility
+                      ? "translate-x-5 bg-lovesWhite dark:bg-darkPrimaryText"
+                      : ""
                   }`}
                 ></div>
               </div>
@@ -298,12 +304,14 @@ export default function DisplayOptions({
                   className={`w-11 h-6 rounded-full shadow-inner transition-colors duration-300 ${
                     displayOptions.resizableTables
                       ? "bg-lovesPrimaryRed"
-                      : "bg-lovesGray dark:border dark:border-darkBorder dark:bg-darkBg"
+                      : "bg-darkBorder dark:bg-darkPrimaryText border-2 border-lightGray dark:border dark:border-darkBorder dark:bg-darkBg"
                   }`}
                 ></div>
                 <div
                   className={`dot absolute left-1 top-1 w-4 h-4 bg-lovesWhite rounded-full transition-transform duration-300 ${
-                    displayOptions.resizableTables ? "translate-x-5" : ""
+                    displayOptions.resizableTables
+                      ? "translate-x-5 bg-lovesWhite dark:bg-darkPrimaryText"
+                      : ""
                   }`}
                 ></div>
               </div>

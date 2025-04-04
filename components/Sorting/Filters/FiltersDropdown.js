@@ -75,8 +75,8 @@ export default function FiltersDropdown({
                         multiple
                       >
                         <div className="mt-1 relative">
-                          <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none  border border-lovesGray dark:border-darkBorder">
-                            <span className="block truncate text-lovesBlack dark:text-darkPrimaryText ">
+                          <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-darkBorder rounded-md cursor-default focus:outline-none  border border-darkBorder dark:border-darkBorder">
+                            <span className="block truncate text-lovesWhite dark:text-darkPrimaryText ">
                               {activeFilters
                                 .filter((f) => f.type === filterCategory.name)
                                 .map((f) => f.label)
@@ -84,12 +84,12 @@ export default function FiltersDropdown({
                             </span>
                             <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                               <ChevronDownIcon
-                                className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
+                                className="h-5 w-5 text-lovesWhite dark:text-darkPrimaryText"
                                 aria-hidden="true"
                               />
                             </span>
                           </Listbox.Button>
-                          <Listbox.Options className="absolute dark:bg-darkBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
+                          <Listbox.Options className="absolute dark:bg-darkBg mt-1 w-full bg-darkBorder shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none dark:border-2 dark:border-darkBorder  z-50">
                             {filterCategory.options.map((option) => (
                               <Listbox.Option
                                 key={option.value}
@@ -97,8 +97,8 @@ export default function FiltersDropdown({
                                 className={({ active }) =>
                                   `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                     active
-                                      ? "text-lovesBlack bg-lovesGray dark:bg-darkBg dark:text-darkPrimaryText"
-                                      : "text-lovesBlack dark:text-darkPrimaryText"
+                                      ? "text-lovesWhite bg-darkBorder dark:bg-darkBg dark:text-darkPrimaryText"
+                                      : "text-lovesWhite bg-darkBorder dark:text-darkPrimaryText"
                                   }`
                                 }
                               >

@@ -99,7 +99,7 @@ export default function SearchBox({
           <input
             type="search"
             id="search-dropdown"
-            className="block p-2.5 w-full text-md font-futura dark:text-darkPrimaryText  text-lovesBlack border focus:outline-none border-lovesGray dark:border-darkBorder dark:placeholder-darkPrimaryText rounded-lg bg-lovesWhite dark:bg-darkCompBg shadow-md dark:shadow-sm shadow-lovesGray dark:shadow-darkBorder"
+            className="block appearance-none p-2.5 w-full text-md font-futura dark:text-darkPrimaryText text-lovesBlack border focus:outline-none focus:ring-0 border-darkBorder dark:border-darkBorder dark:placeholder-darkPrimaryText rounded-lg bg-lovesWhite dark:bg-darkCompBg shadow-md dark:shadow-sm shadow-darkBorder  placeholder-lovesBlack dark:shadow-darkBorder"
             placeholder="Search Tables... "
             value={query}
             onChange={handleInputChange}
@@ -129,11 +129,11 @@ export default function SearchBox({
       </div>
 
       {suggestions.length > 0 ? (
-        <div className="absolute mt-1 lg:inset-x-0 lg:w-full w-80 dark:border dark:border-darkBorder bg-lovesWhite shadow-lg dark:bg-darkCompBg dark:text-lovesBlack dark:shadow-sm shadow-lovesGray dark:shadow-darkBorder  max-h-60 no-scrollbar rounded-lg border border-lovesGray  overflow-auto focus:outline-none  z-50">
+        <div className="absolute mt-1 lg:inset-x-0 lg:w-full w-80 dark:border dark:border-darkBorder bg-lovesWhite shadow-lg dark:bg-darkCompBg dark:text-lovesBlack dark:shadow-sm shadow-darkBorder dark:shadow-darkBorder  max-h-60 no-scrollbar rounded-lg border border-darkBorder  overflow-auto focus:outline-none z-50">
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              className="cursor-pointer select-none relative z-50 py-2 pl-3 pr-9 hover:bg-lovesGray"
+              className="cursor-pointer select-none relative z-50 py-2 pl-3 pr-9 hover:bg-lovesWhite"
               onClick={() => handleSuggestionSelect(suggestion)}
             >
               <span className="flex items-center">
@@ -145,7 +145,7 @@ export default function SearchBox({
           ))}
         </div>
       ) : query.length > 1 ? (
-        <div className="absolute z-50 mt-1 inset-x-0 lg:w-full w-80 dark:border dark:border-darkBorder ml-4 lg:ml-0 bg-lovesWhite shadow-lg rounded-md py-1  overflow-auto  dark:bg-darkCompBg dark:text-darkPrimaryText dark:shadow-sm">
+        <div className="absolute z-50 mt-1 inset-x-0 lg:w-full w-80 dark:border dark:border-darkBorder ml-4 lg:ml-0 bg-lovesWhite shadow-lg shadow-darkBorder border border-darkBorder rounded-md py-1  overflow-auto  dark:bg-darkCompBg dark:text-darkPrimaryText dark:shadow-sm">
           <div className="cursor-default select-none relative py-2 pl-3 pr-9 text-lovesBlack text-md font-futura">
             No results found
           </div>

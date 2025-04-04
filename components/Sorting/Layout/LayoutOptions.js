@@ -57,13 +57,13 @@ const quickLayouts = [
     ],
     preview: (
       <div className=" max-w-xs grid grid-cols-2 gap-x-1 gap-y-1">
-        <div className="h-60 w-full bg-lovesGray rounded col-span-1"></div>
+        <div className="h-60 w-full bg-darkBorder rounded col-span-1"></div>
         <div className="col-span-1 grid grid-rows-5 gap-y-1">
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
         </div>
       </div>
     ),
@@ -124,12 +124,12 @@ const quickLayouts = [
     preview: (
       <div className=" max-w-xs grid grid-cols-1 gap-x-1 gap-y-1">
         <div className="row-span-2 grid grid-rows-5 gap-y-1">
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
-          <div className="h-10 w-20 bg-lovesGray rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
+          <div className="h-10 w-20 bg-darkBorder rounded"></div>
         </div>
       </div>
     ),
@@ -189,17 +189,17 @@ const quickLayouts = [
     ],
     preview: (
       <div className=" max-w-xs w-full grid grid-cols-2 gap-x-2 gap-y-2">
-        <div className="h-20 w-full bg-lovesGray rounded col-span-2"></div>
+        <div className="h-20 w-full bg-darkBorder rounded col-span-2"></div>
 
         <div className="col-span-1 flex flex-col gap-y-1">
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
         </div>
 
         <div className="col-span-1 flex flex-col gap-y-1">
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
-          <div className="h-12 w-12 bg-lovesGray rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
+          <div className="h-12 w-12 bg-darkBorder rounded"></div>
         </div>
       </div>
     ),
@@ -259,14 +259,14 @@ const quickLayouts = [
     ],
     preview: (
       <div className=" max-w-lg w-full grid grid-cols-2 gap-x-1 gap-y-1">
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
 
-        <div className="h-20 w-full bg-lovesGray rounded col-span-2"></div>
+        <div className="h-20 w-full bg-darkBorder rounded col-span-2"></div>
 
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
       </div>
     ),
   },
@@ -325,12 +325,12 @@ const quickLayouts = [
     ],
     preview: (
       <div className=" max-w-lg w-full grid grid-cols-2 gap-x-1 gap-y-1">
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-full bg-lovesGray rounded col-span-2"></div>
-        <div className="h-20 w-full bg-lovesGray rounded col-span-2"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-2"></div>
+        <div className="h-20 w-full bg-darkBorder rounded col-span-2"></div>
       </div>
     ),
   },
@@ -389,12 +389,12 @@ const quickLayouts = [
     ],
     preview: (
       <div className=" max-w-lg w-full grid grid-cols-2 gap-x-1 gap-y-1">
-        <div className="h-12 w-full bg-lovesGray rounded col-span-2"></div>
-        <div className="h-20 w-full bg-lovesGray rounded col-span-2"></div>
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-full bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
-        <div className="h-12 w-12 bg-lovesGray rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-2"></div>
+        <div className="h-20 w-full bg-darkBorder rounded col-span-2"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-full bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
+        <div className="h-12 w-12 bg-darkBorder rounded col-span-1"></div>
       </div>
     ),
   },
@@ -407,8 +407,8 @@ export default function LayoutOptions({
 }) {
   const [selectedLayoutIndex, setSelectedLayoutIndex] = useState(null);
   return (
-    <div className="bg-lovesBlack dark:bg-darkCompBg dark:border dark:border-darkBorder p-8 rounded-lg">
-      <div className="mb-3 text-lg font-futura-bold text-lovesWhite flex items-center justify-center gap-x-6 space-y-3">
+    <div className="bg-lightGray dark:bg-darkCompBg dark:border dark:border-darkBorder p-8 rounded-lg">
+      <div className="mb-3 text-lg font-futura-bold text-lovesBlack flex items-center justify-center gap-x-6 space-y-3">
         <h2>Quick Layouts</h2>
       </div>
       <div className="flex flex-row items-start justify-center space-x-12 ">
@@ -421,7 +421,7 @@ export default function LayoutOptions({
               onLayoutSelect(quickLayout.layout);
             }}
           >
-            <p className="mb-2 text-lovesWhite text-lg font-futura">
+            <p className="mb-2 text-lovesBlack text-lg font-futura">
               {quickLayout.name}
             </p>
 
@@ -429,7 +429,7 @@ export default function LayoutOptions({
               className={`${
                 selectedLayoutIndex === index
                   ? "bg-lovesPrimaryRed animate-pulse"
-                  : "animate-pulse"
+                  : "animate-custom-pulse-light dark:animate-pulse"
               } p-2 rounded-lg`}
             >
               {quickLayout.preview}
@@ -448,7 +448,7 @@ export default function LayoutOptions({
         <button
           type="button"
           onClick={onSaveLayout}
-          className="inline-flex border border-lovesWhite dark:border-2 dark:border-darkBorder justify-center rounded-md bg-lovesBlack px-12 py-2 text-md font-futura-bold text-lovesWhite shadow-sm hover:bg-lovesWhite dark:hover:bg-darkCompBg dark:hover:text-darkPrimaryText hover:text-lovesBlack"
+          className="inline-flex border border-darkBorder dark:border-2 dark:border-darkBorder justify-center rounded-md bg-darkBorder px-12 py-2 text-md font-futura-bold text-lovesWhite shadow-sm hover:bg-lightGray dark:hover:bg-darkCompBg dark:hover:text-darkPrimaryText hover:text-lovesBlack"
         >
           Save
         </button>

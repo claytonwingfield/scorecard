@@ -1,5 +1,6 @@
 "use client";
-import React, { useMemo, forwardRef } from "react";
+"use client";
+import React, { useMemo, forwardRef, useState, useEffect } from "react";
 import {
   ComposedChart,
   Line,
@@ -13,7 +14,6 @@ import {
 } from "recharts";
 import CustomTooltip from "./CustomTooltip";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
 
 const averageScoreGoal = "95%";
 const adherenceGoal = "88%";
@@ -51,11 +51,6 @@ const convertTimeToMinutes = (timeStr) => {
   return parseInt(minutes, 10) + parseInt(seconds, 10) / 60;
 };
 
-const renderBlackDot = (props) => {
-  const { cx, cy } = props;
-  return <circle cx={cx} cy={cy} r={4} fill="#000" />;
-};
-
 const LineChartTime = forwardRef(
   (
     {
@@ -77,6 +72,14 @@ const LineChartTime = forwardRef(
     };
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
+
+    // Define the dot rendering function inside the component so it can access isDarkMode
+    const renderColoredDot = (props) => {
+      const { cx, cy } = props;
+      return (
+        <circle cx={cx} cy={cy} r={4} fill={isDarkMode ? "#fff" : "#E0E0E0"} />
+      );
+    };
 
     const fixedAHTDomain = [
       convertTimeToMinutes("5:00"),
@@ -494,7 +497,7 @@ const LineChartTime = forwardRef(
               <Line
                 dataKey={yDataKey}
                 stroke="url(#lineColor)"
-                dot={renderBlackDot}
+                dot={renderColoredDot}
                 activeDot={{ r: 8, fill: "#000" }}
                 strokeWidth={3}
                 filter="url(#shadow)"

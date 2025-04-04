@@ -262,6 +262,7 @@ export default function OverviewTable({
           )
         ) : (
           <div className="flex-grow overflow-y-auto no-scrollbar">
+            <div></div>
             <table className="min-w-full divide-y divide-lovesBlack ">
               <thead className="bg-lightGray dark:bg-darkCompBg ">
                 <tr>

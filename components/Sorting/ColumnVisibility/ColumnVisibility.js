@@ -23,7 +23,7 @@ export default function ColumnVisibility({
   };
 
   return (
-    <div className="bg-lovesWhite dark:bg-darkCompBg rounded-lg lg:p-4 p-2 border dark:border-2 dark:border-darkBorder shadow-sm shadow-lovesBlack dark:shadow-darkBorder">
+    <div className="bg-lightGray dark:bg-darkCompBg rounded-lg lg:p-4 p-2 border dark:border-2 dark:border-darkBorder shadow-sm shadow-lovesBlack dark:shadow-darkBorder">
       <h3 className="text-xl font-futura-bold font-medium text-lovesBlack lg:mb-3 mb-5 text-center dark:text-darkPrimaryText">
         Column Controls
       </h3>
@@ -83,7 +83,7 @@ export default function ColumnVisibility({
                       className={({ active }) =>
                         `cursor-pointer select-none relative py-2 pl-10 pr-4 dark:border-b dark:border-darkBorder ${
                           active
-                            ? "text-lovesBlack bg-lovesGray dark:bg-darkBg text-md font-futura dark:text-darkPrimaryText"
+                            ? "text-lovesBlack dark:bg-darkBg text-md font-futura dark:text-darkPrimaryText"
                             : "text-lovesWhite text-md font-futura dark:text-darkPrimaryText"
                         }`
                       }
@@ -116,7 +116,7 @@ export default function ColumnVisibility({
                         className={({ active }) =>
                           `cursor-pointer select-none relative py-2 pl-10 pr-4 ${
                             active
-                              ? "text-lovesBlack bg-lovesGray text-md font-futura dark:text-darkPrimaryText dark:bg-darkBg"
+                              ? "text-lovesBlack  text-md font-futura dark:text-darkPrimaryText dark:bg-darkBg"
                               : "text-lovesBlack text-md font-futura dark:text-darkPrimaryText dark:bg-darkBg"
                           }`
                         }

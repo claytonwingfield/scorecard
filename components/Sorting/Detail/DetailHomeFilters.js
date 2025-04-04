@@ -184,7 +184,7 @@ export default function DetailHomeFilters({
                   leaveTo="opacity-0 -translate-y-2"
                 >
                   <Disclosure.Panel className="mt-2">
-                    <hr className="h-px mb-4 bg-lightGray border-0 dark:bg-darkBorder" />
+                    <hr className="h-px mb-4 bg-darkBorder border-0 dark:bg-darkBorder" />
                     <div className="lg:space-y-6 space-y-2">
                       {dynamicFilterOptions.map((filterCategory) => (
                         <div
@@ -226,7 +226,7 @@ export default function DetailHomeFilters({
                                   />
                                 </span>
                               </Listbox.Button>
-                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-lightGray shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
+                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-darkBorder shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
                                 {filterCategory.options.map((option) => (
                                   <Listbox.Option
                                     key={option.value}
@@ -234,8 +234,8 @@ export default function DetailHomeFilters({
                                     className={({ active }) =>
                                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                         active
-                                          ? "text-darkBorder dark:text-darkPrimaryText bg-lovesGray dark:bg-darkBg"
-                                          : "text-darkBorder dark:text-darkPrimaryText"
+                                          ? "text-lovesWhite dark:text-darkPrimaryText bg-darkBorder dark:bg-darkBg"
+                                          : "text-lovesWhite dark:text-darkPrimaryText"
                                       }`
                                     }
                                   >
@@ -318,7 +318,7 @@ export default function DetailHomeFilters({
                   <ChevronUpIcon
                     className={`${
                       open ? "transform rotate-180" : ""
-                    } transition-transform duration-200 w-5 h-5 text-lovesWhite dark:text-darkPrimaryText`}
+                    } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
                   />
                 </Disclosure.Button>
 
@@ -366,7 +366,7 @@ export default function DetailHomeFilters({
                           <button
                             type="button"
                             onClick={() => saveRange(close)}
-                            className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack 
+                            className="lg:w-3/6 w-3/4 rounded-md bg-darkBorder 
                     dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
                           >
                             Save Date Range
@@ -423,8 +423,8 @@ export default function DetailHomeFilters({
           className={`lg:w-1/5 py-1 w-2/5 flex items-center justify-center gap-2 rounded-lg  
     ${
       canSubmit
-        ? "bg-lovesPrimaryRed hover:bg-lovesBlack dark:hover:bg-lovesPrimaryRed text-lovesWhite"
-        : "bg-darkLightGray dark:bg-darkCompBg dark:text-darkPrimaryText text-lovesBlack cursor-not-allowed "
+        ? "bg-lovesPrimaryRed hover:bg-darkBorder dark:hover:bg-lovesPrimaryRed text-lovesWhite"
+        : "bg-lightGray dark:bg-darkCompBg dark:text-darkPrimaryText text-lovesBlack cursor-not-allowed "
     }
       font-futura-bold text-lg shadow-md shadow-lovesBlack`}
         >

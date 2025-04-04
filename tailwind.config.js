@@ -27,7 +27,22 @@ module.exports = {
       borderRadius: {
         "4xl": "2rem",
       },
-
+      keyframes: {
+        // Custom pulse for light mode with less reduction in opacity
+        "custom-pulse-light": {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.9 }, // adjust to your desired opacity
+        },
+        glow: {
+          "0%, 100%": { boxShadow: "0 0 10px #9dca7e, 0 0 20px #9dca7e" },
+          "50%": { boxShadow: "0 0 20px #9dca7e, 0 0 40px #9dca7e" },
+        },
+      },
+      animation: {
+        "custom-pulse-light":
+          "custom-pulse-light 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        glow: "glow 2s ease-in-out infinite",
+      },
       scrollBehavior: {
         smooth: "smooth",
       },

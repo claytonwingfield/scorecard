@@ -141,7 +141,7 @@ export default function TableSorting({
           <h2 id="filter-heading" className="sr-only ">
             Filters
           </h2>
-          <div className="bg-lovesWhite dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
+          <div className="bg-lightGray dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
             <div
               ref={containerRef}
               className="mx-auto flex max-w-full items-center space-x-4 px-4 sm:px-6 lg:px-8 pt-3"
@@ -174,7 +174,7 @@ export default function TableSorting({
           <h2 id="filter-heading" className="sr-only ">
             Filters
           </h2>
-          <div className="bg-lovesWhite dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
+          <div className="bg-lightGray dark:bg-darkCompBg pb-4 mt-4 border-t-darkBorder shadow shadow-lovesBlack rounded-t-lg dark:shadow-darkBorder dark:border-b dark:border-darkBorder">
             <div className="mx-auto flex max-w-full items-center space-x-4 px-4 sm:px-6 lg:px-8 pt-3">
               <p className="font-futura-bold dark:text-darkPrimaryText">
                 Select Filters Below
@@ -183,7 +183,7 @@ export default function TableSorting({
           </div>
         </section>
       )}
-      <div className="bg-lovesWhite dark:bg-darkCompBg dark:shadow-md dark:shadow-darkBorder">
+      <div className="bg-lightGray dark:bg-darkCompBg dark:shadow-md dark:shadow-darkBorder">
         <DateFilterDropdown
           isOpen={isDateFilterOpen}
           dateDropdownRef={dateDropdownRef}

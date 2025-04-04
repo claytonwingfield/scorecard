@@ -120,7 +120,7 @@ export default function TeamTable({
   return (
     <div
       ref={containerRef}
-      className="h-full overflow-hidden dark:ring-0 ring-1 ring-lovesBlack rounded-lg bg-lovesBlack dark:bg-darkCompBg"
+      className="h-full overflow-hidden dark:ring-0 ring-1 ring-lightGray rounded-lg bg-lightGray dark:bg-darkCompBg"
     >
       <div className="flex flex-col h-full">
         {displayOptions.showCharts ? (
@@ -129,9 +129,9 @@ export default function TeamTable({
               isMobile
                 ? "flex-col items-center" // MOBILE: Title on top
                 : "flex-row items-center justify-between" // DESKTOP: Title on left, listboxes on right
-            } bg-lovesBlack dark:bg-darkCompBg pl-4 pt-2 pb-4`}
+            } bg-lightGray dark:bg-darkCompBg pl-4 pt-2 pb-4`}
           >
-            <h2 className="text-xl font-futura-bold text-lovesWhite dark:text-darkPrimaryText">
+            <h2 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
               {title}
             </h2>
             <div
@@ -274,13 +274,13 @@ export default function TeamTable({
             </div>
           </div>
         ) : (
-          <h2 className="text-md font-futura-bold text-lovesWhite dark:text-darkPrimaryText bg-lovesBlack dark:bg-darkCompBg p-3">
+          <h2 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg p-3">
             {title}
           </h2>
         )}
 
         {columnsToDisplay.length === 0 ? (
-          <div className="p-4 text-center text-lovesWhite dark:text-darkPrimaryText text-md font-futura">
+          <div className="p-4 text-center text-lovesBlack dark:text-darkPrimaryText text-md font-futura">
             No columns to display.
           </div>
         ) : displayOptions.showCharts ? (
@@ -308,13 +308,13 @@ export default function TeamTable({
         ) : (
           <div className="flex-grow overflow-y-auto no-scrollbar">
             <table className="min-w-full divide-y divide-lovesBlack">
-              <thead className="bg-lovesBlack dark:bg-darkCompBg">
+              <thead className="bg-lightGray dark:bg-darkCompBg">
                 <tr>
                   {columnsToDisplay.map((col, index) => (
                     <th
                       key={col.key}
                       onClick={() => handleSort(col.key)}
-                      className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
+                      className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesBlack dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
                         index
                       )}`}
                       aria-sort={
