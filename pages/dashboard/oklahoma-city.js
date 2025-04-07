@@ -718,7 +718,7 @@ export default function OklahomaCity() {
       <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
-                     border border-lightGray shadow-sm shadow-lovesBlack border-lightGray  dark:border-darkBorder
+                     border border-lightGray shadow-sm shadow-lovesBlack   dark:border-darkBorder
                      rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
           onClick={() => setShowCalendar(true)}
         >

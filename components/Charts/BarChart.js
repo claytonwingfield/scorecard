@@ -363,16 +363,17 @@ const BarChart = forwardRef(
                 )}
                 <filter
                   id="barShadow"
-                  x="-20%"
-                  y="-20%"
-                  width="140%"
-                  height="140%"
+                  x="-50%"
+                  y="-50%"
+                  width="200%"
+                  height="200%"
                 >
                   <feDropShadow
                     dx="2"
                     dy="2"
                     stdDeviation="3"
-                    floodColor="black"
+                    floodColor={isDarkMode ? "#282828" : "#000"}
+                    floodOpacity="0.5"
                   />
                 </filter>
               </defs>

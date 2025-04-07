@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Disclosure, Transition, Listbox } from "@headlessui/react";
 import {
@@ -11,48 +11,622 @@ import Header from "@/components/Navigation/header";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
-import { allTeamData, customerServiceData } from "@/data/customerServiceData";
+
 import dynamic from "next/dynamic";
 import filterBackground from "@/public/animations/filterBackground.json";
 
+import Link from "next/link";
+import {
+  ChevronRightIcon,
+  PlusCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/20/solid";
+import bgCard from "@/public/animations/bgCard.json";
+import down from "@/public/animations/down.json";
+import award from "@/public/animations/award.json";
+
+import BarChart from "@/components/Charts/BarChart";
+import warning from "@/public/warning.png";
+import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
+import LineChartTime from "@/components/Charts/LineChartTime";
+import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
+
+import {
+  customerServiceAverageScore,
+  customerServiceAHT,
+  qualityInfo,
+  customerServiceAdherence,
+  allTeamData,
+} from "@/data/customerServiceData";
+import { customerServiceData } from "@/data/customerServiceData";
+import Image from "next/image";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
-export default function ManagerSelectionForm({}) {
-  const router = useRouter();
-  const [selectedManager, setSelectedManager] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+const dataSets = customerServiceData.dataSets;
 
-  const dataSets = customerServiceData.dataSets;
+const averageHandleTimeGoal = "5:30 - 6:30";
+const qualityGoal = "88%";
+const adherenceGoal = "88%";
+const averageScoreGoal = "95%";
+function generateRandomMetricValue(metricName) {
+  if (metricName === "Average Handle Time") {
+    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
+    let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
+    let mins = Math.floor(seconds / 60);
+    let secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  } else if (metricName === "Average Score") {
+    // generate a random percentage between 90% and 105%
+    let value = (Math.random() * 15 + 90).toFixed(2);
+    return `${value}%`;
+  } else if (metricName === "Adherence") {
+    // generate a random percentage between 85% and 95%
+    let value = (Math.random() * 10 + 85).toFixed(2);
+    return `${value}%`;
+  } else if (metricName === "Quality") {
+    // generate a random percentage between 80% and 95%
+    let value = (Math.random() * 15 + 80).toFixed(2);
+    return `${value}%`;
+  }
+  return "0%";
+}
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [fromDate, setFromDate] = useState(null);
-  const [toDate, setToDate] = useState(null);
-  const [selectedDateRange, setSelectedDateRange] = useState(null);
+function formatSecondsToMMSS(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${secs
+    .toString()
+    .padStart(2, "0")}`;
+}
 
-  const managerList = useMemo(() => {
-    const managersSet = new Set();
-    dataSets.forEach((set) => {
-      set.data.forEach((row) => {
-        if (row.manager) managersSet.add(row.manager);
-      });
+function generateRandomAHTSeconds() {
+  const minSeconds = 5 * 60;
+  const maxSeconds = 7 * 60;
+  return Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
+}
+
+function generateRandomAHTFormatted() {
+  const seconds = generateRandomAHTSeconds();
+  return formatSecondsToMMSS(seconds);
+}
+
+function generateFakeDataForMarch2025ForMetric(metricKey, generator) {
+  const data = [];
+  const startDate = new Date(2025, 2, 1);
+  const endDate = new Date(2025, 2, 31);
+  let currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    const formattedDate = `${
+      currentDate.getMonth() + 1
+    }/${currentDate.getDate()}`;
+    data.push({ date: formattedDate, [metricKey]: generator() });
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return data;
+}
+
+export const fakeAHTData = generateFakeDataForMarch2025ForMetric(
+  "ahtTeam",
+  generateRandomAHTFormatted
+);
+
+export const fakeAdherenceData = generateFakeDataForMarch2025ForMetric(
+  "adherence",
+  () => generateRandomMetricValue("Adherence")
+);
+export const fakeQualityData = generateFakeDataForMarch2025ForMetric(
+  "qualityTeam",
+  () => generateRandomMetricValue("Quality")
+);
+export const fakeMtdScoreData = generateFakeDataForMarch2025ForMetric(
+  "mtdScore",
+  () => generateRandomMetricValue("Average Score")
+);
+
+const fakeDataMap = {
+  "Average Handle Time": fakeAHTData,
+  Adherence: fakeAdherenceData,
+  Quality: fakeQualityData,
+  "Average Score": fakeMtdScoreData,
+};
+function getBgColor(statName, statValue) {
+  if (!statValue || statValue === "N/A") {
+    return "bg-lovesWhite/20";
+  }
+  if (statName === "Average Handle Time") {
+    const [mins, secs] = statValue.split(":").map(Number);
+    const totalSeconds = mins * 60 + secs;
+    const [lowStr, highStr] = averageHandleTimeGoal.split(" - ");
+    const [lowMins, lowSecs] = lowStr.split(":").map(Number);
+    const [highMins, highSecs] = highStr.split(":").map(Number);
+    const lowerBound = lowMins * 60 + lowSecs;
+    const upperBound = highMins * 60 + highSecs;
+    return totalSeconds >= lowerBound && totalSeconds <= upperBound
+      ? "bg-lovesGreen"
+      : "bg-lovesPrimaryRed";
+  } else {
+    const num = parseFloat(statValue.replace("%", ""));
+    if (statName === "Adherence") {
+      return num >= parseFloat(adherenceGoal)
+        ? "bg-lovesGreen"
+        : "bg-lovesPrimaryRed";
+    } else if (statName === "Quality") {
+      return num >= parseFloat(qualityGoal)
+        ? "bg-lovesGreen"
+        : "bg-lovesPrimaryRed";
+    } else if (statName === "Average Score") {
+      return num >= parseFloat(averageScoreGoal)
+        ? "bg-lovesGreen"
+        : "bg-lovesPrimaryRed";
+    }
+  }
+  return "bg-lovesWhite";
+}
+const customerServiceManagers = Array.from(
+  new Set(allTeamData.map((item) => item.manager))
+).map((managerName) => ({ name: managerName }));
+const customerServiceSupervisors = Array.from(
+  new Set(allTeamData.map((item) => item.supervisor))
+).map((supervisorName) => ({ name: supervisorName }));
+const computedCustomerServiceManagerStats = customerServiceManagers.map(
+  (manager) => {
+    const managerName = manager.name;
+    return {
+      name: managerName,
+      "Average Handle Time": averageAHTForManager(
+        customerServiceAHT,
+        managerName
+      ),
+      Adherence: averagePercentageForManager(
+        customerServiceAdherence,
+        "qualityTeam",
+        managerName
+      ),
+      Quality: averagePercentageForManager(
+        qualityInfo,
+        "qualityTeam",
+        managerName
+      ),
+      "Average Score": averagePercentageForManager(
+        customerServiceAverageScore,
+        "mtdScore",
+        managerName
+      ),
+    };
+  }
+);
+const computedCustomerServiceSupervisorStats = customerServiceSupervisors.map(
+  (supervisor) => {
+    const supervisorName = supervisor.name;
+    return {
+      name: supervisorName,
+      "Average Handle Time": averageAHTForSupervisor(
+        customerServiceAHT,
+        supervisorName
+      ),
+      Adherence: averagePercentageForSupervisor(
+        customerServiceAdherence,
+        "qualityTeam",
+        supervisorName
+      ),
+      Quality: averagePercentageForSupervisor(
+        qualityInfo,
+        "qualityTeam",
+        supervisorName
+      ),
+      "Average Score": averagePercentageForSupervisor(
+        customerServiceAverageScore,
+        "mtdScore",
+        supervisorName
+      ),
+    };
+  }
+);
+
+function averagePercentageForManager(dataArray, key, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce(
+    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+    0
+  );
+  const avg = sum / filtered.length;
+  return avg.toFixed(2) + "%";
+}
+
+// Computes average AHT in MM:SS for a manager
+function averageAHTForManager(dataArray, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    const [m, s] = cur.ahtTeam.split(":").map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const avgSeconds = sumSeconds / filtered.length;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+function averageAHTForSupervisor(dataArray, supervisorName) {
+  const filtered = dataArray.filter(
+    (item) => item.supervisor === supervisorName
+  );
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    const [m, s] = cur.ahtTeam.split(":").map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const avgSeconds = sumSeconds / filtered.length;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
+function averagePercentageForSupervisor(dataArray, key, supervisorName) {
+  const filtered = dataArray.filter(
+    (item) => item.supervisor === supervisorName
+  );
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce(
+    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+    0
+  );
+  const avg = sum / filtered.length;
+  return avg.toFixed(2) + "%";
+}
+
+const StatCardComponent = ({
+  id,
+  name,
+  stat,
+  qualifies,
+  bgColorClass,
+  delay = 0,
+  onClick,
+  isActive,
+}) => {
+  const [animationFinished, setAnimationFinished] = useState(true);
+  const [startAnimation, setStartAnimation] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStartAnimation(true);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+  const textColorClass = isActive
+    ? qualifies
+      ? "text-lovesGreen"
+      : "text-lovesPrimaryRed"
+    : qualifies
+    ? "text-lovesGreen"
+    : "text-lovesPrimaryRed";
+
+  const cardBg = isActive
+    ? "bg-darkCompBg dark:bg-darkBg "
+    : animationFinished
+    ? "bg-darkBorder"
+    : "bg-lovesBlack dark:bg-darkPrimaryText";
+  const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
+  return (
+    <div
+      onClick={onClick}
+      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
+        isActive
+          ? qualifies
+            ? "animate-glow border-lovesGreen dark:border-lovesGreen"
+            : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
+          : "border-lovesBlack dark:border-lovesBlack"
+      } ${cardBg}`}
+      style={{ transition: "background-color 1s ease-in-out" }}
+    >
+      {animationFinished &&
+        (qualifies ? (
+          <div className="absolute top-0 right-0 p-2">
+            <Lottie
+              animationData={award}
+              loop={true}
+              speed={0.1}
+              style={{ width: "50px", height: "50px" }}
+            />
+          </div>
+        ) : (
+          <div className="absolute top-2 right-3 p-2">
+            {/* <Image
+              src={warning}
+              alt="Warning"
+              width={20}
+              height={20}
+              // style={{ width: "50px", height: "50px" }}
+            /> */}
+          </div>
+        ))}
+
+      <div
+        className="relative p-6 flex flex-col items-center justify-center"
+        style={{
+          opacity: animationFinished ? 1 : 0,
+          transition: "opacity 1s ease-in-out",
+        }}
+      >
+        <dt className="flex flex-col items-center text-center">
+          <p
+            className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
+          >
+            {name}
+          </p>
+        </dt>
+        <dd className="flex flex-col items-center justify-center pt-4">
+          <p
+            className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
+          >
+            {stat}
+          </p>
+        </dd>
+      </div>
+    </div>
+  );
+};
+
+function generateRandomStat(metricName) {
+  return generateRandomMetricValue(metricName);
+}
+
+export default function ManagerSelectionForm() {
+  const avgScore = useMemo(() => {
+    const scores = customerServiceAverageScore.map((item) =>
+      parseFloat(item.mtdScore.replace("%", ""))
+    );
+    const total = scores.reduce((acc, s) => acc + s, 0);
+    const avg = total / scores.length;
+    return avg.toFixed(2) + "%";
+  }, []);
+
+  const avgAdherence = useMemo(() => {
+    const adherences = customerServiceAdherence.map((item) =>
+      parseFloat(item.qualityTeam.replace("%", ""))
+    );
+    const total = adherences.reduce((acc, a) => acc + a, 0);
+    const avg = total / adherences.length;
+    return avg.toFixed(2) + "%";
+  }, []);
+
+  const avgQuality = useMemo(() => {
+    const qualities = qualityInfo.map((item) =>
+      parseFloat(item.qualityTeam.replace("%", ""))
+    );
+    const total = qualities.reduce((acc, q) => acc + q, 0);
+    const avg = total / qualities.length;
+    return avg.toFixed(2) + "%";
+  }, []);
+
+  const avgAHT = useMemo(() => {
+    const timesInSeconds = customerServiceAHT.map((item) => {
+      const [mins, secs] = item.ahtTeam.split(":").map(Number);
+      return mins * 60 + secs;
     });
-    return Array.from(managersSet).map((mgr) => ({ value: mgr, label: mgr }));
-  }, [dataSets]);
+    const totalSeconds = timesInSeconds.reduce((acc, t) => acc + t, 0);
+    const avgSeconds = totalSeconds / timesInSeconds.length;
+    const mins = Math.floor(avgSeconds / 60);
+    const secs = Math.round(avgSeconds % 60);
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  }, []);
+  const [selectedDepartments, setSelectedDepartments] = useState({
+    "Customer Service": true,
+    "Help Desk": true,
+    "Electronic Dispatch": true,
+    "Written Communication": true,
+    Resolutions: true,
+  });
 
-  const formatDateParam = (date) =>
-    date ? date.toISOString().split("T")[0] : "";
+  const [managersExpanded, setManagersExpanded] = useState({
+    "Customer Service": false,
+    "Help Desk": false,
+    "Electronic Dispatch": false,
+    "Written Communication": false,
+    Resolutions: false,
+  });
+  const [activeMetrics, setActiveMetrics] = useState({
+    "Customer Service": "Average Handle Time",
+    "Help Desk": "Average Handle Time",
+    "Electronic Dispatch": "Average Handle Time",
+    "Written Communication": "Average Handle Time",
+    Resolutions: "Average Handle Time",
+  });
 
-  const clearRange = () => {
-    setFromDate(null);
-    setToDate(null);
-    setSelectedDateRange(null);
+  const [managerExpanded, setManagerExpanded] = useState({});
+  const [managerActiveMetrics, setManagerActiveMetrics] = useState({});
+  const [supervisorExpanded, setSupervisorExpanded] = useState({});
+  const [supervisorActiveMetrics, setSupervisorActiveMetrics] = useState({});
+  const toggleExpand = (dept) => {
+    setExpandedRows((prev) => {
+      const isCurrentlyExpanded = prev[dept];
+      // If the department is being closed, reset the manager's expanded state.
+      if (isCurrentlyExpanded) {
+        setManagersExpanded((prevManagers) => ({
+          ...prevManagers,
+          [dept]: false,
+        }));
+      }
+      return { ...prev, [dept]: !isCurrentlyExpanded };
+    });
+  };
+  const toggleManagerExpand = (dept) => {
+    setManagersExpanded((prev) => ({
+      ...prev,
+      [dept]: !prev[dept],
+    }));
+  };
+  const toggleSupervisorExpand = (dept) => {
+    setSupervisorExpanded((prev) => ({
+      ...prev,
+      [dept]: !prev[dept],
+    }));
   };
 
-  const saveRange = (close) => {
-    close();
+  const metricMap = {
+    "Average Handle Time": "ahtTeam",
+    Adherence: "adherence",
+    Quality: "qualityTeam",
+    "Average Score": "mtdScore",
+  };
+  const handleStatCardClick = (managerName, metric) => {
+    setManagerActiveMetrics((prev) => ({
+      ...prev,
+      [managerName]: metric,
+    }));
+    setManagerExpanded((prev) => ({
+      ...prev,
+      [managerName]: true,
+    }));
   };
 
-  const canSubmit = selectedManager !== null;
+  const renderChart = (managerName) => {
+    if (!managerExpanded[managerName]) return null;
+    const currentMetric =
+      managerActiveMetrics[managerName] || "Average Handle Time";
 
+    return (
+      <>
+        {/* Manager Main Chart */}
+        <div className="my-4 h-80">
+          <LineChartTime
+            data={fakeDataMap[currentMetric]}
+            xDataKey="date"
+            yDataKey={metricMap[currentMetric]}
+            disableGrouping={true}
+          />
+        </div>
+        {/* (Additional manager-specific UI here) */}
+      </>
+    );
+  };
+
+  // New supervisor chart function
+  const renderSupervisorChart = (supervisorName) => {
+    if (!supervisorExpanded[supervisorName]) return null;
+    const currentMetric =
+      supervisorActiveMetrics[supervisorName] || "Average Handle Time";
+
+    return (
+      <>
+        {/* Supervisor Main Chart */}
+        <div className="my-4 h-80">
+          <LineChartTime
+            data={fakeDataMap[currentMetric]}
+            xDataKey="date"
+            yDataKey={metricMap[currentMetric]}
+            disableGrouping={true}
+          />
+        </div>
+        {/* For example, conditionally render the supervisor toggle and stats block */}
+        {!supervisorExpanded[supervisorName] ? (
+          <div className="lg:flex justify-center mt-4 hidden">
+            <button
+              onClick={() => toggleSupervisorExpand(supervisorName)}
+              className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+            >
+              <PlusCircleIcon className="h-6 w-6 mr-2" />
+              Show Supervisors
+            </button>
+          </div>
+        ) : (
+          <div className="border-2 border-darkBorder dark:bg-darkBg bg-darkBorder mx-2 rounded-lg">
+            {/* Render supervisor stats cards */}
+            <Transition
+              show={supervisorExpanded[supervisorName]}
+              appear
+              enter="transition ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="mt-4 text-center px-4 rounded-lg">
+                <div className="relative">
+                  {computedCustomerServiceSupervisorStats.map((supervisor) => {
+                    const { name, ...metrics } = supervisor;
+                    return (
+                      <div key={name} className="mb-8 py-2 px-2">
+                        <div className="flex items-center justify-center mb-8">
+                          <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
+                            {name}
+                          </h2>
+                          <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                        </div>
+
+                        <dl className="grid grid-cols-2 gap-8">
+                          {Object.entries(metrics).map(
+                            ([metric, value], idx) => {
+                              const bgColorClass = getBgColor(metric, value);
+                              return (
+                                <StatCardComponent
+                                  key={metric}
+                                  id={metric}
+                                  name={metric}
+                                  stat={value}
+                                  qualifies={
+                                    bgColorClass.trim() === "bg-lovesGreen"
+                                  }
+                                  bgColorClass={bgColorClass}
+                                  delay={idx * 300}
+                                  isActive={
+                                    supervisorActiveMetrics[supervisorName] ===
+                                    metric
+                                  }
+                                  onClick={() =>
+                                    handleSupervisorStatCardClick(
+                                      supervisorName,
+                                      metric
+                                    )
+                                  }
+                                />
+                              );
+                            }
+                          )}
+                        </dl>
+                        <div className="mt-4 h-80">
+                          <LineChartTime
+                            data={fakeDataMap[currentMetric]}
+                            xDataKey="date"
+                            yDataKey={metricMap[currentMetric]}
+                            disableGrouping={true}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
+                </div>
+              </div>
+            </Transition>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const {
+    currentDate,
+    setCurrentDate,
+    fromDate,
+    setFromDate,
+    toDate,
+    setToDate,
+    navigateMonth,
+    handleDateSelect,
+  } = useDateRange();
+
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedManager, setSelectedManager] = useState(null);
   const handleSearch = () => {
     if (!selectedManager) return;
 
@@ -77,278 +651,140 @@ export default function ManagerSelectionForm({}) {
       </>
     );
   }
-  const formatActiveFilters = () => {
-    return selectedManager ? `Manager: ${selectedManager.label}` : "No Filters";
-  };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
-      <div className="flex-grow flex flex-col items-center justify-center">
-        <section className="w-full max-w-7xl p-4">
-          <h1 className=" text-center font-futura-bold text-xl">
-            Manager Search
-          </h1>
-          <div className="mt-4 w-full max-w-full mx-auto flex justify-center items-center">
-            <div className="box flex flex-col md:flex-row justify-between items-start rounded-xl border bg-lovesWhite dark:bg-darkBg p-6 w-full max-w-7xl shadow-md shadow-lovesBlack">
-              <Disclosure defaultOpen>
-                {({ open }) => (
-                  <div className="w-full md:w-1/2 lg:pr-12">
-                    <Disclosure.Button className="flex items-center justify-between w-full">
-                      <h6 className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText lg:mb-3 mb-1">
-                        Manager
-                      </h6>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? "transform rotate-180" : ""
-                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
-                      />
-                    </Disclosure.Button>
-                    <Transition
-                      show={open}
-                      enter="transition ease-in-out duration-[200ms]"
-                      enterFrom="opacity-0 -translate-y-2"
-                      enterTo="opacity-100 translate-y-0"
-                      leave="transition ease-in-out duration-[200ms]"
-                      leaveFrom="opacity-100 translate-y-0"
-                      leaveTo="opacity-0 -translate-y-2"
-                    >
-                      <Disclosure.Panel className="mt-2">
-                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkCompBg" />
-                        <div className="lg:space-y-6 space-y-2">
-                          <div>
-                            <h3 className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
-                              Select Manager
-                            </h3>
-                            <Listbox
-                              value={selectedManager}
-                              onChange={setSelectedManager}
-                            >
-                              <div className="relative">
-                                <Listbox.Button className="relative dark:bg-darkCompBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-lovesGray">
-                                  <span className="block truncate text-lovesBlack">
-                                    {selectedManager
-                                      ? selectedManager.label
-                                      : "Select Manager"}
-                                  </span>
-                                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                    <ChevronDownIcon
-                                      className="w-5 h-5 text-lovesBlack"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                </Listbox.Button>
-                                <Listbox.Options className="absolute dark:bg-darkCompBg mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
-                                  {managerList.map((option) => (
-                                    <Listbox.Option
-                                      key={option.value}
-                                      value={option}
-                                      className={({ active }) =>
-                                        `cursor-default select-none relative py-2 pl-10 pr-4 ${
-                                          active
-                                            ? "text-lovesBlack bg-lovesGray"
-                                            : "text-lovesBlack"
-                                        }`
-                                      }
-                                    >
-                                      {({ selected }) => (
-                                        <>
-                                          <span
-                                            className={`block truncate ${
-                                              selected
-                                                ? "font-medium"
-                                                : "font-normal"
-                                            }`}
-                                          >
-                                            {option.label}
-                                          </span>
-                                          {selected && (
-                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                              <CheckIcon
-                                                className="w-5 h-5 text-lovesPrimaryRed"
-                                                aria-hidden="true"
-                                              />
-                                            </span>
-                                          )}
-                                        </>
-                                      )}
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </div>
-                            </Listbox>
-                          </div>
-                        </div>
-                      </Disclosure.Panel>
-                    </Transition>
-                    {!open && (
-                      <Transition
-                        show={!open}
-                        enter="transition ease-in-out duration-[200ms]"
-                        enterFrom="opacity-0 -translate-y-2"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in-out duration-[200ms]"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 -translate-y-2"
-                      >
-                        <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                          <div className="absolute inset-0 flex justify-center items-center z-0">
-                            <Lottie
-                              animationData={filterBackground}
-                              loop
-                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
-                            />
-                          </div>
+      <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
+        <div
+          className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
+                     border border-lightGray shadow-sm shadow-lovesBlack   dark:border-darkBorder
+                     rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
+          onClick={() => setShowCalendar(true)}
+        >
+          {fromDate && toDate
+            ? `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`
+            : "Date Range: Not Selected"}
+        </div>
 
-                          <div className="flex flex-col items-center z-10 px-4">
-                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
-                              Selected Filters
-                            </h2>
-                            <div className="mt-2">
-                              <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
-                                {formatActiveFilters()}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </Transition>
-                    )}
-                  </div>
-                )}
-              </Disclosure>
+        <FilterCalendarToggle
+          fromDate={fromDate}
+          toDate={toDate}
+          setFromDate={setFromDate}
+          setToDate={setToDate}
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
+          selectedDateRange={selectedDateRange}
+          setSelectedDateRange={setSelectedDateRange}
+          selectedDepartments={selectedDepartments}
+          setSelectedDepartments={setSelectedDepartments}
+          showCalendar={showCalendar}
+          setShowCalendar={setShowCalendar}
+        />
+      </div>
 
-              <Disclosure defaultOpen>
-                {({ open, close }) => (
-                  <div className="w-full md:w-1/2 lg:mt-0 mt-8">
-                    <Disclosure.Button className="flex items-center justify-between w-full">
-                      <p className="font-futura-bold text-lg text-lovesBlack dark:text-darkPrimaryText mb-3">
-                        Date Range
-                      </p>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? "transform rotate-180" : ""
-                        } transition-transform duration-200 w-5 h-5 text-lovesBlack dark:text-darkPrimaryText`}
-                      />
-                    </Disclosure.Button>
-                    <Transition
-                      show={open}
-                      enter="transition ease-in-out duration-[200ms]"
-                      enterFrom="opacity-0 -translate-y-2"
-                      enterTo="opacity-100 translate-y-0"
-                      leave="transition ease-in-out duration-[200ms]"
-                      leaveFrom="opacity-100 translate-y-0"
-                      leaveTo="opacity-0 -translate-y-2"
-                    >
-                      <Disclosure.Panel className="mt-2">
-                        <hr className="h-px mb-4 bg-lovesBlack border-0 dark:bg-darkCompBg" />
-                        <Calendar
-                          currentDate={currentDate}
-                          setCurrentDate={setCurrentDate}
-                          fromDate={fromDate}
-                          setFromDate={setFromDate}
-                          toDate={toDate}
-                          setToDate={setToDate}
-                          navigateMonth={() => {}}
-                          handleDateSelect={() => {}}
-                          selectedDateRange={selectedDateRange}
-                          setSelectedDateRange={setSelectedDateRange}
-                        />
-                        <div className="mt-2 flex justify-center space-x-1">
-                          {(fromDate || toDate) && (
-                            <button
-                              type="button"
-                              onClick={clearRange}
-                              className="lg:w-3/6 w-3/4 rounded-md py-2 bg-lovesPrimaryRed dark:bg-darkBg dark:text-darkPrimaryText text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
-                            >
-                              Clear Date Range
-                            </button>
-                          )}
-                          {fromDate && toDate && (
-                            <button
-                              type="button"
-                              onClick={() => saveRange(close)}
-                              className="lg:w-3/6 w-3/4 rounded-md bg-lovesBlack 
-                    dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
-                            >
-                              Save Date Range
-                            </button>
-                          )}
-                        </div>
-                      </Disclosure.Panel>
-                    </Transition>
-                    {!open && (
-                      <Transition
-                        show={!open}
-                        enter="transition ease-in-out duration-[200ms]"
-                        enterFrom="opacity-0 -translate-y-2"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in-out duration-[200ms]"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 -translate-y-2"
-                      >
-                        <div className="relative w-full lg:h-80 h-48 flex justify-center items-center">
-                          <div className="absolute inset-0 flex justify-center items-center z-0">
-                            <Lottie
-                              animationData={filterBackground}
-                              loop
-                              className="w-48 h-48 lg:w-full lg:h-80 opacity-40"
-                            />
-                          </div>
-
-                          <div className="flex flex-col items-center z-10 px-4">
-                            <h2 className="font-futura-bold text-2xl text-lovesBlack dark:text-darkPrimaryText text-center">
-                              Date Range
-                            </h2>
-                            <div className="mt-2">
-                              <p className="font-futura-bold text-md text-lovesBlack dark:text-darkPrimaryText text-center">
-                                From: {fromDate.toLocaleDateString()} To:{" "}
-                                {toDate.toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </Transition>
-                    )}
-                  </div>
-                )}
-              </Disclosure>
-            </div>
-          </div>
-          <div className="mt-8 flex justify-center dark:bg-darkBg">
-            <button
-              onClick={handleSearch}
-              disabled={!canSubmit}
-              className={`lg:w-1/5 py-1 w-2/5 flex items-center justify-center gap-2 rounded-lg  
-            ${
-              canSubmit
-                ? "bg-lovesPrimaryRed hover:bg-lovesBlack dark:hover:bg-lovesPrimaryRed text-lovesWhite"
-                : "bg-darkLightGray dark:text-lovesBlack text-lovesBlack cursor-not-allowed dark:hover:text-lovesBlack"
-            }
-            font-futura-bold text-lg shadow-md shadow-lovesBlack`}
+      <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
+        <Transition
+          as="div"
+          show={selectedDepartments["Customer Service"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          {computedCustomerServiceManagerStats.map((manager, idx) => (
+            <div
+              key={manager.name}
+              className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder dark:shadow-sm p-4 rounded-lg mt-4"
             >
-              <svg
-                width="17"
-                height="16"
-                viewBox="0 0 17 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14.4987 13.9997L13.1654 12.6663M13.832 7.33301C13.832 10.6467 11.1457 13.333 7.83203 13.333C4.51832 13.333 1.83203 10.6467 1.83203 7.33301C1.83203 4.0193 4.51832 1.33301 7.83203 1.33301C11.1457 1.33301 13.832 4.0193 13.832 7.33301Z"
-                  className={`${
-                    canSubmit
-                      ? "stroke-white"
-                      : "stroke-lovesBlack dark:stroke-lovesBlack dark:hover:stroke-lovesBlack"
-                  }`}
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Search
-            </button>
-          </div>
-        </section>
+              <div className="mb-4">
+                <div className="flex items-center justify-between">
+                  <div
+                    onClick={() => {
+                      setSelectedManager({ value: manager.name });
+                      handleSearch();
+                    }}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack hover:underline cursor-pointer">
+                      {manager.name}
+                    </h1>
+                    <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                  </div>
+                  <div className="lg:flex items-center space-x-2 hidden">
+                    {managersExpanded[manager.name] && (
+                      <button
+                        onClick={() => toggleExpand(manager.name)}
+                        className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText lg:px-4 lg:py-2 px-1 py-1 rounded-lg font-futura-bold"
+                      >
+                        <XCircleIcon className="lg:h-6 lg:w-6 mr-2" />
+                        Close Department
+                      </button>
+                    )}
+                    <div className="lg:flex items-center space-x-2 hidden">
+                      {supervisorExpanded[manager.name] && (
+                        <button
+                          onClick={() => toggleSupervisorExpand(manager.name)}
+                          className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                        >
+                          <XCircleIcon className="h-6 w-6 mr-2" />
+                          Hide Supervisors
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {Object.entries(manager)
+                  .filter(([key]) => key !== "name")
+                  .map(([metric, value]) => {
+                    const isActive =
+                      managerActiveMetrics[manager.name] === metric;
+                    const bgColorClass = getBgColor(metric, value);
+                    return (
+                      <StatCardComponent
+                        key={`${manager.name}-${metric}`}
+                        id={`${manager.name}-${metric}`}
+                        name={metric} // Only the metric name will be displayed here
+                        stat={value}
+                        qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                        bgColorClass={bgColorClass}
+                        delay={idx * 300}
+                        isActive={isActive}
+                        onClick={() =>
+                          handleStatCardClick(manager.name, metric)
+                        }
+                      />
+                    );
+                  })}
+              </dl>
+
+              {renderChart(manager.name)}
+
+              {/* Optional: A button to manually expand the manager chart if not already expanded */}
+              {!managerExpanded[manager.name] && (
+                <div className="overflow-hidden transition-all duration-500 ease-in-out transform max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
+                  <button
+                    onClick={() =>
+                      setManagerExpanded((prev) => ({
+                        ...prev,
+                        [manager.name]: true,
+                      }))
+                    }
+                    className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl"
+                  >
+                    Expand Manager
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </Transition>
       </div>
     </div>
   );

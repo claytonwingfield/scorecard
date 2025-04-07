@@ -184,7 +184,7 @@ export default function DetailHomeFilters({
                   leaveTo="opacity-0 -translate-y-2"
                 >
                   <Disclosure.Panel className="mt-2">
-                    <hr className="h-px mb-4 bg-darkBorder border-0 dark:bg-darkBorder" />
+                    <hr className="h-px mb-4 bg-lovesWhite border-darkBorder dark:border-0 dark:bg-darkBorder" />
                     <div className="lg:space-y-6 space-y-2">
                       {dynamicFilterOptions.map((filterCategory) => (
                         <div
@@ -209,8 +209,8 @@ export default function DetailHomeFilters({
                             multiple
                           >
                             <div className="mt-1 relative">
-                              <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-darkBorder rounded-md cursor-default focus:outline-none border border-lovesGray dark:text-darkPrimaryText dark:border-2 dark:border-darkBorder">
-                                <span className="block truncate text-lovesWhite dark:text-darkPrimaryText">
+                              <Listbox.Button className="relative dark:bg-darkBg w-full py-2 pl-3 pr-10 text-left text-md font-futura bg-lovesWhite rounded-md cursor-default focus:outline-none border border-darkBorder  dark:text-darkPrimaryText dark:border-2 dark:border-darkBorder">
+                                <span className="block truncate text-lovesBlack dark:text-darkPrimaryText">
                                   {activeFilters
                                     .filter(
                                       (f) => f.type === filterCategory.name
@@ -221,12 +221,12 @@ export default function DetailHomeFilters({
                                 </span>
                                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                                   <ChevronDownIcon
-                                    className="h-5 w-5 text-lovesWhite dark:text-darkPrimaryText"
+                                    className="h-5 w-5 text-lovesBlack dark:text-darkPrimaryText"
                                     aria-hidden="true"
                                   />
                                 </span>
                               </Listbox.Button>
-                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-darkBorder shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
+                              <Listbox.Options className="absolute dark:bg-darkBg dark:border-2 dark:border-darkBorder mt-1 w-full bg-lovesWhite shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none z-50">
                                 {filterCategory.options.map((option) => (
                                   <Listbox.Option
                                     key={option.value}
@@ -234,8 +234,8 @@ export default function DetailHomeFilters({
                                     className={({ active }) =>
                                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                                         active
-                                          ? "text-lovesWhite dark:text-darkPrimaryText bg-darkBorder dark:bg-darkBg"
-                                          : "text-lovesWhite dark:text-darkPrimaryText"
+                                          ? "text-lovesBlack dark:text-darkPrimaryText bg-lovesWhite dark:bg-darkBg"
+                                          : "text-lovesBlack dark:text-darkPrimaryText"
                                       }`
                                     }
                                   >
@@ -305,7 +305,7 @@ export default function DetailHomeFilters({
               </div>
             )}
           </Disclosure>
-          <hr className="h-px mb-4 bg-darkBorder border-0 dark:bg-darkPrimaryText" />
+          <hr className="h-px mb-4 bg-lovesWhite border-0 dark:bg-darkPrimaryText" />
 
           <Disclosure defaultOpen>
             {({ open, close }) => (
@@ -366,8 +366,8 @@ export default function DetailHomeFilters({
                           <button
                             type="button"
                             onClick={() => saveRange(close)}
-                            className="lg:w-3/6 w-3/4 rounded-md bg-darkBorder 
-                    dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesWhite shadow dark:shadow-none dark:border dark:border-darkBorder"
+                            className="lg:w-3/6 w-3/4 rounded-md bg-lovesWhite 
+                    dark:bg-darkBorder dark:text-darkPrimaryText  text-md font-futura-bold text-lovesBlack shadow dark:shadow-none border border-darkBorder dark:border-darkBorder"
                           >
                             Save Date Range
                           </button>

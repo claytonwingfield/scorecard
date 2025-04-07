@@ -76,8 +76,10 @@ const StatCardComponent = ({
   qualifies,
   bgColorClass,
   delay = 0,
+  onClick,
+  isActive,
 }) => {
-  const [animationFinished, setAnimationFinished] = useState(false);
+  const [animationFinished, setAnimationFinished] = useState(true);
   const [startAnimation, setStartAnimation] = useState(false);
 
   useEffect(() => {
@@ -86,37 +88,53 @@ const StatCardComponent = ({
     }, delay);
     return () => clearTimeout(timer);
   }, [delay]);
+  const textColorClass = isActive
+    ? qualifies
+      ? "text-lovesGreen"
+      : "text-lovesPrimaryRed"
+    : qualifies
+    ? "text-lovesGreen"
+    : "text-lovesPrimaryRed";
 
+  const cardBg = isActive
+    ? "bg-darkCompBg dark:bg-darkBg "
+    : animationFinished
+    ? "bg-darkBorder"
+    : "bg-lovesBlack dark:bg-darkPrimaryText";
+  const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
   return (
     <div
-      className={`relative rounded-lg shadow-md shadow-lovesBlack overflow-hidden dark:border dark:border-lovesGreen ${
-        animationFinished ? bgColorClass : "bg-lovesWhite"
-      }`}
+      onClick={onClick}
+      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
+        isActive
+          ? qualifies
+            ? "animate-glow border-lovesGreen dark:border-lovesGreen"
+            : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
+          : "border-lovesBlack dark:border-lovesBlack"
+      } ${cardBg}`}
       style={{ transition: "background-color 1s ease-in-out" }}
     >
-      {startAnimation && !animationFinished && (
-        <div className="absolute inset-0 bg-white flex items-center justify-center">
-          <Lottie
-            animationData={qualifies ? bgCard : down}
-            loop={false}
-            speed={0.2}
-            style={{ width: "100%", height: "100%" }}
-            onComplete={() => setAnimationFinished(true)}
-            className="opacity-70"
-          />
-        </div>
-      )}
-
-      {qualifies && animationFinished && (
-        <div className="absolute top-0 right-0 p-2">
-          <Lottie
-            animationData={award}
-            loop={true}
-            speed={0.1}
-            style={{ width: "50px", height: "50px" }}
-          />
-        </div>
-      )}
+      {animationFinished &&
+        (qualifies ? (
+          <div className="absolute top-0 right-0 p-2">
+            <Lottie
+              animationData={award}
+              loop={true}
+              speed={0.1}
+              style={{ width: "50px", height: "50px" }}
+            />
+          </div>
+        ) : (
+          <div className="absolute top-2 right-3 p-2">
+            {/* <Image
+              src={warning}
+              alt="Warning"
+              width={20}
+              height={20}
+              // style={{ width: "50px", height: "50px" }}
+            /> */}
+          </div>
+        ))}
 
       <div
         className="relative p-6 flex flex-col items-center justify-center"
@@ -127,18 +145,14 @@ const StatCardComponent = ({
       >
         <dt className="flex flex-col items-center text-center">
           <p
-            className={`truncate text-md font-futura-bold ${
-              qualifies ? "text-gray-900" : "text-white"
-            }`}
+            className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
           >
             {name}
           </p>
         </dt>
         <dd className="flex flex-col items-center justify-center pt-4">
           <p
-            className={`text-2xl font-semibold font-futura-bold ${
-              qualifies ? "text-gray-900" : "text-white"
-            }`}
+            className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
           >
             {stat}
           </p>
@@ -995,295 +1009,313 @@ export default function ManagerDailyMetricsPage() {
           )}
         </>
       ) : (
-        <div className="lg:px-8">
-          <dl className="mt-5 py-2 px-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 bg-black dark:bg-darkCompBg shadow-md shadow-lovesBlack rounded-lg">
-            {statCards.map((item, index) => {
-              const bgColorClass = getBgColor(item.name, item.stat);
-              const qualifies = bgColorClass.trim() === "bg-lovesGreen";
-
-              const delay = index * 300;
-              return (
-                <StatCardComponent
-                  key={item.id}
-                  id={item.id}
-                  name={item.name}
-                  stat={item.stat}
-                  qualifies={qualifies}
-                  bgColorClass={bgColorClass}
-                  delay={delay}
-                />
-              );
-            })}
-          </dl>
-        </div>
-      )}
-      {showComparison ? (
-        <div></div>
-      ) : (
-        <div className="mt-4 p-8  lg:block">
-          <div className="h-full overflow-hidden dark:ring-0 ring-1 ring-lovesBlack rounded-lg bg-lovesBlack dark:bg-darkCompBg pb-2">
-            <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between bg-lovesBlack dark:bg-darkCompBg pl-4 pt-2 pb-4">
-                <h2 className="text-xl font-futura-bold text-lovesWhite dark:text-darkPrimaryText">
-                  Performance Chart
-                </h2>
-                <div className="flex space-x-2 pr-2">
-                  <div className="w-48">
-                    <Listbox value={groupByField} onChange={setGroupByField}>
-                      <div className="relative">
-                        <Listbox.Button className="bg-lovesWhite dark:bg-darkBg relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
-                          <span className="block truncate">
-                            {
-                              groupByOptions.find(
-                                (option) => option.value === groupByField
-                              )?.label
-                            }
-                          </span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-                        <Listbox.Options className="absolute z-10 mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
-                          {groupByOptions.map((option) => (
-                            <Listbox.Option
-                              key={option.value}
-                              value={option.value}
-                              className={({ active }) =>
-                                `${
-                                  active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
-                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
-                                } cursor-default select-none relative py-2 pl-10 pr-4`
-                              }
-                            >
-                              {({ selected, active }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? "font-medium" : "font-normal"
-                                    }`}
-                                  >
-                                    {option.label}
-                                  </span>
-                                  {selected && (
-                                    <span
-                                      className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                        active
-                                          ? "text-lovesPrimaryRed"
-                                          : "text-lovesPrimaryRed"
-                                      }`}
-                                    >
-                                      <CheckIcon
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </div>
-                    </Listbox>
-                  </div>
-
-                  <div className="w-48">
-                    <Listbox value={metric} onChange={setMetric}>
-                      <div className="relative">
-                        <Listbox.Button className="bg-lovesWhite dark:bg-darkBg relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
-                          <span className="block truncate">{metric}</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-                        <Listbox.Options className="absolute z-10 mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
-                          {metricOptions.map((option) => (
-                            <Listbox.Option
-                              key={option.value}
-                              value={option.value}
-                              className={({ active }) =>
-                                `${
-                                  active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
-                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
-                                } cursor-default select-none relative py-2 pl-10 pr-4`
-                              }
-                            >
-                              {({ selected, active }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? "font-medium" : "font-normal"
-                                    }`}
-                                  >
-                                    {option.label}
-                                  </span>
-                                  {selected && (
-                                    <span
-                                      className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                        active
-                                          ? "text-lovesPrimaryRed"
-                                          : "text-lovesPrimaryRed"
-                                      }`}
-                                    >
-                                      <CheckIcon
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </div>
-                    </Listbox>
-                  </div>
-
-                  <div className="w-48">
-                    <Listbox value={chartType} onChange={setChartType}>
-                      <div className="relative">
-                        <Listbox.Button className="bg-lovesWhite dark:bg-darkBg relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
-                          <span className="block truncate">{chartType}</span>
-                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                            <ChevronDownIcon
-                              className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </Listbox.Button>
-                        <Listbox.Options className="absolute z-10 mt-1 w-full bg-lovesWhite dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
-                          {chartTypeOptions.map((option) => (
-                            <Listbox.Option
-                              key={option.value}
-                              value={option.value}
-                              className={({ active }) =>
-                                `${
-                                  active
-                                    ? "text-lovesBlack bg-lovesWhite dark:bg-darkCompBg font-futura-bold"
-                                    : "text-lovesBlack dark:text-darkPrimaryText font-futura"
-                                } cursor-default select-none relative py-2 pl-10 pr-4`
-                              }
-                            >
-                              {({ selected, active }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? "font-medium" : "font-normal"
-                                    }`}
-                                  >
-                                    {option.label}
-                                  </span>
-                                  {selected && (
-                                    <span
-                                      className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                        active
-                                          ? "text-lovesPrimaryRed"
-                                          : "text-lovesPrimaryRed"
-                                      }`}
-                                    >
-                                      <CheckIcon
-                                        className="w-5 h-5"
-                                        aria-hidden="true"
-                                      />
-                                    </span>
-                                  )}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </div>
-                    </Listbox>
+        <>
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lightGray dark:shadow-darkCompBg border dark:border-darkCompBg dark:shadow-sm p-4 rounded-lg mt-4 mb-4">
+            <div className="lg:px-8">
+              <div className="mb-4 mt-2 text-center">
+                <div className="flex justify-center">
+                  <div className="cursor-pointer">
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack ">
+                      {managers}
+                    </h1>
                   </div>
                 </div>
               </div>
+              <dl className="mt-5 py-0 px-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 ">
+                {statCards.map((item, index) => {
+                  const bgColorClass = getBgColor(item.name, item.stat);
+                  const qualifies = bgColorClass.trim() === "bg-lovesGreen";
 
-              {chartType === "Bar Chart" ? (
-                <div className="h-[500px]">
-                  <BarChart
-                    data={chartData}
-                    xDataKey={xAxisField}
-                    yDataKey={metricMapping[metric]}
-                    groupByKey={groupByField}
-                    disableGrouping={false}
-                  />
+                  const delay = index * 300;
+                  return (
+                    <StatCardComponent
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      stat={item.stat}
+                      qualifies={qualifies}
+                      bgColorClass={bgColorClass}
+                      delay={delay}
+                    />
+                  );
+                })}
+              </dl>
+            </div>
+            <div className="mt-2 p-6 lg:block hidden">
+              <div className="border-2 border-darkCompBg dark:border-darkBg shadow-md shadow-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center justify-between dark:bg-darkBg shadow-md dark:shadow-darkBg dark:border dark:border-darkBg dark:shadow-sm pl-4 pt-2 pb-4 ">
+                    <h2 className="text-xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite rounded-lg">
+                      Performance Chart
+                    </h2>
+                    <div className="flex space-x-2 pr-2">
+                      <div className="w-48">
+                        <Listbox
+                          value={groupByField}
+                          onChange={setGroupByField}
+                        >
+                          <div className="relative">
+                            <Listbox.Button className="bg-lightGray dark:bg-darkBorder relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
+                              <span className="block truncate">
+                                {
+                                  groupByOptions.find(
+                                    (option) => option.value === groupByField
+                                  )?.label
+                                }
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <ChevronDownIcon
+                                  className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+                            <Listbox.Options className="absolute z-10 mt-1 w-full bg-lightGray dark:bg-darkBg shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
+                              {groupByOptions.map((option) => (
+                                <Listbox.Option
+                                  key={option.value}
+                                  value={option.value}
+                                  className={({ active }) =>
+                                    `${
+                                      active
+                                        ? "text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkBorder font-futura-bold"
+                                        : "text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkBorder font-futura"
+                                    } cursor-default select-none relative py-2 pl-10 pr-4`
+                                  }
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={`block truncate ${
+                                          selected
+                                            ? "font-medium"
+                                            : "font-normal"
+                                        }`}
+                                      >
+                                        {option.label}
+                                      </span>
+                                      {selected && (
+                                        <span
+                                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                            active
+                                              ? "text-lovesPrimaryRed"
+                                              : "text-lovesPrimaryRed"
+                                          }`}
+                                        >
+                                          <CheckIcon
+                                            className="w-5 h-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </div>
+                        </Listbox>
+                      </div>
+
+                      <div className="w-48">
+                        <Listbox value={metric} onChange={setMetric}>
+                          <div className="relative">
+                            <Listbox.Button className="bg-lightGray dark:bg-darkBorder relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
+                              <span className="block truncate">{metric}</span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <ChevronDownIcon
+                                  className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+                            <Listbox.Options className="absolute z-10 mt-1 w-full bg-lightGray dark:bg-darkBorder shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
+                              {metricOptions.map((option) => (
+                                <Listbox.Option
+                                  key={option.value}
+                                  value={option.value}
+                                  className={({ active }) =>
+                                    `${
+                                      active
+                                        ? "text-lovesBlack bg-lightGray dark:text-darkPrimaryText dark:bg-darkBorder font-futura-bold"
+                                        : "text-lovesBlack bg-lightGray dark:text-darkPrimaryText dark:bg-darkBorder font-futura"
+                                    } cursor-default select-none relative py-2 pl-10 pr-4`
+                                  }
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={`block truncate ${
+                                          selected
+                                            ? "font-medium"
+                                            : "font-normal"
+                                        }`}
+                                      >
+                                        {option.label}
+                                      </span>
+                                      {selected && (
+                                        <span
+                                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                            active
+                                              ? "text-lovesPrimaryRed"
+                                              : "text-lovesPrimaryRed"
+                                          }`}
+                                        >
+                                          <CheckIcon
+                                            className="w-5 h-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </div>
+                        </Listbox>
+                      </div>
+
+                      <div className="w-48">
+                        <Listbox value={chartType} onChange={setChartType}>
+                          <div className="relative">
+                            <Listbox.Button className="bg-lightGray dark:bg-darkBorder relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
+                              <span className="block truncate">
+                                {chartType}
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <ChevronDownIcon
+                                  className="w-5 h-5 text-lovesBlack dark:text-darkPrimaryText"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </Listbox.Button>
+                            <Listbox.Options className="absolute z-10 mt-1 w-full bg-lightGray dark:bg-darkBorder shadow-lg max-h-60 rounded-md py-1 text-md font-futura ring-1 ring-lovesBlack ring-opacity-5 overflow-auto focus:outline-none">
+                              {chartTypeOptions.map((option) => (
+                                <Listbox.Option
+                                  key={option.value}
+                                  value={option.value}
+                                  className={({ active }) =>
+                                    `${
+                                      active
+                                        ? "text-lovesBlack bg-lightGray dark:text-darkPrimaryText dark:bg-darkBorder font-futura-bold"
+                                        : "text-lovesBlack bg-lightGray dark:text-darkPrimaryText dark:bg-darkBorder font-futura"
+                                    } cursor-default select-none relative py-2 pl-10 pr-4`
+                                  }
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <span
+                                        className={`block truncate ${
+                                          selected
+                                            ? "font-medium"
+                                            : "font-normal"
+                                        }`}
+                                      >
+                                        {option.label}
+                                      </span>
+                                      {selected && (
+                                        <span
+                                          className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                            active
+                                              ? "text-lovesPrimaryRed"
+                                              : "text-lovesPrimaryRed"
+                                          }`}
+                                        >
+                                          <CheckIcon
+                                            className="w-5 h-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </div>
+                        </Listbox>
+                      </div>
+                    </div>
+                  </div>
+
+                  {chartType === "Bar Chart" ? (
+                    <div className="h-[500px] ">
+                      <BarChart
+                        data={chartData}
+                        xDataKey={xAxisField}
+                        yDataKey={metricMapping[metric]}
+                        groupByKey={groupByField}
+                        disableGrouping={false}
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-[500px] ">
+                      <LineChartTime
+                        data={chartData}
+                        xDataKey={xAxisField}
+                        yDataKey={metricMapping[metric]}
+                        groupByKey={groupByField}
+                        disableGrouping={false}
+                      />
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="h-[500px]">
-                  <LineChartTime
-                    data={chartData}
-                    xDataKey={xAxisField}
-                    yDataKey={metricMapping[metric]}
-                    groupByKey={groupByField}
-                    disableGrouping={false}
-                  />
+              </div>
+              <div className="lg:p-4 py-2">
+                <div className="bg-darkBorder dark:bg-darkBg shadow-md shadow-darkBorder dark:shadow-darkBg rounded-lg p-1.5 w-full max-w-full no-scrollbar">
+                  <div className="flex-grow overflow-y-auto no-scrollbar">
+                    <table className="min-w-full divide-y divide-darkBorder dark:divide-darkBg">
+                      <thead className="bg-darkBorder dark:bg-darkBg">
+                        <tr>
+                          {columnsToDisplay.map((col, index) => (
+                            <th
+                              key={col.key}
+                              onClick={() => handleSort(col.key)}
+                              className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
+                                index
+                              )}`}
+                              title="Click to sort"
+                            >
+                              <span
+                                className={`flex ${
+                                  index === 0
+                                    ? "justify-start"
+                                    : "justify-center"
+                                } items-center`}
+                              >
+                                {col.label}
+                                <span className="ml-2 sm:inline hidden">
+                                  {getSortIndicator(col.key)}
+                                </span>
+                              </span>
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-lovesBlack dark:divide-darkBorder bg-lovesWhite dark:bg-darkCompBg">
+                        {sortedAggregatedData.map((item, rowIndex) => (
+                          <tr key={rowIndex}>
+                            {columnsToDisplay.map((col, colIndex) => (
+                              <td
+                                key={col.key}
+                                className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-darkPrimaryText sm:pl-6 ${getTextAlignment(
+                                  colIndex
+                                )}`}
+                              >
+                                {item[col.key]}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {showComparison ? (
-        <div></div>
-      ) : (
-        <div className="lg:p-8 py-4">
-          <div className="bg-lovesBlack dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder rounded-md p-1.5 w-full max-w-full no-scrollbar">
-            <div className="flex-grow overflow-y-auto no-scrollbar">
-              <table className="min-w-full divide-y divide-lovesBlack">
-                <thead className="bg-lovesBlack dark:bg-darkCompBg">
-                  <tr>
-                    {columnsToDisplay.map((col, index) => (
-                      <th
-                        key={col.key}
-                        onClick={() => handleSort(col.key)}
-                        className={`whitespace-nowrap py-3.5 pl-4 pr-3 text-md font-futura text-lovesWhite dark:text-darkPrimaryText sm:pl-6 cursor-pointer ${getTextAlignment(
-                          index
-                        )}`}
-                        title="Click to sort"
-                      >
-                        <span
-                          className={`flex ${
-                            index === 0 ? "justify-start" : "justify-center"
-                          } items-center`}
-                        >
-                          {col.label}
-                          <span className="ml-2 sm:inline hidden">
-                            {getSortIndicator(col.key)}
-                          </span>
-                        </span>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-lovesBlack dark:divide-darkBorder bg-lovesWhite dark:bg-darkBg">
-                  {sortedAggregatedData.map((item, rowIndex) => (
-                    <tr key={rowIndex}>
-                      {columnsToDisplay.map((col, colIndex) => (
-                        <td
-                          key={col.key}
-                          className={`whitespace-nowrap py-4 pl-4 pr-3 text-md font-futura no-underline hover:underline text-lovesBlack dark:text-darkPrimaryText sm:pl-6 ${getTextAlignment(
-                            colIndex
-                          )}`}
-                        >
-                          {item[col.key]}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        </>
       )}
     </>
   );
@@ -1292,7 +1324,7 @@ export default function ManagerDailyMetricsPage() {
     <div className="bg-lovesWhite dark:bg-darkBg">
       <Header />
 
-      <div className="px-4 sm:px-6 lg:px-8 mt-4">
+      <div className="px-4 sm:px-2 lg:px-8 mt-4">
         <div className="hidden lg:block relative h-16">
           <div className="flex items-center justify-center h-full">
             {showComparison ? (
@@ -1300,13 +1332,11 @@ export default function ManagerDailyMetricsPage() {
                 Compare Managers
               </h1>
             ) : (
-              <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
-                {managers}
-              </h1>
+              <div></div>
             )}
           </div>
           {showComparison ? (
-            <div className="absolute inset-y-0 left-0 flex items-center px-8">
+            <div className="absolute inset-y-0 left-0 flex items-center px-2">
               <div
                 className="text-lovesBlack dark:text-darkPrimaryText font-futura-bold 
                      border border-lovesBlack shadow-sm shadow-lovesBlack 
@@ -1319,14 +1349,14 @@ export default function ManagerDailyMetricsPage() {
               </div>
             </div>
           ) : (
-            <div className="absolute inset-y-0 left-0 flex items-center px-8">
+            <div className="absolute inset-y-0 left-0 flex items-center px-2">
               <nav aria-label="Breadcrumb">
-                <ol className="flex space-x-2 rounded-md bg-lovesWhite dark:bg-darkCompBg px-2 py-1 border border-lovesBlack shadow-sm shadow-lovesBlack">
+                <ol className="flex space-x-2 rounded-md bg-lightGray dark:bg-darkCompBg px-2 py-1 lg:px-4 lg:py-1  shadow-sm shadow-lovesBlack">
                   <li className="flex">
                     <div className="flex items-center">
                       <Link
                         href="/customer-service/daily-metrics"
-                        className="text-lovesBlack hover:text-lovesPrimaryRed"
+                        className="text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
                       >
                         <HomeIcon
                           aria-hidden="true"
@@ -1351,7 +1381,7 @@ export default function ManagerDailyMetricsPage() {
                         <a
                           href={page.href}
                           aria-current={page.current ? "page" : undefined}
-                          className="ml-1 text-sm font-futura-bold text-lovesBlack hover:text-lovesPrimaryRed"
+                          className="ml-2 text-sm font-futura-bold text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
                         >
                           {page.name}
                         </a>
@@ -1363,7 +1393,7 @@ export default function ManagerDailyMetricsPage() {
             </div>
           )}
           {showComparison ? (
-            <div className="absolute inset-y-0 right-0 flex items-center px-8">
+            <div className="absolute inset-y-0 right-0 flex items-center px-2">
               <FilterCalendarToggle
                 fromDate={fromDate}
                 toDate={toDate}
@@ -1383,10 +1413,10 @@ export default function ManagerDailyMetricsPage() {
               />
             </div>
           ) : (
-            <div className="absolute inset-y-0 right-0 flex items-center px-8">
+            <div className="absolute inset-y-0 right-0 flex items-center px-2">
               <div
-                className="text-lovesBlack dark:text-darkPrimaryText font-futura-bold 
-                       border border-lovesBlack shadow-sm shadow-lovesBlack 
+                className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold 
+                        shadow-sm shadow-lovesBlack 
                        rounded-lg lg:px-2 px-1 py-1 cursor-pointer mr-4"
                 onClick={() => setShowCalendar(true)}
               >

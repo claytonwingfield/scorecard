@@ -306,7 +306,7 @@ const LineChartTime = forwardRef(
 
     return (
       <section ref={ref} className="flex flex-grow h-full px-2">
-        <div className="w-full h-full bg-lovesWhite border-2 border-lovesBlack dark:bg-darkBg shadow-sm dark:border-darkBorder rounded-lg">
+        <div className="w-full h-full bg-lovesWhite border-2 border-lovesBlack dark:bg-darkBg shadow-sm dark:shadow-darkCompBg dark:border-darkCompBg rounded-lg">
           <ResponsiveContainer width="100%" height="95%">
             <ComposedChart
               data={chartData}
@@ -329,7 +329,7 @@ const LineChartTime = forwardRef(
                     dx="2"
                     dy="2"
                     stdDeviation="3"
-                    floodColor="#000"
+                    floodColor={isDarkMode ? "#282828" : "#000"}
                     floodOpacity="0.5"
                   />
                 </filter>
@@ -368,12 +368,12 @@ const LineChartTime = forwardRef(
                 vertical={false}
                 horizontal={true}
                 strokeDasharray="3 3"
-                stroke={isDarkMode ? "#ccc" : "#000"}
+                stroke={isDarkMode ? "#E0E0E0" : "#000"}
               />
               <XAxis
                 dataKey={xDataKey}
                 type="category"
-                stroke={isDarkMode ? "#fff" : "#000"}
+                stroke={isDarkMode ? "#E0E0E0" : "#000"}
                 tick={
                   isMobile ? (
                     false
@@ -417,13 +417,13 @@ const LineChartTime = forwardRef(
                   />
                 }
                 contentStyle={{
-                  backgroundColor: isDarkMode ? "#333" : "#fff",
-                  borderColor: isDarkMode ? "#fff" : "#000",
+                  backgroundColor: isDarkMode ? "#333" : "#E0E0E0",
+                  borderColor: isDarkMode ? "#E0E0E0" : "#000",
                   borderRadius: "0.5rem",
-                  color: isDarkMode ? "#fff" : "#000",
+                  color: isDarkMode ? "#E0E0E0" : "#000",
                 }}
-                itemStyle={{ color: isDarkMode ? "#fff" : "#000" }}
-                labelStyle={{ color: isDarkMode ? "#fff" : "#000" }}
+                itemStyle={{ color: isDarkMode ? "#E0E0E0" : "#000" }}
+                labelStyle={{ color: isDarkMode ? "#E0E0E0" : "#000" }}
               />
               <Legend
                 content={() => {
