@@ -3,7 +3,11 @@ import Header from "@/components/Navigation/header";
 
 import React, { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronRightIcon,
+  PlusCircleIcon,
+  XCircleIcon,
+} from "@heroicons/react/20/solid";
 import bgCard from "@/public/animations/bgCard.json";
 import down from "@/public/animations/down.json";
 import award from "@/public/animations/award.json";
@@ -20,6 +24,7 @@ import {
   customerServiceAHT,
   qualityInfo,
   customerServiceAdherence,
+  allTeamData,
 } from "@/data/customerServiceData";
 import Image from "next/image";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
@@ -30,6 +35,7 @@ const adherenceGoal = "88%";
 const averageScoreGoal = "95%";
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
+    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
     let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
     let mins = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -37,12 +43,15 @@ function generateRandomMetricValue(metricName) {
       .toString()
       .padStart(2, "0")}`;
   } else if (metricName === "Average Score") {
+    // generate a random percentage between 90% and 105%
     let value = (Math.random() * 15 + 90).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Adherence") {
+    // generate a random percentage between 85% and 95%
     let value = (Math.random() * 10 + 85).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Quality") {
+    // generate a random percentage between 80% and 95%
     let value = (Math.random() * 15 + 80).toFixed(2);
     return `${value}%`;
   }
@@ -140,6 +149,75 @@ function getBgColor(statName, statValue) {
   }
   return "bg-lovesLightRed";
 }
+const customerServiceManagers = Array.from(
+  new Set(allTeamData.map((item) => item.manager))
+).map((managerName) => ({ name: managerName }));
+const computedCustomerServiceManagerStats = customerServiceManagers.map(
+  (manager) => {
+    const managerName = manager.name;
+    return {
+      name: managerName,
+      "Average Handle Time": averageAHTForManager(
+        customerServiceAHT,
+        managerName
+      ),
+      Adherence: averagePercentageForManager(
+        customerServiceAdherence,
+        "qualityTeam",
+        managerName
+      ),
+      Quality: averagePercentageForManager(
+        qualityInfo,
+        "qualityTeam",
+        managerName
+      ),
+      "Average Score": averagePercentageForManager(
+        customerServiceAverageScore,
+        "mtdScore",
+        managerName
+      ),
+    };
+  }
+);
+const helpDeskManagerStats = [
+  {
+    name: "Chris Monks",
+    "Average Handle Time": "05:02",
+    Adherence: "90%",
+    Quality: "89%",
+    "Average Score": "93%",
+  },
+];
+
+// Mapping for all departments
+const departmentManagerStats = {
+  "Customer Service": computedCustomerServiceManagerStats,
+  "Help Desk": helpDeskManagerStats,
+};
+function averagePercentageForManager(dataArray, key, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce(
+    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+    0
+  );
+  const avg = sum / filtered.length;
+  return avg.toFixed(2) + "%";
+}
+
+// Computes average AHT in MM:SS for a manager
+function averageAHTForManager(dataArray, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    const [m, s] = cur.ahtTeam.split(":").map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const avgSeconds = sumSeconds / filtered.length;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
 
 const StatCardComponent = ({
   id,
@@ -165,20 +243,24 @@ const StatCardComponent = ({
       ? "text-lovesGreen"
       : "text-lovesPrimaryRed"
     : qualifies
-    ? "text-gray-900"
-    : "text-white";
+    ? "text-lovesGreen"
+    : "text-lovesPrimaryRed";
 
   const cardBg = isActive
-    ? "bg-lovesWhite"
+    ? "bg-darkCompBg dark:bg-darkBg "
     : animationFinished
-    ? bgColorClass
-    : "bg-lovesWhite";
-
+    ? "bg-darkBorder"
+    : "bg-lovesBlack dark:bg-darkPrimaryText";
+  const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
   return (
     <div
-      onClick={onClick} // make the card clickable
-      className={`cursor-pointer relative rounded-lg shadow-md shadow-lovesBlack overflow-hidden dark:border ${
-        qualifies ? "dark:border-lovesGreen" : "dark:border-lovesPrimaryRed"
+      onClick={onClick}
+      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
+        isActive
+          ? qualifies
+            ? "animate-glow border-lovesGreen dark:border-lovesGreen"
+            : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
+          : "border-lovesBlack dark:border-lovesBlack"
       } ${cardBg}`}
       style={{ transition: "background-color 1s ease-in-out" }}
     >
@@ -194,13 +276,13 @@ const StatCardComponent = ({
           </div>
         ) : (
           <div className="absolute top-2 right-3 p-2">
-            <Image
+            {/* <Image
               src={warning}
               alt="Warning"
-              width={40}
-              height={40}
+              width={20}
+              height={20}
               // style={{ width: "50px", height: "50px" }}
-            />
+            /> */}
           </div>
         ))}
 
@@ -212,13 +294,15 @@ const StatCardComponent = ({
         }}
       >
         <dt className="flex flex-col items-center text-center">
-          <p className={`truncate text-md font-futura-bold ${textColorClass}`}>
+          <p
+            className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
+          >
             {name}
           </p>
         </dt>
         <dd className="flex flex-col items-center justify-center pt-4">
           <p
-            className={`text-2xl font-semibold font-futura-bold ${textColorClass}`}
+            className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
           >
             {stat}
           </p>
@@ -241,6 +325,7 @@ const customerServiceStats = [
   { id: 3, name: "Quality", stat: generateRandomStat("Quality") },
   { id: 4, name: "Average Score", stat: generateRandomStat("Average Score") },
 ];
+
 const helpDeskStats = [
   { id: 1, name: "Average Handle Time", stat: "05:45" },
   { id: 2, name: "Adherence", stat: "92%" },
@@ -354,6 +439,13 @@ export default function SantoDomingo() {
     "Written Communication": false,
     Resolutions: false,
   });
+  const [managersExpanded, setManagersExpanded] = useState({
+    "Customer Service": false,
+    "Help Desk": false,
+    "Electronic Dispatch": false,
+    "Written Communication": false,
+    Resolutions: false,
+  });
   const [activeMetrics, setActiveMetrics] = useState({
     "Customer Service": "Average Handle Time",
     "Help Desk": "Average Handle Time",
@@ -363,11 +455,32 @@ export default function SantoDomingo() {
   });
 
   const toggleExpand = (dept) => {
-    setExpandedRows((prev) => ({ ...prev, [dept]: !prev[dept] }));
+    setExpandedRows((prev) => {
+      const isCurrentlyExpanded = prev[dept];
+      // If the department is being closed, reset the manager's expanded state.
+      if (isCurrentlyExpanded) {
+        setManagersExpanded((prevManagers) => ({
+          ...prevManagers,
+          [dept]: false,
+        }));
+      }
+      return { ...prev, [dept]: !isCurrentlyExpanded };
+    });
   };
-
+  const toggleManagerExpand = (dept) => {
+    setManagersExpanded((prev) => ({
+      ...prev,
+      [dept]: !prev[dept],
+    }));
+  };
   const [activeMetric, setActiveMetric] = useState("Average Handle Time");
-
+  const departmentManagerLinks = {
+    "Customer Service": "/customer-service/daily-metrics/manager",
+    "Help Desk": "/help-desk/daily-metrics/manager",
+    "Electronic Dispatch": "/electronic-dispatch/daily-metrics/manager",
+    "Written Communication": "/written-communication/daily-metrics/manager",
+    Resolutions: "/resolutions/daily-metrics/manager",
+  };
   const metricMap = {
     "Average Handle Time": "ahtTeam",
     Adherence: "adherence",
@@ -390,17 +503,126 @@ export default function SantoDomingo() {
   const renderChart = (dept) => {
     if (!expandedRows[dept]) return null;
     const currentMetric = activeMetrics[dept];
+
     return (
-      <div className="mt-4 h-80">
-        <LineChartTime
-          data={fakeDataMap[currentMetric]}
-          xDataKey="date"
-          yDataKey={metricMap[currentMetric]}
-          disableGrouping={true}
-        />
-      </div>
+      <>
+        {/* Main Chart */}
+        <div className="my-4 h-80">
+          <LineChartTime
+            data={fakeDataMap[currentMetric]}
+            xDataKey="date"
+            yDataKey={metricMap[currentMetric]}
+            disableGrouping={true}
+          />
+        </div>
+
+        {/* Department Managers Heading */}
+
+        {/* Conditionally render button or managers block based on managersExpanded */}
+        {!managersExpanded[dept] ? (
+          <div className="lg:flex justify-center mt-4 hidden">
+            <button
+              onClick={() => toggleManagerExpand(dept)}
+              className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+            >
+              <PlusCircleIcon className="h-6 w-6 mr-2 " />
+              Show Managers
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="border-2 border-darkBorder dark:bg-darkBg  bg-darkBorder mx-2 rounded-lg">
+              <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg lg:m-8 rounded-lg">
+                <div className=""></div>
+                <div className="flex items-center  mt-4 mb-2 mx-4">
+                  <Link
+                    href={departmentManagerLinks[dept] || "/default-managers"}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite hover:underline cursor-pointer">
+                      {dept} Managers
+                    </h1>
+                    <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  </Link>
+                </div>
+                <Transition
+                  show={managersExpanded[dept]}
+                  appear
+                  enter="transition ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="transition ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <div className="mt-4 text-center px-4 rounded-lg">
+                    <div className="relative">
+                      <div className="grid grid-cols-2 gap-x-16 gap-y-4 ">
+                        {departmentManagerStats[dept]?.map((manager) => {
+                          const { name, ...metrics } = manager;
+                          return (
+                            <div key={name} className="mb-8 py-2 px-2">
+                              <div className="flex items-center justify-center mb-8">
+                                <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
+                                  {name}
+                                </h2>
+                                <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                              </div>
+                              <dl className="grid grid-cols-2 gap-8">
+                                {Object.entries(metrics).map(
+                                  ([metric, value], idx) => {
+                                    const bgColorClass = getBgColor(
+                                      metric,
+                                      value
+                                    );
+                                    return (
+                                      <StatCardComponent
+                                        key={metric}
+                                        id={metric}
+                                        name={metric}
+                                        stat={value}
+                                        qualifies={
+                                          bgColorClass.trim() ===
+                                          "bg-lovesGreen"
+                                        }
+                                        bgColorClass={bgColorClass}
+                                        delay={idx * 300}
+                                        isActive={
+                                          activeMetrics[dept] === metric
+                                        }
+                                        onClick={() =>
+                                          handleStatCardClick(dept, metric)
+                                        }
+                                      />
+                                    );
+                                  }
+                                )}
+                              </dl>
+                              <div className="mt-4 h-80">
+                                <LineChartTime
+                                  data={fakeDataMap[currentMetric]}
+                                  xDataKey="date"
+                                  yDataKey={metricMap[currentMetric]}
+                                  disableGrouping={true}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* Vertical divider for medium screens and above */}
+                      <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
+                    </div>
+                  </div>
+                </Transition>
+              </div>
+            </div>
+          </>
+        )}
+      </>
     );
   };
+
   const {
     currentDate,
     setCurrentDate,
@@ -416,13 +638,13 @@ export default function SantoDomingo() {
   const [showCalendar, setShowCalendar] = useState(false);
 
   return (
-    <div className="bg-lovesWhite dark:bg-lovesBlack min-h-screen">
+    <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
-      <div className="px-5 sm:px-6 lg:px-10 mt-4 flex items-center justify-between">
+      <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
-          className="text-lovesBlack dark:text-lovesWhite font-futura-bold 
-                     border border-lovesBlack shadow-sm shadow-lovesBlack 
-                     rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
+          className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
+                     border border-lightGray shadow-sm shadow-lovesBlack border-lightGray  dark:border-darkBorder
+                     rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
           onClick={() => setShowCalendar(true)}
         >
           {fromDate && toDate
@@ -457,16 +679,42 @@ export default function SantoDomingo() {
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="group bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/customer-service/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/customer-service/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Customer Service
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="lg:flex items-center space-x-2 hidden">
+                  {managersExpanded["Customer Service"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Customer Service")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Customer Service"] && (
+                    <button
+                      onClick={() => toggleExpand("Customer Service")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText lg:px-4 lg:py-2 px-1 py-1 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="lg:h-6 lg:w-6  mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
+              </div>
             </div>
 
             <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -492,77 +740,110 @@ export default function SantoDomingo() {
                 );
               })}
             </dl>
-            {/* Chart: rendered only if expanded */}
+
             {renderChart("Customer Service")}
-            {/* Toggle button placed below the chart */}
-            <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Customer Service"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
               <button
                 onClick={() => toggleExpand("Customer Service")}
-                className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
               >
-                {expandedRows["Customer Service"]
-                  ? "Collapse Chart"
-                  : "Expand Chart"}
+                Expand Department
               </button>
             </div>
           </div>
         </Transition>
         <Transition
-          show={selectedDepartments["Help Desk"]} // Whether to show or hide
-          appear // If you also want it animated on first render
-          enter="transition ease-out duration-300" // Classes for the enter phase
+          show={selectedDepartments["Help Desk"]}
+          appear
+          enter="transition ease-out duration-300"
           enterFrom="opacity-0 scale-95"
           enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200" // Classes for the leave phase
+          leave="transition ease-in duration-200"
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="bg-black dark:bg-lovesGray shadow-md shadow-lovesBlack p-4 rounded-lg mt-8">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder   dark:shadow-sm p-4 rounded-lg mt-4">
             <div className="mb-4">
-              <Link href="/help-desk/daily-metrics">
-                <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-lovesBlack text-lovesWhite">
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/help-desk/daily-metrics"
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
+                  <h1
+                    className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack 
+hover:underline cursor-pointer"
+                  >
                     Help Desk
                   </h1>
-                  <ChevronRightIcon className="h-6 w-6 dark:text-lovesBlack text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+                </Link>
+                <div className="lg:flex items-center space-x-2 hidden">
+                  {managersExpanded["Help Desk"] && (
+                    <button
+                      onClick={() => toggleManagerExpand("Help Desk")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Hide Managers
+                    </button>
+                  )}
+                  {expandedRows["Help Desk"] && (
+                    <button
+                      onClick={() => toggleExpand("Help Desk")}
+                      className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
+                    >
+                      <XCircleIcon className="h-6 w-6 mr-2" />
+                      Close Department
+                    </button>
+                  )}
                 </div>
-              </Link>
-            </div>
-            <div className="group">
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {helpDeskStats.map((item, index) => {
-                  const isActive =
-                    expandedRows["Help Desk"] &&
-                    activeMetrics["Help Desk"] === item.name;
-                  const bgColorClass = getBgColor(item.name, item.stat);
-                  return (
-                    <StatCardComponent
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      stat={item.stat}
-                      qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                      bgColorClass={bgColorClass}
-                      delay={index * 300}
-                      isActive={isActive}
-                      onClick={() =>
-                        handleStatCardClick("Help Desk", item.name)
-                      }
-                    />
-                  );
-                })}
-              </dl>
-              {renderChart("Help Desk")}
-              <div className="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                <button
-                  onClick={() => toggleExpand("Help Desk")}
-                  className="w-full mt-4 dark:bg-lovesGray text-center py-4 bg-lovesWhite rounded-lg text-lovesBlack font-futura-bold text-xl"
-                >
-                  {expandedRows["Help Desk"]
-                    ? "Collapse Chart"
-                    : "Expand Chart"}
-                </button>
               </div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {helpDeskStats.map((item, index) => {
+                const isActive =
+                  expandedRows["Help Desk"] &&
+                  activeMetrics["Help Desk"] === item.name;
+                const bgColorClass = getBgColor(item.name, item.stat);
+                return (
+                  <StatCardComponent
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    stat={item.stat}
+                    qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+                    bgColorClass={bgColorClass}
+                    delay={index * 300}
+                    isActive={isActive}
+                    onClick={() => handleStatCardClick("Help Desk", item.name)}
+                  />
+                );
+              })}
+            </dl>
+
+            {renderChart("Help Desk")}
+
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+                expandedRows["Help Desk"]
+                  ? "max-h-0 opacity-0"
+                  : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"
+              }`}
+            >
+              <button
+                onClick={() => toggleExpand("Help Desk")}
+                className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl "
+              >
+                Expand Department
+              </button>
             </div>
           </div>
         </Transition>
