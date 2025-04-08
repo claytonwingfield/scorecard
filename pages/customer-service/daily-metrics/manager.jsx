@@ -7,6 +7,7 @@ import Link from "next/link";
 import { HomeIcon } from "@heroicons/react/20/solid";
 import { Listbox } from "@headlessui/react";
 import { ChevronDownIcon, CheckIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "next-themes";
 import Header from "@/components/Navigation/header";
 import BarChart from "@/components/Charts/BarChart";
 import LineChartTime from "@/components/Charts/LineChartTime";
@@ -692,6 +693,10 @@ export default function ManagerDailyMetricsPage() {
   ];
   const renderCustomLegend = (props) => {
     const { payload } = props;
+    // Assume theme is a string, 'dark' or 'light'
+    const { theme } = useTheme();
+    const isDarkMode = theme === "dark";
+
     return (
       <div style={{ display: "flex", gap: "1rem" }}>
         {payload.map((entry, index) => (
@@ -707,7 +712,12 @@ export default function ManagerDailyMetricsPage() {
                 marginRight: 4,
               }}
             />
-            <span style={{ color: "#000000", whiteSpace: "nowrap" }}>
+            <span
+              style={{
+                color: isDarkMode ? "#E0E0E0" : "#000000",
+                whiteSpace: "nowrap",
+              }}
+            >
               {entry.value}
             </span>
           </div>
@@ -878,7 +888,7 @@ export default function ManagerDailyMetricsPage() {
               )}
             </div>
           </div>
-          <hr className="border-lovesBlack my-4 mx-4 mb-8" />
+          <hr className="border-lovesBlack mt-4 mx-4 mb-4" />
           {!comparisonManager || isManagerDropdownOpen ? (
             <div className="my-4 ">
               <div className="grid grid-cols-2 p-2 ">
@@ -957,12 +967,13 @@ export default function ManagerDailyMetricsPage() {
               </div>
             </div>
           ) : (
-            <div className="my-4 ">
-              <div className="grid grid-cols-2 p-2 ">
-                <div className="p-2 ">
-                  <h3 className="font-futura-bold text-md">
+            <div className=" bg-lightGray dark:bg-darkCompBg  p-4 ">
+              <div className="grid grid-cols-2 gap-4 px-2">
+                <div className=" bg-lovesWhite dark:bg-darkBg  px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
+                  <h3 className="font-futura-bold text-md pb-4">
                     Average Handle Time
                   </h3>
+
                   <CompareBarChart
                     data={combinedData.filter(
                       (d) => d.metric === "Average Handle Time"
@@ -972,8 +983,10 @@ export default function ManagerDailyMetricsPage() {
                     comparisonManager={comparisonManager}
                   />
                 </div>
-                <div className="p-2">
-                  <h3 className="font-futura-bold text-md">Average Score</h3>
+                <div className=" bg-lovesWhite dark:bg-darkBg  px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
+                  <h3 className="font-futura-bold text-md pb-4">
+                    Average Score
+                  </h3>
                   <CompareBarChart
                     data={combinedData.filter(
                       (d) => d.metric === "Average Score"
@@ -983,8 +996,8 @@ export default function ManagerDailyMetricsPage() {
                     comparisonManager={comparisonManager}
                   />
                 </div>
-                <div className="p-2">
-                  <h3 className="font-futura-bold text-md">Adherence</h3>
+                <div className=" bg-lovesWhite dark:bg-darkBg dark:bg-darkBg  px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
+                  <h3 className="font-futura-bold text-md pb-4">Adherence</h3>
                   <CompareBarChart
                     data={combinedData.filter((d) => d.metric === "Adherence")}
                     xDataKey="metric"
@@ -992,8 +1005,8 @@ export default function ManagerDailyMetricsPage() {
                     comparisonManager={comparisonManager}
                   />
                 </div>
-                <div className="p-2">
-                  <h3 className="font-futura-bold text-md">Quality</h3>
+                <div className=" bg-lovesWhite dark:bg-darkBg  px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
+                  <h3 className="font-futura-bold text-md pb-4">Quality</h3>
                   <CompareBarChart
                     data={combinedData.filter((d) => d.metric === "Quality")}
                     xDataKey="metric"
@@ -1002,7 +1015,7 @@ export default function ManagerDailyMetricsPage() {
                   />
                 </div>
               </div>
-              <div className="flex justify-center mt-4">
+              <div className="flex justify-center mt-8 ">
                 {renderCustomLegend({ payload: legendPayload })}
               </div>
             </div>
@@ -1010,7 +1023,7 @@ export default function ManagerDailyMetricsPage() {
         </>
       ) : (
         <>
-          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lightGray dark:shadow-darkCompBg border dark:border-darkCompBg dark:shadow-sm p-4 rounded-lg mt-4 mb-4">
+          <div className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-darkBorder dark:shadow-darkCompBg border-2 dark:border-darkCompBg border-lightGray dark:shadow-sm p-4 rounded-lg mt-4 mb-4">
             <div className="lg:px-8">
               <div className="mb-4 mt-2 text-center">
                 <div className="flex justify-center">
@@ -1041,10 +1054,10 @@ export default function ManagerDailyMetricsPage() {
                 })}
               </dl>
             </div>
-            <div className="mt-2 p-6 lg:block hidden">
-              <div className="border-2 border-darkCompBg dark:border-darkBg shadow-md shadow-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
+            <div className="mt-0 p-6 lg:block hidden">
+              <div className="border-2 border-darkCompBg dark:border-darkBg shadow-md shadow-darkBorder border-2 border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between dark:bg-darkBg shadow-md dark:shadow-darkBg dark:border dark:border-darkBg dark:shadow-sm pl-4 pt-2 pb-4 ">
+                  <div className="flex items-center justify-between dark:bg-darkBg shadow-md dark:shadow-darkBg border-2 border-darkBorder dark:border dark:border-darkBg dark:shadow-sm pl-4 pt-2 pb-4 ">
                     <h2 className="text-xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite rounded-lg">
                       Performance Chart
                     </h2>
@@ -1328,7 +1341,7 @@ export default function ManagerDailyMetricsPage() {
         <div className="hidden lg:block relative h-16">
           <div className="flex items-center justify-center h-full">
             {showComparison ? (
-              <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
+              <h1 className="text-2xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                 Compare Managers
               </h1>
             ) : (
@@ -1339,8 +1352,8 @@ export default function ManagerDailyMetricsPage() {
             <div className="absolute inset-y-0 left-0 flex items-center px-2">
               <div
                 className="text-lovesBlack dark:text-darkPrimaryText font-futura-bold 
-                     border border-lovesBlack shadow-sm shadow-lovesBlack 
-                     rounded-lg lg:px-2 px-1 py-1 cursor-pointer mr-4"
+                      shadow-sm shadow-lovesBlack 
+                     rounded-lg lg:px-2 px-1 py-1 cursor-pointer mr-4 bg-lightGray dark:bg-darkCompBg"
                 onClick={() => setShowCalendar(true)}
               >
                 {fromDate && toDate
@@ -1351,7 +1364,7 @@ export default function ManagerDailyMetricsPage() {
           ) : (
             <div className="absolute inset-y-0 left-0 flex items-center px-2">
               <nav aria-label="Breadcrumb">
-                <ol className="flex space-x-2 rounded-md bg-lightGray dark:bg-darkCompBg px-2 py-1 lg:px-4 lg:py-1  shadow-sm shadow-lovesBlack">
+                <ol className="flex space-x-2 rounded-md bg-lightGray dark:bg-darkCompBg px-2 py-1 lg:px-4 lg:py-1 text-md  shadow-sm shadow-lovesBlack">
                   <li className="flex">
                     <div className="flex items-center">
                       <Link
@@ -1381,7 +1394,7 @@ export default function ManagerDailyMetricsPage() {
                         <a
                           href={page.href}
                           aria-current={page.current ? "page" : undefined}
-                          className="ml-2 text-sm font-futura-bold text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
+                          className="ml-2 text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
                         >
                           {page.name}
                         </a>
@@ -1449,14 +1462,14 @@ export default function ManagerDailyMetricsPage() {
 
         {showComparison ? (
           // Split-screen layout when comparing
-          <div className="flex flex-col lg:flex-row gap-1">
+          <div className="flex flex-col lg:flex-row gap-1 bg-lightGray dark:bg-darkCompBg shadow-md shadow-darkBg dark:shadow-none dark:border-2 dark:border-darkBorder rounded-lg mb-2">
             {/* Left column: your current detail view */}
             <div className="w-full lg:w-2/5 pt-4">{detailView}</div>
 
             {/* Right column: manager selection for comparison */}
             {comparisonManager && !isManagerDropdownOpen && (
               <div className="flex flex-col items-center w-full lg:w-3/5 mt-20 ">
-                <div className="flex justify-center items-center border border-lovesBlack rounded-lg shadow-sm shadow-lovesBlack">
+                <div className="flex justify-center items-center border border-lovesBlack rounded-lg shadow-sm shadow-lovesBlack bg-lovesWhite dark:bg-darkBg">
                   {metricOptions.map((option) => (
                     <button
                       key={option.value}
@@ -1465,7 +1478,7 @@ export default function ManagerDailyMetricsPage() {
             ${
               metric === option.value
                 ? "text-lovesPrimaryRed font-bold"
-                : "text-lovesBlack"
+                : "text-lovesBlack dark:text-darkPrimaryText"
             }`}
                     >
                       {option.label}
@@ -1475,7 +1488,7 @@ export default function ManagerDailyMetricsPage() {
 
                 {/* Set a fixed height for the chart container */}
 
-                <div className="w-full mt-4 h-[500px]">
+                <div className="w-full mt-4 mb-4 h-[500px]">
                   <CompareLineChart
                     data={compareChartData}
                     xDataKey="date"

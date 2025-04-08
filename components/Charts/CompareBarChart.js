@@ -127,17 +127,42 @@ const CompareBarChart = forwardRef(
     const tickFormatter = isTimeMetric ? formatSecondsToTime : (val) => val;
 
     return (
-      <section ref={ref} className="flex  h-full">
+      <section ref={ref} className="flex">
         <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg">
-          <ResponsiveContainer width="100%" height="86%">
+          <ResponsiveContainer width="100%" height={130}>
+            <defs>
+              <linearGradient id="areaColor" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#9dca7e" />
+
+                <stop offset="100%" stopColor="#FF0000" />
+              </linearGradient>
+
+              <filter
+                id="barShadow"
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+              >
+                <feDropShadow
+                  dx="2"
+                  dy="2"
+                  stdDeviation="3"
+                  floodColor={isDarkMode ? "#282828" : "#000"}
+                  floodOpacity="0.5"
+                />
+              </filter>
+            </defs>
             <ComposedChart
               data={chartData}
               layout="vertical"
-              margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
+              margin={{ top: 0, right: 40, left: 0, bottom: 0 }}
             >
               <XAxis
                 type="number"
-                domain={xDomain}
+                domain={
+                  chartData[0]?.metric === "Average Score" ? [85, 100] : xDomain
+                }
                 ticks={computedTicks}
                 tickFormatter={tickFormatter}
                 tick={false}
@@ -149,6 +174,7 @@ const CompareBarChart = forwardRef(
               <Bar
                 dataKey="mainValue"
                 fill="#FF0000"
+                filter="url(#shadow)"
                 barSize={30}
                 name={managers}
               >
@@ -163,6 +189,7 @@ const CompareBarChart = forwardRef(
               <Bar
                 dataKey="comparedValue"
                 fill="#FFEB00"
+                filter="url(#shadow)"
                 barSize={30}
                 name={comparisonManager?.label || "Compared"}
               >

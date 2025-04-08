@@ -178,8 +178,12 @@ const CompareLineChart = forwardRef(
 
     return (
       <section ref={ref} className="flex flex-grow h-full px-2">
-        <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg">
-          <ResponsiveContainer width="100%" height="95%">
+        <div className="w-full h-full bg-lovesWhite dark:bg-darkBg  rounded-lg border-2 border-darkBorder shadow-md shadow-darkBorder dark:shadow-darkBorder ">
+          <ResponsiveContainer
+            width="100%"
+            height="95%"
+            style={{ overflow: "visible" }}
+          >
             <ComposedChart
               data={chartData}
               margin={{
@@ -189,6 +193,23 @@ const CompareLineChart = forwardRef(
                 bottom: 20,
               }}
             >
+              <defs>
+                <filter
+                  id="shadow"
+                  x="-100%"
+                  y="-100%"
+                  width="300%"
+                  height="300%"
+                >
+                  <feDropShadow
+                    dx="2"
+                    dy="2"
+                    stdDeviation="3"
+                    floodColor={isDarkMode ? "#282828" : "#000"}
+                    floodOpacity="0.5"
+                  />
+                </filter>
+              </defs>
               <XAxis
                 dataKey={xDataKey}
                 type="category"
@@ -222,12 +243,14 @@ const CompareLineChart = forwardRef(
                 type="monotone"
                 dataKey="mainValue"
                 stroke="#FF0000"
+                filter="url(#shadow)"
                 strokeWidth={3}
                 name="Main Manager"
               />
               <Line
                 type="monotone"
                 dataKey="comparedValue"
+                filter="url(#shadow)"
                 stroke="#FFEB00"
                 strokeWidth={3}
                 name="Comparison Manager"

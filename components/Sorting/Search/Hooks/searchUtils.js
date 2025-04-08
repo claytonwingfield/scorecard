@@ -138,5 +138,5 @@ export function performSearch({
     }
 
     alert("Please select a Manager, Supervisor, or Agent before searching.");
-  }, 5000);
+  }, 1000);
 }
