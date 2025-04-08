@@ -1,5 +1,5 @@
 "use client";
-"use client";
+
 import React, { useMemo, forwardRef, useState, useEffect } from "react";
 import {
   ComposedChart,

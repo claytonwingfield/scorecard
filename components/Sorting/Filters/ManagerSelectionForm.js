@@ -1,36 +1,14 @@
 "use client";
-import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Disclosure, Transition, Listbox } from "@headlessui/react";
-import {
-  ChevronDownIcon,
-  CheckIcon,
-  ChevronUpIcon,
-} from "@heroicons/react/20/solid";
+
+import React, { useState } from "react";
 import Header from "@/components/Navigation/header";
-import Calendar from "@/components/Sorting/DateFilters/Calendar";
-import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
-import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
-
-import dynamic from "next/dynamic";
-import filterBackground from "@/public/animations/filterBackground.json";
-
-import Link from "next/link";
-import {
-  ChevronRightIcon,
-  PlusCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/20/solid";
-import bgCard from "@/public/animations/bgCard.json";
-import down from "@/public/animations/down.json";
-import award from "@/public/animations/award.json";
-
-import BarChart from "@/components/Charts/BarChart";
-import warning from "@/public/warning.png";
+import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
-import LineChartTime from "@/components/Charts/LineChartTime";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
+import { Transition } from "@headlessui/react";
+import Link from "next/link";
 
+// Import your data and functions
 import {
   customerServiceAverageScore,
   customerServiceAHT,
@@ -38,35 +16,24 @@ import {
   customerServiceAdherence,
   allTeamData,
 } from "@/data/customerServiceData";
-import { customerServiceData } from "@/data/customerServiceData";
-import Image from "next/image";
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
-const dataSets = customerServiceData.dataSets;
 
-const averageHandleTimeGoal = "5:30 - 6:30";
-const qualityGoal = "88%";
-const adherenceGoal = "88%";
-const averageScoreGoal = "95%";
+// ─── FAKE CHART DATA (for example purposes) ────────────────────────────────
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
-    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
-    let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
-    let mins = Math.floor(seconds / 60);
-    let secs = seconds % 60;
+    const seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs
       .toString()
       .padStart(2, "0")}`;
   } else if (metricName === "Average Score") {
-    // generate a random percentage between 90% and 105%
-    let value = (Math.random() * 15 + 90).toFixed(2);
+    const value = (Math.random() * 15 + 90).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Adherence") {
-    // generate a random percentage between 85% and 95%
-    let value = (Math.random() * 10 + 85).toFixed(2);
+    const value = (Math.random() * 10 + 85).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Quality") {
-    // generate a random percentage between 80% and 95%
-    let value = (Math.random() * 15 + 80).toFixed(2);
+    const value = (Math.random() * 15 + 80).toFixed(2);
     return `${value}%`;
   }
   return "0%";
@@ -80,14 +47,11 @@ function formatSecondsToMMSS(seconds) {
     .padStart(2, "0")}`;
 }
 
-function generateRandomAHTSeconds() {
+function generateRandomAHTFormatted() {
   const minSeconds = 5 * 60;
   const maxSeconds = 7 * 60;
-  return Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
-}
-
-function generateRandomAHTFormatted() {
-  const seconds = generateRandomAHTSeconds();
+  const seconds =
+    Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
   return formatSecondsToMMSS(seconds);
 }
 
@@ -110,7 +74,6 @@ export const fakeAHTData = generateFakeDataForMarch2025ForMetric(
   "ahtTeam",
   generateRandomAHTFormatted
 );
-
 export const fakeAdherenceData = generateFakeDataForMarch2025ForMetric(
   "adherence",
   () => generateRandomMetricValue("Adherence")
@@ -124,51 +87,76 @@ export const fakeMtdScoreData = generateFakeDataForMarch2025ForMetric(
   () => generateRandomMetricValue("Average Score")
 );
 
-const fakeDataMap = {
+export const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
   Adherence: fakeAdherenceData,
   Quality: fakeQualityData,
   "Average Score": fakeMtdScoreData,
 };
-function getBgColor(statName, statValue) {
-  if (!statValue || statValue === "N/A") {
-    return "bg-lovesWhite/20";
-  }
-  if (statName === "Average Handle Time") {
-    const [mins, secs] = statValue.split(":").map(Number);
-    const totalSeconds = mins * 60 + secs;
-    const [lowStr, highStr] = averageHandleTimeGoal.split(" - ");
-    const [lowMins, lowSecs] = lowStr.split(":").map(Number);
-    const [highMins, highSecs] = highStr.split(":").map(Number);
-    const lowerBound = lowMins * 60 + lowSecs;
-    const upperBound = highMins * 60 + highSecs;
-    return totalSeconds >= lowerBound && totalSeconds <= upperBound
-      ? "bg-lovesGreen"
-      : "bg-lovesPrimaryRed";
-  } else {
-    const num = parseFloat(statValue.replace("%", ""));
-    if (statName === "Adherence") {
-      return num >= parseFloat(adherenceGoal)
-        ? "bg-lovesGreen"
-        : "bg-lovesPrimaryRed";
-    } else if (statName === "Quality") {
-      return num >= parseFloat(qualityGoal)
-        ? "bg-lovesGreen"
-        : "bg-lovesPrimaryRed";
-    } else if (statName === "Average Score") {
-      return num >= parseFloat(averageScoreGoal)
-        ? "bg-lovesGreen"
-        : "bg-lovesPrimaryRed";
-    }
-  }
-  return "bg-lovesWhite";
+
+// ─── HELPER FUNCTIONS FOR COMPUTING AVERAGE METRICS ───────────────────────
+function averagePercentageForManager(dataArray, key, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce(
+    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+    0
+  );
+  return (sum / filtered.length).toFixed(2) + "%";
 }
+
+function averageAHTForManager(dataArray, managerName) {
+  const filtered = dataArray.filter((item) => item.manager === managerName);
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    const [m, s] = cur.ahtTeam.split(":").map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const avgSeconds = sumSeconds / filtered.length;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
+function averagePercentageForSupervisor(dataArray, key, supervisorName) {
+  const filtered = dataArray.filter(
+    (item) => item.supervisor === supervisorName && item[key]
+  );
+  if (filtered.length === 0) return "N/A";
+  const sum = filtered.reduce((acc, cur) => {
+    const num = parseFloat(cur[key].replace("%", ""));
+    return acc + (isNaN(num) ? 0 : num);
+  }, 0);
+  return (sum / filtered.length).toFixed(2) + "%";
+}
+
+function averageAHTForSupervisor(dataArray, supervisorName) {
+  const filtered = dataArray.filter(
+    (item) => item.supervisor === supervisorName
+  );
+  if (filtered.length === 0) return "N/A";
+  const sumSeconds = filtered.reduce((acc, cur) => {
+    if (!cur.ahtTeam) return acc;
+    const parts = cur.ahtTeam.split(":");
+    if (parts.length < 2) return acc;
+    const [m, s] = parts.map(Number);
+    return acc + m * 60 + s;
+  }, 0);
+  const validEntriesCount = filtered.filter(
+    (item) => item.ahtTeam && item.ahtTeam.includes(":")
+  ).length;
+  if (validEntriesCount === 0) return "N/A";
+  const avgSeconds = sumSeconds / validEntriesCount;
+  const m = Math.floor(avgSeconds / 60);
+  const s = Math.round(avgSeconds % 60);
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
+// ─── COMPUTE MANAGER STATS ────────────────────────────────────────────────
 const customerServiceManagers = Array.from(
   new Set(allTeamData.map((item) => item.manager))
 ).map((managerName) => ({ name: managerName }));
-const customerServiceSupervisors = Array.from(
-  new Set(allTeamData.map((item) => item.supervisor))
-).map((supervisorName) => ({ name: supervisorName }));
+
 const computedCustomerServiceManagerStats = customerServiceManagers.map(
   (manager) => {
     const managerName = manager.name;
@@ -196,420 +184,78 @@ const computedCustomerServiceManagerStats = customerServiceManagers.map(
     };
   }
 );
-const computedCustomerServiceSupervisorStats = customerServiceSupervisors.map(
-  (supervisor) => {
-    const supervisorName = supervisor.name;
-    return {
-      name: supervisorName,
-      "Average Handle Time": averageAHTForSupervisor(
-        customerServiceAHT,
-        supervisorName
-      ),
-      Adherence: averagePercentageForSupervisor(
-        customerServiceAdherence,
-        "qualityTeam",
-        supervisorName
-      ),
-      Quality: averagePercentageForSupervisor(
-        qualityInfo,
-        "qualityTeam",
-        supervisorName
-      ),
-      "Average Score": averagePercentageForSupervisor(
-        customerServiceAverageScore,
-        "mtdScore",
-        supervisorName
-      ),
-    };
-  }
-);
 
-function averagePercentageForManager(dataArray, key, managerName) {
-  const filtered = dataArray.filter((item) => item.manager === managerName);
-  if (filtered.length === 0) return "N/A";
-  const sum = filtered.reduce(
-    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
-    0
+// ─── COMPUTE SUPERVISOR STATS FOR A GIVEN MANAGER ─────────────────────────
+const getSupervisorStatsForManager = (managerName) => {
+  const filteredData = allTeamData.filter(
+    (item) => item.manager === managerName
   );
-  const avg = sum / filtered.length;
-  return avg.toFixed(2) + "%";
-}
-
-// Computes average AHT in MM:SS for a manager
-function averageAHTForManager(dataArray, managerName) {
-  const filtered = dataArray.filter((item) => item.manager === managerName);
-  if (filtered.length === 0) return "N/A";
-  const sumSeconds = filtered.reduce((acc, cur) => {
-    const [m, s] = cur.ahtTeam.split(":").map(Number);
-    return acc + m * 60 + s;
-  }, 0);
-  const avgSeconds = sumSeconds / filtered.length;
-  const m = Math.floor(avgSeconds / 60);
-  const s = Math.round(avgSeconds % 60);
-  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-}
-function averageAHTForSupervisor(dataArray, supervisorName) {
-  const filtered = dataArray.filter(
-    (item) => item.supervisor === supervisorName
+  // Get unique supervisors for this manager.
+  const uniqueSupervisors = Array.from(
+    new Set(filteredData.map((item) => item.supervisor))
   );
-  if (filtered.length === 0) return "N/A";
-  const sumSeconds = filtered.reduce((acc, cur) => {
-    const [m, s] = cur.ahtTeam.split(":").map(Number);
-    return acc + m * 60 + s;
-  }, 0);
-  const avgSeconds = sumSeconds / filtered.length;
-  const m = Math.floor(avgSeconds / 60);
-  const s = Math.round(avgSeconds % 60);
-  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-}
-
-function averagePercentageForSupervisor(dataArray, key, supervisorName) {
-  const filtered = dataArray.filter(
-    (item) => item.supervisor === supervisorName
-  );
-  if (filtered.length === 0) return "N/A";
-  const sum = filtered.reduce(
-    (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
-    0
-  );
-  const avg = sum / filtered.length;
-  return avg.toFixed(2) + "%";
-}
-
-const StatCardComponent = ({
-  id,
-  name,
-  stat,
-  qualifies,
-  bgColorClass,
-  delay = 0,
-  onClick,
-  isActive,
-}) => {
-  const [animationFinished, setAnimationFinished] = useState(true);
-  const [startAnimation, setStartAnimation] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setStartAnimation(true);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, [delay]);
-  const textColorClass = isActive
-    ? qualifies
-      ? "text-lovesGreen"
-      : "text-lovesPrimaryRed"
-    : qualifies
-    ? "text-lovesGreen"
-    : "text-lovesPrimaryRed";
-
-  const cardBg = isActive
-    ? "bg-darkCompBg dark:bg-darkBg "
-    : animationFinished
-    ? "bg-darkBorder"
-    : "bg-lovesBlack dark:bg-darkPrimaryText";
-  const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
-  return (
-    <div
-      onClick={onClick}
-      className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
-        isActive
-          ? qualifies
-            ? "animate-glow border-lovesGreen dark:border-lovesGreen"
-            : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
-          : "border-lovesBlack dark:border-lovesBlack"
-      } ${cardBg}`}
-      style={{ transition: "background-color 1s ease-in-out" }}
-    >
-      {animationFinished &&
-        (qualifies ? (
-          <div className="absolute top-0 right-0 p-2">
-            <Lottie
-              animationData={award}
-              loop={true}
-              speed={0.1}
-              style={{ width: "50px", height: "50px" }}
-            />
-          </div>
-        ) : (
-          <div className="absolute top-2 right-3 p-2">
-            {/* <Image
-              src={warning}
-              alt="Warning"
-              width={20}
-              height={20}
-              // style={{ width: "50px", height: "50px" }}
-            /> */}
-          </div>
-        ))}
-
-      <div
-        className="relative p-6 flex flex-col items-center justify-center"
-        style={{
-          opacity: animationFinished ? 1 : 0,
-          transition: "opacity 1s ease-in-out",
-        }}
-      >
-        <dt className="flex flex-col items-center text-center">
-          <p
-            className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
-          >
-            {name}
-          </p>
-        </dt>
-        <dd className="flex flex-col items-center justify-center pt-4">
-          <p
-            className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
-          >
-            {stat}
-          </p>
-        </dd>
-      </div>
-    </div>
-  );
+  return uniqueSupervisors.map((supervisorName) => ({
+    name: supervisorName,
+    "Average Handle Time": averageAHTForSupervisor(
+      customerServiceAHT,
+      supervisorName
+    ),
+    Adherence: averagePercentageForSupervisor(
+      customerServiceAdherence,
+      "qualityTeam",
+      supervisorName
+    ),
+    Quality: averagePercentageForSupervisor(
+      qualityInfo,
+      "qualityTeam",
+      supervisorName
+    ),
+    "Average Score": averagePercentageForSupervisor(
+      customerServiceAverageScore,
+      "mtdScore",
+      supervisorName
+    ),
+  }));
 };
 
-function generateRandomStat(metricName) {
-  return generateRandomMetricValue(metricName);
-}
+// ─── UTILITY FUNCTIONS TO FORMAT DATA FOR THE REUSABLE COMPONENT ───────────
+const formatMetrics = (entity) => {
+  // Convert an object (with keys: name, and metrics) into an array of metric objects.
+  return Object.entries(entity)
+    .filter(([key]) => key !== "name")
+    .map(([metric, value], idx) => ({
+      id: idx,
+      name: metric,
+      stat: value,
+    }));
+};
 
-export default function ManagerSelectionForm() {
-  const avgScore = useMemo(() => {
-    const scores = customerServiceAverageScore.map((item) =>
-      parseFloat(item.mtdScore.replace("%", ""))
-    );
-    const total = scores.reduce((acc, s) => acc + s, 0);
-    const avg = total / scores.length;
-    return avg.toFixed(2) + "%";
-  }, []);
-
-  const avgAdherence = useMemo(() => {
-    const adherences = customerServiceAdherence.map((item) =>
-      parseFloat(item.qualityTeam.replace("%", ""))
-    );
-    const total = adherences.reduce((acc, a) => acc + a, 0);
-    const avg = total / adherences.length;
-    return avg.toFixed(2) + "%";
-  }, []);
-
-  const avgQuality = useMemo(() => {
-    const qualities = qualityInfo.map((item) =>
-      parseFloat(item.qualityTeam.replace("%", ""))
-    );
-    const total = qualities.reduce((acc, q) => acc + q, 0);
-    const avg = total / qualities.length;
-    return avg.toFixed(2) + "%";
-  }, []);
-
-  const avgAHT = useMemo(() => {
-    const timesInSeconds = customerServiceAHT.map((item) => {
-      const [mins, secs] = item.ahtTeam.split(":").map(Number);
-      return mins * 60 + secs;
-    });
-    const totalSeconds = timesInSeconds.reduce((acc, t) => acc + t, 0);
-    const avgSeconds = totalSeconds / timesInSeconds.length;
-    const mins = Math.floor(avgSeconds / 60);
-    const secs = Math.round(avgSeconds % 60);
-    return `${mins.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
-  }, []);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
+const formatSupervisorData = (managerName) => {
+  const supervisorStats = getSupervisorStatsForManager(managerName);
+  return supervisorStats.map((supervisor) => {
+    const metrics = Object.entries(supervisor)
+      .filter(([key]) => key !== "name")
+      .map(([metric, value], idx) => ({
+        id: idx,
+        name: metric,
+        stat: value,
+      }));
+    return {
+      name: supervisor.name,
+      metrics,
+    };
   });
+};
 
-  const [managersExpanded, setManagersExpanded] = useState({
-    "Customer Service": false,
-    "Help Desk": false,
-    "Electronic Dispatch": false,
-    "Written Communication": false,
-    Resolutions: false,
-  });
-  const [activeMetrics, setActiveMetrics] = useState({
-    "Customer Service": "Average Handle Time",
-    "Help Desk": "Average Handle Time",
-    "Electronic Dispatch": "Average Handle Time",
-    "Written Communication": "Average Handle Time",
-    Resolutions: "Average Handle Time",
-  });
+// ─── CHART MAPPING (same as before) ─────────────────────────────────────────
+const metricMap = {
+  "Average Handle Time": "ahtTeam",
+  Adherence: "adherence",
+  Quality: "qualityTeam",
+  "Average Score": "mtdScore",
+};
 
-  const [managerExpanded, setManagerExpanded] = useState({});
-  const [managerActiveMetrics, setManagerActiveMetrics] = useState({});
-  const [supervisorExpanded, setSupervisorExpanded] = useState({});
-  const [supervisorActiveMetrics, setSupervisorActiveMetrics] = useState({});
-  const toggleExpand = (dept) => {
-    setExpandedRows((prev) => {
-      const isCurrentlyExpanded = prev[dept];
-      // If the department is being closed, reset the manager's expanded state.
-      if (isCurrentlyExpanded) {
-        setManagersExpanded((prevManagers) => ({
-          ...prevManagers,
-          [dept]: false,
-        }));
-      }
-      return { ...prev, [dept]: !isCurrentlyExpanded };
-    });
-  };
-  const toggleManagerExpand = (dept) => {
-    setManagersExpanded((prev) => ({
-      ...prev,
-      [dept]: !prev[dept],
-    }));
-  };
-  const toggleSupervisorExpand = (dept) => {
-    setSupervisorExpanded((prev) => ({
-      ...prev,
-      [dept]: !prev[dept],
-    }));
-  };
-
-  const metricMap = {
-    "Average Handle Time": "ahtTeam",
-    Adherence: "adherence",
-    Quality: "qualityTeam",
-    "Average Score": "mtdScore",
-  };
-  const handleStatCardClick = (managerName, metric) => {
-    setManagerActiveMetrics((prev) => ({
-      ...prev,
-      [managerName]: metric,
-    }));
-    setManagerExpanded((prev) => ({
-      ...prev,
-      [managerName]: true,
-    }));
-  };
-
-  const renderChart = (managerName) => {
-    if (!managerExpanded[managerName]) return null;
-    const currentMetric =
-      managerActiveMetrics[managerName] || "Average Handle Time";
-
-    return (
-      <>
-        {/* Manager Main Chart */}
-        <div className="my-4 h-80">
-          <LineChartTime
-            data={fakeDataMap[currentMetric]}
-            xDataKey="date"
-            yDataKey={metricMap[currentMetric]}
-            disableGrouping={true}
-          />
-        </div>
-        {/* (Additional manager-specific UI here) */}
-      </>
-    );
-  };
-
-  // New supervisor chart function
-  const renderSupervisorChart = (supervisorName) => {
-    if (!supervisorExpanded[supervisorName]) return null;
-    const currentMetric =
-      supervisorActiveMetrics[supervisorName] || "Average Handle Time";
-
-    return (
-      <>
-        {/* Supervisor Main Chart */}
-        <div className="my-4 h-80">
-          <LineChartTime
-            data={fakeDataMap[currentMetric]}
-            xDataKey="date"
-            yDataKey={metricMap[currentMetric]}
-            disableGrouping={true}
-          />
-        </div>
-        {/* For example, conditionally render the supervisor toggle and stats block */}
-        {!supervisorExpanded[supervisorName] ? (
-          <div className="lg:flex justify-center mt-4 hidden">
-            <button
-              onClick={() => toggleSupervisorExpand(supervisorName)}
-              className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
-            >
-              <PlusCircleIcon className="h-6 w-6 mr-2" />
-              Show Supervisors
-            </button>
-          </div>
-        ) : (
-          <div className="border-2 border-darkBorder dark:bg-darkBg bg-darkBorder mx-2 rounded-lg">
-            {/* Render supervisor stats cards */}
-            <Transition
-              show={supervisorExpanded[supervisorName]}
-              appear
-              enter="transition ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="transition ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="mt-4 text-center px-4 rounded-lg">
-                <div className="relative">
-                  {computedCustomerServiceSupervisorStats.map((supervisor) => {
-                    const { name, ...metrics } = supervisor;
-                    return (
-                      <div key={name} className="mb-8 py-2 px-2">
-                        <div className="flex items-center justify-center mb-8">
-                          <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
-                            {name}
-                          </h2>
-                          <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
-                        </div>
-
-                        <dl className="grid grid-cols-2 gap-8">
-                          {Object.entries(metrics).map(
-                            ([metric, value], idx) => {
-                              const bgColorClass = getBgColor(metric, value);
-                              return (
-                                <StatCardComponent
-                                  key={metric}
-                                  id={metric}
-                                  name={metric}
-                                  stat={value}
-                                  qualifies={
-                                    bgColorClass.trim() === "bg-lovesGreen"
-                                  }
-                                  bgColorClass={bgColorClass}
-                                  delay={idx * 300}
-                                  isActive={
-                                    supervisorActiveMetrics[supervisorName] ===
-                                    metric
-                                  }
-                                  onClick={() =>
-                                    handleSupervisorStatCardClick(
-                                      supervisorName,
-                                      metric
-                                    )
-                                  }
-                                />
-                              );
-                            }
-                          )}
-                        </dl>
-                        <div className="mt-4 h-80">
-                          <LineChartTime
-                            data={fakeDataMap[currentMetric]}
-                            xDataKey="date"
-                            yDataKey={metricMap[currentMetric]}
-                            disableGrouping={true}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                  <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
-                </div>
-              </div>
-            </Transition>
-          </div>
-        )}
-      </>
-    );
-  };
-
+export default function ManagerDashboard() {
   const {
     currentDate,
     setCurrentDate,
@@ -617,48 +263,23 @@ export default function ManagerSelectionForm() {
     setFromDate,
     toDate,
     setToDate,
-    navigateMonth,
-    handleDateSelect,
   } = useDateRange();
-
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedManager, setSelectedManager] = useState(null);
-  const handleSearch = () => {
-    if (!selectedManager) return;
-
-    const activeFilters = [{ type: "Manager", label: selectedManager.value }];
-
-    performSearch({
-      activeFilters,
-      fromDate,
-      toDate,
-      dataSets,
-      allTeamData,
-      router,
-      setIsLoading,
-    });
-  };
-
-  if (isLoading) {
-    return (
-      <>
-        <Header />
-        <LoadingAnimation />
-      </>
-    );
-  }
-
+  const [selectedDepartments, setSelectedDepartments] = useState({
+    "Customer Service": true,
+    "Help Desk": true,
+    "Electronic Dispatch": true,
+    "Written Communication": true,
+    Resolutions: true,
+  });
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
       <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
-                     border border-lightGray shadow-sm shadow-lovesBlack   dark:border-darkBorder
+                     border border-lightGray shadow-sm shadow-lovesBlack dark:border-darkBorder
                      rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
           onClick={() => setShowCalendar(true)}
         >
@@ -676,7 +297,7 @@ export default function ManagerSelectionForm() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
+          selectedDepartments={selectedDepartments} // <-- Pass it here
           setSelectedDepartments={setSelectedDepartments}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
@@ -684,108 +305,895 @@ export default function ManagerSelectionForm() {
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
-        <Transition
-          as="div"
-          show={selectedDepartments["Customer Service"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          {computedCustomerServiceManagerStats.map((manager, idx) => (
-            <div
+        {computedCustomerServiceManagerStats.map((manager) => {
+          const parentStats = formatMetrics(manager);
+          const subordinateStats = formatSupervisorData(manager.name);
+          return (
+            <DashboardSection
               key={manager.name}
-              className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder dark:shadow-sm p-4 rounded-lg mt-4"
-            >
-              <div className="mb-4">
-                <div className="flex items-center justify-between">
-                  <div
-                    onClick={() => {
-                      setSelectedManager({ value: manager.name });
-                      handleSearch();
-                    }}
-                    className="flex items-center space-x-2 cursor-pointer"
-                  >
-                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack hover:underline cursor-pointer">
-                      {manager.name}
-                    </h1>
-                    <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
-                  </div>
-                  <div className="lg:flex items-center space-x-2 hidden">
-                    {managersExpanded[manager.name] && (
-                      <button
-                        onClick={() => toggleExpand(manager.name)}
-                        className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText lg:px-4 lg:py-2 px-1 py-1 rounded-lg font-futura-bold"
-                      >
-                        <XCircleIcon className="lg:h-6 lg:w-6 mr-2" />
-                        Close Department
-                      </button>
-                    )}
-                    <div className="lg:flex items-center space-x-2 hidden">
-                      {supervisorExpanded[manager.name] && (
-                        <button
-                          onClick={() => toggleSupervisorExpand(manager.name)}
-                          className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText px-4 py-2 rounded-lg font-futura-bold"
-                        >
-                          <XCircleIcon className="h-6 w-6 mr-2" />
-                          Hide Supervisors
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                {Object.entries(manager)
-                  .filter(([key]) => key !== "name")
-                  .map(([metric, value]) => {
-                    const isActive =
-                      managerActiveMetrics[manager.name] === metric;
-                    const bgColorClass = getBgColor(metric, value);
-                    return (
-                      <StatCardComponent
-                        key={`${manager.name}-${metric}`}
-                        id={`${manager.name}-${metric}`}
-                        name={metric} // Only the metric name will be displayed here
-                        stat={value}
-                        qualifies={bgColorClass.trim() === "bg-lovesGreen"}
-                        bgColorClass={bgColorClass}
-                        delay={idx * 300}
-                        isActive={isActive}
-                        onClick={() =>
-                          handleStatCardClick(manager.name, metric)
-                        }
-                      />
-                    );
-                  })}
-              </dl>
-
-              {renderChart(manager.name)}
-
-              {/* Optional: A button to manually expand the manager chart if not already expanded */}
-              {!managerExpanded[manager.name] && (
-                <div className="overflow-hidden transition-all duration-500 ease-in-out transform max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
-                  <button
-                    onClick={() =>
-                      setManagerExpanded((prev) => ({
-                        ...prev,
-                        [manager.name]: true,
-                      }))
-                    }
-                    className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl"
-                  >
-                    Expand Manager
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
-        </Transition>
+              title={manager.name}
+              headerLink={`/customer-service/daily-metrics/manager/${manager.name}`} // Customize as needed.
+              subordinateTitle="Supervisors"
+              subordinateLink="/customer-service/daily-metrics/supervisor" // Customize link if required.
+              parentStats={parentStats}
+              subordinateStats={subordinateStats}
+              chartDataMap={fakeDataMap}
+              metricMap={metricMap}
+              initialActiveMetric="Average Handle Time"
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
+
+// "use client";
+// import React, { useState, useMemo, useEffect } from "react";
+// import { useRouter } from "next/router";
+// import { Disclosure, Transition, Listbox } from "@headlessui/react";
+// import {
+//   ChevronDownIcon,
+//   CheckIcon,
+//   ChevronUpIcon,
+// } from "@heroicons/react/20/solid";
+// import Header from "@/components/Navigation/header";
+// import Calendar from "@/components/Sorting/DateFilters/Calendar";
+// import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
+// import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
+
+// import dynamic from "next/dynamic";
+// import filterBackground from "@/public/animations/filterBackground.json";
+
+// import Link from "next/link";
+// import {
+//   ChevronRightIcon,
+//   PlusCircleIcon,
+//   XCircleIcon,
+// } from "@heroicons/react/20/solid";
+// import bgCard from "@/public/animations/bgCard.json";
+// import down from "@/public/animations/down.json";
+// import award from "@/public/animations/award.json";
+
+// import BarChart from "@/components/Charts/BarChart";
+// import warning from "@/public/warning.png";
+// import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
+// import LineChartTime from "@/components/Charts/LineChartTime";
+// import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
+
+// import {
+//   customerServiceAverageScore,
+//   customerServiceAHT,
+//   qualityInfo,
+//   customerServiceAdherence,
+//   allTeamData,
+// } from "@/data/customerServiceData";
+// import { customerServiceData } from "@/data/customerServiceData";
+// import Image from "next/image";
+// const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+// const dataSets = customerServiceData.dataSets;
+
+// const averageHandleTimeGoal = "5:30 - 6:30";
+// const qualityGoal = "88%";
+// const adherenceGoal = "88%";
+// const averageScoreGoal = "95%";
+// function generateRandomMetricValue(metricName) {
+//   if (metricName === "Average Handle Time") {
+//     // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
+//     let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
+//     let mins = Math.floor(seconds / 60);
+//     let secs = seconds % 60;
+//     return `${mins.toString().padStart(2, "0")}:${secs
+//       .toString()
+//       .padStart(2, "0")}`;
+//   } else if (metricName === "Average Score") {
+//     // generate a random percentage between 90% and 105%
+//     let value = (Math.random() * 15 + 90).toFixed(2);
+//     return `${value}%`;
+//   } else if (metricName === "Adherence") {
+//     // generate a random percentage between 85% and 95%
+//     let value = (Math.random() * 10 + 85).toFixed(2);
+//     return `${value}%`;
+//   } else if (metricName === "Quality") {
+//     // generate a random percentage between 80% and 95%
+//     let value = (Math.random() * 15 + 80).toFixed(2);
+//     return `${value}%`;
+//   }
+//   return "0%";
+// }
+
+// function formatSecondsToMMSS(seconds) {
+//   const minutes = Math.floor(seconds / 60);
+//   const secs = seconds % 60;
+//   return `${minutes.toString().padStart(2, "0")}:${secs
+//     .toString()
+//     .padStart(2, "0")}`;
+// }
+
+// function generateRandomAHTSeconds() {
+//   const minSeconds = 5 * 60;
+//   const maxSeconds = 7 * 60;
+//   return Math.floor(Math.random() * (maxSeconds - minSeconds + 1)) + minSeconds;
+// }
+
+// function generateRandomAHTFormatted() {
+//   const seconds = generateRandomAHTSeconds();
+//   return formatSecondsToMMSS(seconds);
+// }
+
+// function generateFakeDataForMarch2025ForMetric(metricKey, generator) {
+//   const data = [];
+//   const startDate = new Date(2025, 2, 1);
+//   const endDate = new Date(2025, 2, 31);
+//   let currentDate = new Date(startDate);
+//   while (currentDate <= endDate) {
+//     const formattedDate = `${
+//       currentDate.getMonth() + 1
+//     }/${currentDate.getDate()}`;
+//     data.push({ date: formattedDate, [metricKey]: generator() });
+//     currentDate.setDate(currentDate.getDate() + 1);
+//   }
+//   return data;
+// }
+
+// export const fakeAHTData = generateFakeDataForMarch2025ForMetric(
+//   "ahtTeam",
+//   generateRandomAHTFormatted
+// );
+
+// export const fakeAdherenceData = generateFakeDataForMarch2025ForMetric(
+//   "adherence",
+//   () => generateRandomMetricValue("Adherence")
+// );
+// export const fakeQualityData = generateFakeDataForMarch2025ForMetric(
+//   "qualityTeam",
+//   () => generateRandomMetricValue("Quality")
+// );
+// export const fakeMtdScoreData = generateFakeDataForMarch2025ForMetric(
+//   "mtdScore",
+//   () => generateRandomMetricValue("Average Score")
+// );
+
+// const fakeDataMap = {
+//   "Average Handle Time": fakeAHTData,
+//   Adherence: fakeAdherenceData,
+//   Quality: fakeQualityData,
+//   "Average Score": fakeMtdScoreData,
+// };
+// function getBgColor(statName, statValue) {
+//   if (!statValue || statValue === "N/A") {
+//     return "bg-lovesWhite/20";
+//   }
+//   if (statName === "Average Handle Time") {
+//     const [mins, secs] = statValue.split(":").map(Number);
+//     const totalSeconds = mins * 60 + secs;
+//     const [lowStr, highStr] = averageHandleTimeGoal.split(" - ");
+//     const [lowMins, lowSecs] = lowStr.split(":").map(Number);
+//     const [highMins, highSecs] = highStr.split(":").map(Number);
+//     const lowerBound = lowMins * 60 + lowSecs;
+//     const upperBound = highMins * 60 + highSecs;
+//     return totalSeconds >= lowerBound && totalSeconds <= upperBound
+//       ? "bg-lovesGreen"
+//       : "bg-lovesPrimaryRed";
+//   } else {
+//     const num = parseFloat(statValue.replace("%", ""));
+//     if (statName === "Adherence") {
+//       return num >= parseFloat(adherenceGoal)
+//         ? "bg-lovesGreen"
+//         : "bg-lovesPrimaryRed";
+//     } else if (statName === "Quality") {
+//       return num >= parseFloat(qualityGoal)
+//         ? "bg-lovesGreen"
+//         : "bg-lovesPrimaryRed";
+//     } else if (statName === "Average Score") {
+//       return num >= parseFloat(averageScoreGoal)
+//         ? "bg-lovesGreen"
+//         : "bg-lovesPrimaryRed";
+//     }
+//   }
+//   return "bg-lovesWhite";
+// }
+// const customerServiceManagers = Array.from(
+//   new Set(allTeamData.map((item) => item.manager))
+// ).map((managerName) => ({ name: managerName }));
+// const customerServiceSupervisors = Array.from(
+//   new Set(allTeamData.map((item) => item.supervisor))
+// ).map((supervisorName) => ({ name: supervisorName }));
+// const computedCustomerServiceManagerStats = customerServiceManagers.map(
+//   (manager) => {
+//     const managerName = manager.name;
+//     return {
+//       name: managerName,
+//       "Average Handle Time": averageAHTForManager(
+//         customerServiceAHT,
+//         managerName
+//       ),
+//       Adherence: averagePercentageForManager(
+//         customerServiceAdherence,
+//         "qualityTeam",
+//         managerName
+//       ),
+//       Quality: averagePercentageForManager(
+//         qualityInfo,
+//         "qualityTeam",
+//         managerName
+//       ),
+//       "Average Score": averagePercentageForManager(
+//         customerServiceAverageScore,
+//         "mtdScore",
+//         managerName
+//       ),
+//     };
+//   }
+// );
+// const computedCustomerServiceSupervisorStats = customerServiceSupervisors.map(
+//   (supervisor) => {
+//     const supervisorName = supervisor.name;
+//     return {
+//       name: supervisorName,
+//       "Average Handle Time": averageAHTForSupervisor(
+//         customerServiceAHT,
+//         supervisorName
+//       ),
+//       Adherence: averagePercentageForSupervisor(
+//         customerServiceAdherence,
+//         "qualityTeam",
+//         supervisorName
+//       ),
+//       Quality: averagePercentageForSupervisor(
+//         qualityInfo,
+//         "qualityTeam",
+//         supervisorName
+//       ),
+//       "Average Score": averagePercentageForSupervisor(
+//         customerServiceAverageScore,
+//         "mtdScore",
+//         supervisorName
+//       ),
+//     };
+//   }
+// );
+// const getSupervisorStatsForManager = (managerName) => {
+//   // Filter allTeamData for rows that belong to this manager.
+//   const filteredData = allTeamData.filter(
+//     (item) => item.manager === managerName
+//   );
+//   console.log(filteredData);
+
+//   // Get a unique list of supervisors for that manager.
+//   const uniqueSupervisors = Array.from(
+//     new Set(filteredData.map((item) => item.supervisor))
+//   );
+
+//   // Compute stats for each unique supervisor using your average functions.
+//   return uniqueSupervisors.map((supervisorName) => ({
+//     name: supervisorName,
+//     "Average Handle Time": averageAHTForSupervisor(
+//       customerServiceAHT,
+//       supervisorName
+//     ),
+//     Adherence: averagePercentageForSupervisor(
+//       customerServiceAdherence,
+//       "qualityTeam",
+//       supervisorName
+//     ),
+//     Quality: averagePercentageForSupervisor(
+//       qualityInfo,
+//       "qualityTeam",
+//       supervisorName
+//     ),
+//     "Average Score": averagePercentageForSupervisor(
+//       customerServiceAverageScore,
+//       "mtdScore",
+//       supervisorName
+//     ),
+//   }));
+// };
+// function averagePercentageForManager(dataArray, key, managerName) {
+//   const filtered = dataArray.filter((item) => item.manager === managerName);
+//   if (filtered.length === 0) return "N/A";
+//   const sum = filtered.reduce(
+//     (acc, cur) => acc + parseFloat(cur[key].replace("%", "")),
+//     0
+//   );
+//   const avg = sum / filtered.length;
+//   return avg.toFixed(2) + "%";
+// }
+
+// // Computes average AHT in MM:SS for a manager
+// function averageAHTForManager(dataArray, managerName) {
+//   const filtered = dataArray.filter((item) => item.manager === managerName);
+//   if (filtered.length === 0) return "N/A";
+//   const sumSeconds = filtered.reduce((acc, cur) => {
+//     const [m, s] = cur.ahtTeam.split(":").map(Number);
+//     return acc + m * 60 + s;
+//   }, 0);
+//   const avgSeconds = sumSeconds / filtered.length;
+//   const m = Math.floor(avgSeconds / 60);
+//   const s = Math.round(avgSeconds % 60);
+//   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+// }
+// function averageAHTForSupervisor(dataArray, supervisorName) {
+//   const filtered = dataArray.filter(
+//     (item) => item.supervisor === supervisorName
+//   );
+//   if (filtered.length === 0) return "N/A";
+
+//   const sumSeconds = filtered.reduce((acc, cur) => {
+//     if (!cur.ahtTeam) return acc; // Skip entries with no ahtTeam.
+//     const parts = cur.ahtTeam.split(":");
+//     if (parts.length < 2) return acc; // Skip invalid format
+//     const [m, s] = parts.map(Number);
+//     return acc + m * 60 + s;
+//   }, 0);
+//   // To avoid division by zero if all entries were skipped:
+//   const validEntriesCount = filtered.filter(
+//     (item) => item.ahtTeam && item.ahtTeam.includes(":")
+//   ).length;
+//   if (validEntriesCount === 0) return "N/A";
+
+//   const avgSeconds = sumSeconds / validEntriesCount;
+//   const m = Math.floor(avgSeconds / 60);
+//   const s = Math.round(avgSeconds % 60);
+//   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+// }
+
+// function averagePercentageForSupervisor(dataArray, key, supervisorName) {
+//   // Filter only entries that have a valid property for the given key.
+//   const filtered = dataArray.filter(
+//     (item) => item.supervisor === supervisorName && item[key]
+//   );
+//   if (filtered.length === 0) return "N/A";
+
+//   const sum = filtered.reduce((acc, cur) => {
+//     // Safely access cur[key]
+//     const stat = cur[key];
+//     if (typeof stat !== "string") return acc; // If stat is not a string, skip it
+//     // Remove the "%" sign and convert to a number.
+//     const num = parseFloat(stat.replace("%", ""));
+//     return acc + (isNaN(num) ? 0 : num);
+//   }, 0);
+
+//   const avg = sum / filtered.length;
+//   return avg.toFixed(2) + "%";
+// }
+
+// const StatCardComponent = ({
+//   id,
+//   name,
+//   stat,
+//   qualifies,
+//   bgColorClass,
+//   delay = 0,
+//   onClick,
+//   isActive,
+// }) => {
+//   const [animationFinished, setAnimationFinished] = useState(true);
+//   const [startAnimation, setStartAnimation] = useState(false);
+
+//   useEffect(() => {
+//     const timer = setTimeout(() => {
+//       setStartAnimation(true);
+//     }, delay);
+//     return () => clearTimeout(timer);
+//   }, [delay]);
+//   const textColorClass = isActive
+//     ? qualifies
+//       ? "text-lovesGreen"
+//       : "text-lovesPrimaryRed"
+//     : qualifies
+//     ? "text-lovesGreen"
+//     : "text-lovesPrimaryRed";
+
+//   const cardBg = isActive
+//     ? "bg-darkCompBg dark:bg-darkBg "
+//     : animationFinished
+//     ? "bg-darkBorder"
+//     : "bg-lovesBlack dark:bg-darkPrimaryText";
+//   const nameTextColorClass = isActive ? "text-lovesWhite" : "text-lovesWhite";
+//   return (
+//     <div
+//       onClick={onClick}
+//       className={`cursor-pointer relative rounded-lg shadow-md dark:shadow-sm shadow-lovesBlack dark:shadow-darkBorder overflow-hidden border-2 dark:border ${
+//         isActive
+//           ? qualifies
+//             ? "animate-glow border-lovesGreen dark:border-lovesGreen"
+//             : "border-lovesPrimaryRed dark:border-lovesPrimaryRed"
+//           : "border-lovesBlack dark:border-lovesBlack"
+//       } ${cardBg}`}
+//       style={{ transition: "background-color 1s ease-in-out" }}
+//     >
+//       {animationFinished &&
+//         (qualifies ? (
+//           <div className="absolute top-0 right-0 p-2">
+//             <Lottie
+//               animationData={award}
+//               loop={true}
+//               speed={0.1}
+//               style={{ width: "50px", height: "50px" }}
+//             />
+//           </div>
+//         ) : (
+//           <div className="absolute top-2 right-3 p-2">
+//             {/* <Image
+//               src={warning}
+//               alt="Warning"
+//               width={20}
+//               height={20}
+//               // style={{ width: "50px", height: "50px" }}
+//             /> */}
+//           </div>
+//         ))}
+
+//       <div
+//         className="relative p-6 flex flex-col items-center justify-center"
+//         style={{
+//           opacity: animationFinished ? 1 : 0,
+//           transition: "opacity 1s ease-in-out",
+//         }}
+//       >
+//         <dt className="flex flex-col items-center text-center">
+//           <p
+//             className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
+//           >
+//             {name}
+//           </p>
+//         </dt>
+//         <dd className="flex flex-col items-center justify-center pt-4">
+//           <p
+//             className={`text-3xl font-semibold font-futura-bold ${textColorClass} glow`}
+//           >
+//             {stat}
+//           </p>
+//         </dd>
+//       </div>
+//     </div>
+//   );
+// };
+
+// function generateRandomStat(metricName) {
+//   return generateRandomMetricValue(metricName);
+// }
+
+// export default function ManagerSelectionForm() {
+//   const avgScore = useMemo(() => {
+//     const scores = customerServiceAverageScore.map((item) =>
+//       parseFloat(item.mtdScore.replace("%", ""))
+//     );
+//     const total = scores.reduce((acc, s) => acc + s, 0);
+//     const avg = total / scores.length;
+//     return avg.toFixed(2) + "%";
+//   }, []);
+
+//   const avgAdherence = useMemo(() => {
+//     const adherences = customerServiceAdherence.map((item) =>
+//       parseFloat(item.qualityTeam.replace("%", ""))
+//     );
+//     const total = adherences.reduce((acc, a) => acc + a, 0);
+//     const avg = total / adherences.length;
+//     return avg.toFixed(2) + "%";
+//   }, []);
+
+//   const avgQuality = useMemo(() => {
+//     const qualities = qualityInfo.map((item) =>
+//       parseFloat(item.qualityTeam.replace("%", ""))
+//     );
+//     const total = qualities.reduce((acc, q) => acc + q, 0);
+//     const avg = total / qualities.length;
+//     return avg.toFixed(2) + "%";
+//   }, []);
+
+//   const avgAHT = useMemo(() => {
+//     const timesInSeconds = customerServiceAHT.map((item) => {
+//       const [mins, secs] = item.ahtTeam.split(":").map(Number);
+//       return mins * 60 + secs;
+//     });
+//     const totalSeconds = timesInSeconds.reduce((acc, t) => acc + t, 0);
+//     const avgSeconds = totalSeconds / timesInSeconds.length;
+//     const mins = Math.floor(avgSeconds / 60);
+//     const secs = Math.round(avgSeconds % 60);
+//     return `${mins.toString().padStart(2, "0")}:${secs
+//       .toString()
+//       .padStart(2, "0")}`;
+//   }, []);
+//   const handleSupervisorStatCardClick = (supervisorName, metric) => {
+//     setSupervisorActiveMetrics((prev) => ({
+//       ...prev,
+//       [supervisorName]: metric,
+//     }));
+//   };
+//   const [selectedDepartments, setSelectedDepartments] = useState({
+//     "Customer Service": true,
+//     "Help Desk": true,
+//     "Electronic Dispatch": true,
+//     "Written Communication": true,
+//     Resolutions: true,
+//   });
+
+//   const [managersExpanded, setManagersExpanded] = useState({
+//     "Customer Service": false,
+//     "Help Desk": false,
+//     "Electronic Dispatch": false,
+//     "Written Communication": false,
+//     Resolutions: false,
+//   });
+//   const [activeMetrics, setActiveMetrics] = useState({
+//     "Customer Service": "Average Handle Time",
+//     "Help Desk": "Average Handle Time",
+//     "Electronic Dispatch": "Average Handle Time",
+//     "Written Communication": "Average Handle Time",
+//     Resolutions: "Average Handle Time",
+//   });
+
+//   const [managerExpanded, setManagerExpanded] = useState({});
+//   const [managerActiveMetrics, setManagerActiveMetrics] = useState({});
+//   const [supervisorExpanded, setSupervisorExpanded] = useState({});
+//   const [supervisorActiveMetrics, setSupervisorActiveMetrics] = useState({});
+//   const toggleExpand = (dept) => {
+//     setExpandedRows((prev) => {
+//       const isCurrentlyExpanded = prev[dept];
+//       // If the department is being closed, reset the manager's expanded state.
+//       if (isCurrentlyExpanded) {
+//         setManagersExpanded((prevManagers) => ({
+//           ...prevManagers,
+//           [dept]: false,
+//         }));
+//       }
+//       return { ...prev, [dept]: !isCurrentlyExpanded };
+//     });
+//   };
+//   const toggleManagerExpand = (managerName) => {
+//     setManagerExpanded((prev) => ({
+//       ...prev,
+//       [managerName]: !prev[managerName],
+//     }));
+//     // Optionally, if you want to reset any other state (e.g. managersExpanded)
+//     setManagersExpanded((prev) => ({
+//       ...prev,
+//       [managerName]: false,
+//     }));
+//   };
+//   const toggleSupervisorExpand = (managerName) => {
+//     setSupervisorExpanded((prev) => ({
+//       ...prev,
+//       [managerName]: !prev[managerName],
+//     }));
+//   };
+
+//   const metricMap = {
+//     "Average Handle Time": "ahtTeam",
+//     Adherence: "adherence",
+//     Quality: "qualityTeam",
+//     "Average Score": "mtdScore",
+//   };
+//   const handleStatCardClick = (managerName, metric) => {
+//     setManagerActiveMetrics((prev) => ({
+//       ...prev,
+//       [managerName]: metric,
+//     }));
+//     setManagerExpanded((prev) => ({
+//       ...prev,
+//       [managerName]: true,
+//     }));
+//     // Get the supervisors for this manager (using your helper)
+//     const supervisors = getSupervisorStatsForManager(managerName);
+//     // Update each supervisor to have the same metric selected
+//     setSupervisorActiveMetrics((prev) => {
+//       const updated = { ...prev };
+//       supervisors.forEach(({ name: supervisorName }) => {
+//         updated[supervisorName] = metric;
+//       });
+//       return updated;
+//     });
+//   };
+
+//   const renderChart = (managerName) => {
+//     // Only render if the manager's chart is expanded.
+//     if (!managerExpanded[managerName]) return null;
+
+//     // Use active metric or default.
+//     const currentMetric =
+//       managerActiveMetrics[managerName] || "Average Handle Time";
+
+//     return (
+//       <>
+//         {/* Manager Main Chart */}
+//         <div className="my-4 h-80">
+//           <LineChartTime
+//             data={fakeDataMap[currentMetric]}
+//             xDataKey="date"
+//             yDataKey={metricMap[currentMetric]}
+//             disableGrouping={true}
+//           />
+//         </div>
+
+//         {/* Supervisor Toggle Button underneath manager chart */}
+//         <div className="flex justify-center mt-4">
+//           {!supervisorExpanded[managerName] ? (
+//             <button
+//               onClick={() => toggleSupervisorExpand(managerName)}
+//               className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+//             >
+//               <PlusCircleIcon className="h-6 w-6 mr-2" />
+//               Show Supervisors
+//             </button>
+//           ) : (
+//             <div></div>
+//           )}
+//         </div>
+
+//         {/* Render the Supervisor Chart block */}
+//         {renderSupervisorChart(managerName)}
+//       </>
+//     );
+//   };
+
+//   // Function to render the supervisor chart block for a given manager.
+//   const renderSupervisorChart = (managerName) => {
+//     // Only render if the supervisor block is expanded for this manager.
+//     if (!supervisorExpanded[managerName]) return null;
+
+//     // Get only the supervisors for this manager.
+//     const supervisorStats = getSupervisorStatsForManager(managerName);
+
+//     return (
+//       <div className="border-2 border-darkBorder dark:bg-darkBg bg-darkBorder mx-2 rounded-lg mt-4">
+//         <Transition
+//           show={supervisorExpanded[managerName]}
+//           appear
+//           enter="transition ease-out duration-300"
+//           enterFrom="opacity-0 scale-95"
+//           enterTo="opacity-100 scale-100"
+//           leave="transition ease-in duration-200"
+//           leaveFrom="opacity-100 scale-100"
+//           leaveTo="opacity-0 scale-95"
+//         >
+//           <div className="mt-4 text-center px-4 rounded-lg">
+//             <div className="relative">
+//               <div className="grid grid-cols-2 gap-x-16 gap-y-4">
+//                 {supervisorStats.map((supervisor) => {
+//                   const { name, ...metrics } = supervisor;
+//                   return (
+//                     <div key={name} className="mb-8 py-2 px-2">
+//                       <div className="flex items-center justify-center mb-8">
+//                         <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
+//                           {name}
+//                         </h2>
+//                         <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+//                       </div>
+//                       <dl className="grid grid-cols-2 gap-8">
+//                         {Object.entries(metrics).map(([metric, value], idx) => {
+//                           const isActive =
+//                             supervisorActiveMetrics[name] === metric;
+//                           const bgColorClass = getBgColor(metric, value);
+//                           return (
+//                             <StatCardComponent
+//                               key={metric}
+//                               id={metric}
+//                               name={metric}
+//                               stat={value}
+//                               qualifies={
+//                                 bgColorClass.trim() === "bg-lovesGreen"
+//                               }
+//                               bgColorClass={bgColorClass}
+//                               delay={idx * 300}
+//                               isActive={isActive}
+//                               onClick={() =>
+//                                 handleSupervisorStatCardClick(name, metric)
+//                               }
+//                             />
+//                           );
+//                         })}
+//                       </dl>
+//                       <div className="mt-4 h-80">
+//                         <LineChartTime
+//                           data={
+//                             fakeDataMap[
+//                               supervisorActiveMetrics[name] ||
+//                                 "Average Handle Time"
+//                             ]
+//                           }
+//                           xDataKey="date"
+//                           yDataKey={
+//                             metricMap[
+//                               supervisorActiveMetrics[name] ||
+//                                 "Average Handle Time"
+//                             ]
+//                           }
+//                           disableGrouping={true}
+//                         />
+//                       </div>
+//                     </div>
+//                   );
+//                 })}
+//               </div>
+//               {/* Vertical divider for medium screens */}
+//               <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
+//             </div>
+//           </div>
+//         </Transition>
+//       </div>
+//     );
+//   };
+
+//   const {
+//     currentDate,
+//     setCurrentDate,
+//     fromDate,
+//     setFromDate,
+//     toDate,
+//     setToDate,
+//     navigateMonth,
+//     handleDateSelect,
+//   } = useDateRange();
+
+//   const [selectedDateRange, setSelectedDateRange] = useState(null);
+//   const [showCalendar, setShowCalendar] = useState(false);
+
+//   const router = useRouter();
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [selectedManager, setSelectedManager] = useState(null);
+//   const handleSearch = () => {
+//     if (!selectedManager) return;
+
+//     const activeFilters = [{ type: "Manager", label: selectedManager.value }];
+
+//     performSearch({
+//       activeFilters,
+//       fromDate,
+//       toDate,
+//       dataSets,
+//       allTeamData,
+//       router,
+//       setIsLoading,
+//     });
+//   };
+
+//   if (isLoading) {
+//     return (
+//       <>
+//         <Header />
+//         <LoadingAnimation />
+//       </>
+//     );
+//   }
+
+//   return (
+//     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
+//       <Header />
+//       <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
+//         <div
+//           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold
+//                      border border-lightGray shadow-sm shadow-lovesBlack   dark:border-darkBorder
+//                      rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
+//           onClick={() => setShowCalendar(true)}
+//         >
+//           {fromDate && toDate
+//             ? `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`
+//             : "Date Range: Not Selected"}
+//         </div>
+
+//         <FilterCalendarToggle
+//           fromDate={fromDate}
+//           toDate={toDate}
+//           setFromDate={setFromDate}
+//           setToDate={setToDate}
+//           currentDate={currentDate}
+//           setCurrentDate={setCurrentDate}
+//           selectedDateRange={selectedDateRange}
+//           setSelectedDateRange={setSelectedDateRange}
+//           selectedDepartments={selectedDepartments}
+//           setSelectedDepartments={setSelectedDepartments}
+//           showCalendar={showCalendar}
+//           setShowCalendar={setShowCalendar}
+//         />
+//       </div>
+
+//       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
+//         <Transition
+//           as="div"
+//           show={selectedDepartments["Customer Service"]}
+//           appear
+//           enter="transition ease-out duration-300"
+//           enterFrom="opacity-0 scale-95"
+//           enterTo="opacity-100 scale-100"
+//           leave="transition ease-in duration-200"
+//           leaveFrom="opacity-100 scale-100"
+//           leaveTo="opacity-0 scale-95"
+//         >
+//           {computedCustomerServiceManagerStats.map((manager, idx) => (
+//             <div
+//               key={manager.name}
+//               className="group bg-lightGray dark:bg-darkCompBg shadow-md shadow-lovesBlack dark:shadow-darkBorder border dark:border-darkBorder dark:shadow-sm p-4 rounded-lg mt-4"
+//             >
+//               <div className="mb-4">
+//                 <div className="flex items-center justify-between">
+//                   <div
+//                     onClick={() => {
+//                       setSelectedManager({ value: manager.name });
+//                       handleSearch();
+//                     }}
+//                     className="flex items-center space-x-2 cursor-pointer"
+//                   >
+//                     <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText text-lovesBlack hover:underline cursor-pointer">
+//                       {manager.name}
+//                     </h1>
+//                     <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack" />
+//                   </div>
+//                   <div className="lg:flex items-center space-x-2 hidden">
+//                     <div className="lg:flex items-center space-x-2 hidden">
+//                       {!supervisorExpanded[manager.name] ? (
+//                         <div></div>
+//                       ) : (
+//                         <button
+//                           onClick={() => toggleSupervisorExpand(manager.name)}
+//                           className="flex items-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+//                         >
+//                           <XCircleIcon className="h-6 w-6 mr-2" />
+//                           Hide Supervisors
+//                         </button>
+//                       )}
+//                       {managerExpanded[manager.name] && (
+//                         <button
+//                           onClick={() => toggleManagerExpand(manager.name)}
+//                           className="flex items-center bg-darkCompBg text-lovesWhite dark:bg-darkBg dark:text-darkPrimaryText lg:px-4 lg:py-2 px-1 py-1 rounded-lg font-futura-bold"
+//                         >
+//                           <XCircleIcon className="lg:h-6 lg:w-6 mr-2" />
+//                           Close Department
+//                         </button>
+//                       )}
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+
+//               <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+//                 {Object.entries(manager)
+//                   .filter(([key]) => key !== "name")
+//                   .map(([metric, value]) => {
+//                     const isActive =
+//                       managerActiveMetrics[manager.name] === metric;
+//                     const bgColorClass = getBgColor(metric, value);
+//                     return (
+//                       <StatCardComponent
+//                         key={`${manager.name}-${metric}`}
+//                         id={`${manager.name}-${metric}`}
+//                         name={metric} // Only the metric name will be displayed here
+//                         stat={value}
+//                         qualifies={bgColorClass.trim() === "bg-lovesGreen"}
+//                         bgColorClass={bgColorClass}
+//                         delay={idx * 300}
+//                         isActive={isActive}
+//                         onClick={() =>
+//                           handleStatCardClick(manager.name, metric)
+//                         }
+//                       />
+//                     );
+//                   })}
+//               </dl>
+
+//               {renderChart(manager.name)}
+
+//               {/* Optional: A button to manually expand the manager chart if not already expanded */}
+//               {!managerExpanded[manager.name] && (
+//                 <div className="overflow-hidden transition-all duration-500 ease-in-out transform max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
+//                   <button
+//                     onClick={() =>
+//                       setManagerExpanded((prev) => ({
+//                         ...prev,
+//                         [manager.name]: true,
+//                       }))
+//                     }
+//                     className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack dark:border dark:border-darkBorder rounded-lg text-lovesWhite font-futura-bold text-xl"
+//                   >
+//                     Expand Manager
+//                   </button>
+//                 </div>
+//               )}
+//             </div>
+//           ))}
+//         </Transition>
+//       </div>
+//     </div>
+//   );
+// }

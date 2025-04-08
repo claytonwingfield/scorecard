@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useRef } from "react";
 import { FunnelIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
@@ -31,7 +32,16 @@ export default function FilterCalendarToggle({
   setShowComparison,
 }) {
   const [showFilters, setShowFilters] = useState(false);
-
+  FilterCalendarToggle.defaultProps = {
+    selectedDepartments: {
+      "Customer Service": false,
+      "Help Desk": false,
+      "Electronic Dispatch": false,
+      "Written Communication": false,
+      Resolutions: false,
+    },
+    setSelectedDepartments: () => {},
+  };
   const calendarRef = useRef(null);
   const filterRef = useRef(null);
 

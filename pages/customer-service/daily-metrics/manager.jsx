@@ -694,6 +694,7 @@ export default function ManagerDailyMetricsPage() {
   const renderCustomLegend = (props) => {
     const { payload } = props;
     // Assume theme is a string, 'dark' or 'light'
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
@@ -900,29 +901,11 @@ export default function ManagerDailyMetricsPage() {
                       <div className="flex flex-col space-y-2">
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "50%", height: "20px" }}
+                          style={{ width: "50%", height: "50px" }}
                         />
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "70%", height: "20px" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-2">
-                  <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
-                    <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
-
-                      <div className="flex flex-col space-y-2">
-                        <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "50%", height: "20px" }}
-                        />
-                        <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "70%", height: "20px" }}
+                          style={{ width: "70%", height: "50px" }}
                         />
                       </div>
                     </div>
@@ -936,11 +919,11 @@ export default function ManagerDailyMetricsPage() {
                       <div className="flex flex-col space-y-2">
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "50%", height: "20px" }}
+                          style={{ width: "50%", height: "50px" }}
                         />
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "70%", height: "20px" }}
+                          style={{ width: "70%", height: "50px" }}
                         />
                       </div>
                     </div>
@@ -949,16 +932,34 @@ export default function ManagerDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBgrounded w-1/3" />
+                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "50%", height: "20px" }}
+                          style={{ width: "50%", height: "50px" }}
                         />
                         <div
                           className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "70%", height: "20px" }}
+                          style={{ width: "70%", height: "50px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-2">
+                  <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
+                    <div className="animate-pulse flex flex-col space-y-4">
+                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg w-1/3" />
+
+                      <div className="flex flex-col space-y-2">
+                        <div
+                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          style={{ width: "50%", height: "50px" }}
+                        />
+                        <div
+                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          style={{ width: "70%", height: "50px" }}
                         />
                       </div>
                     </div>
@@ -996,7 +997,7 @@ export default function ManagerDailyMetricsPage() {
                     comparisonManager={comparisonManager}
                   />
                 </div>
-                <div className=" bg-lovesWhite dark:bg-darkBg dark:bg-darkBg  px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
+                <div className=" bg-lovesWhite dark:bg-darkBg   px-2 pt-4 border-2 border-darkBorder rounded-lg relative z-10">
                   <h3 className="font-futura-bold text-md pb-4">Adherence</h3>
                   <CompareBarChart
                     data={combinedData.filter((d) => d.metric === "Adherence")}
@@ -1055,7 +1056,7 @@ export default function ManagerDailyMetricsPage() {
               </dl>
             </div>
             <div className="mt-0 p-6 lg:block hidden">
-              <div className="border-2 border-darkCompBg dark:border-darkBg shadow-md shadow-darkBorder border-2 border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
+              <div className="border-2  dark:border-darkBg shadow-md shadow-darkBorder  border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between dark:bg-darkBg shadow-md dark:shadow-darkBg border-2 border-darkBorder dark:border dark:border-darkBg dark:shadow-sm pl-4 pt-2 pb-4 ">
                     <h2 className="text-xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite rounded-lg">
