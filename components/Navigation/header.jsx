@@ -13,7 +13,7 @@ import { useQuery } from "@apollo/client";
 import { IconMoon, IconSun } from "@/components/Icons/icons";
 import { GET_LOGO } from "@/graphql/queries";
 import LoadingAnimation from "../Effects/Loading/LoadingAnimation";
-
+import { usePathname } from "next/navigation";
 export default function Header() {
   const { data, loading, error } = useQuery(GET_LOGO);
   const { isMenuOpen, setIsMenuOpen, currentPage, handlePageChange, pages } =
@@ -22,7 +22,8 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef(null);
-
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
   if (loading) return <LoadingAnimation />;
   if (error) return <p>Error: {error.message}</p>;
   if (!data || !data.logo) return <p>No logo data available</p>;
@@ -111,9 +112,11 @@ export default function Header() {
                 height={60}
               />
             </Link>
-            <h1 className="font-futura-bold text-lovesBlack dark:text-darkPrimaryText lg:text-2xl text-xl mt-3">
-              {currentPage}
-            </h1>
+            {!isHomePage && (
+              <h1 className="font-futura-bold text-lovesBlack dark:text-darkPrimaryText lg:text-2xl text-xl mt-3">
+                {currentPage}
+              </h1>
+            )}
           </div>
 
           <div className="hidden md:flex items-center space-x-6 ml-auto">
@@ -126,30 +129,36 @@ export default function Header() {
                     handlePageChange={handlePageChange}
                   />
                 ) : (
-                  <Link
-                    href={page.path}
-                    onClick={() => handlePageChange(page.name)}
-                    className="
+                  <>
+                    {!isHomePage && (
+                      <Link
+                        href={page.path}
+                        onClick={() => handlePageChange(page.name)}
+                        className="
             inline-flex items-center
             text-lovesBlack dark:text-darkPrimaryText
             text-lg font-medium font-futura-bold 
             cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
           "
-                  >
-                    {page.name}
-                  </Link>
+                      >
+                        {page.name}
+                      </Link>
+                    )}
+                  </>
                 )}
               </div>
             ))}
           </div>
 
           <div className="flex items-center space-x-5 md:ml-3">
-            <button
-              className="md:hidden text-lovesBlack dark:text-darkPrimaryText flex items-center h-10"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {mobileHamburgerIcon}
-            </button>
+            {!isHomePage && (
+              <button
+                className="md:hidden text-lovesBlack dark:text-darkPrimaryText flex items-center h-10"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {mobileHamburgerIcon}
+              </button>
+            )}
 
             <Switch.Root
               className="flex items-center h-10 lg:mb-0 mb-3"

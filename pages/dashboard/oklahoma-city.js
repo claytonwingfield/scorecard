@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection"; // Your reusable dashboard component
 import {
@@ -169,6 +170,7 @@ const CustomerServiceSection = () => {
 
   return (
     <DashboardSection
+      name="Department"
       title="Customer Service"
       headerLink="/customer-service/daily-metrics"
       subordinateTitle="Managers"
@@ -177,7 +179,6 @@ const CustomerServiceSection = () => {
       subordinateStats={subordinateStats}
       chartDataMap={fakeDataMap}
       metricMap={metricMap}
-      initialActiveMetric="Average Handle Time"
     />
   );
 };
@@ -226,6 +227,7 @@ const HelpDeskSection = () => {
   return (
     <DashboardSection
       title="Help Desk"
+      name="Department"
       headerLink="/help-desk/daily-metrics"
       subordinateTitle="Managers"
       subordinateLink="/help-desk/daily-metrics/manager"
@@ -287,6 +289,7 @@ const ElectronicDispatchSection = () => {
   return (
     <DashboardSection
       title="Electronic Dispatch"
+      name="Department"
       headerLink="/electronic-dispatch/daily-metrics"
       subordinateTitle="Managers"
       subordinateLink="/electronic-dispatch/daily-metrics/manager"
@@ -341,6 +344,7 @@ const WrittenCommunicationSection = () => {
   return (
     <DashboardSection
       title="Written Communication"
+      name="Department"
       headerLink="/written-communication/daily-metrics"
       subordinateTitle="Managers"
       subordinateLink="/written-communication/daily-metrics/manager"
@@ -402,6 +406,7 @@ const ResolutionsSection = () => {
   return (
     <DashboardSection
       title="Resolutions"
+      name="Department"
       headerLink="/resolutions/daily-metrics"
       subordinateTitle="Managers"
       subordinateLink="/resolutions/daily-metrics/manager"
@@ -410,6 +415,7 @@ const ResolutionsSection = () => {
       chartDataMap={fakeDataMap}
       metricMap={metricMap}
       initialActiveMetric="Average Handle Time"
+      agent={false}
     />
   );
 };

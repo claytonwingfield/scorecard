@@ -7,26 +7,72 @@ import {
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
+import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
 import { Transition } from "@headlessui/react";
+import Header from "@/components/Navigation/header";
+import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import StatCard from "@/components/Card/StatCard"; // Your current stat card component
-import LineChartTime from "@/components/Charts/LineChartTime";
+const LineChartTime = dynamic(
+  () => import("@/components/Charts/LineChartTime"),
+  { ssr: false }
+);
 
 const DashboardSection = ({
   title,
   headerLink,
   subordinateTitle,
+  agent,
+  name,
   subordinateLink,
   parentStats, // Array of metric objects for the parent item (for example: [{ id, name, stat }, ...])
   subordinateStats, // Array of subordinate objects; each object should have a `name` and a `metrics` array (each metric: { id, name, stat })
   chartDataMap, // Mapping from metric name to its chart dataset
   metricMap, // Mapping from metric name to the yDataKey for your chart (e.g.: { "Average Handle Time": "ahtTeam", ... })
   initialActiveMetric = "Average Handle Time",
+  fromDate,
+  setFromDate,
+  toDate,
+  setToDate,
+  dataSets,
+  allTeamData,
 }) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [subExpanded, setSubExpanded] = useState(false);
   const [activeMetric, setActiveMetric] = useState(initialActiveMetric);
+  const handleTitleClick = () => {
+    if (name === "Department") {
+      // Navigate directly to the department dashboard using the headerLink
+      router.push(headerLink);
+      return;
+    }
 
+    const activeFilters = [{ type: name, label: title }];
+
+    // Start the loading state
+    setIsLoading(true);
+
+    performSearch({
+      activeFilters,
+      fromDate,
+      toDate,
+      dataSets,
+      allTeamData,
+      router,
+      setIsLoading, // This can be used to reset the loading flag when search is done
+    });
+  };
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <LoadingAnimation />
+      </>
+    );
+  }
   const toggleExpand = () => {
     // Collapse subordinate block when closing the parent section.
     if (expanded) setSubExpanded(false);
@@ -63,15 +109,12 @@ const DashboardSection = ({
             <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg lg:m-8 rounded-lg">
               <div className=""></div>
               <div className="flex items-center  mt-4 mb-2 mx-4">
-                <Link
-                  className="flex items-center space-x-2 cursor-pointer"
-                  href={subordinateLink || "/default"}
-                >
+                <div className="flex items-center space-x-2 cursor-pointer">
                   <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText mr-2 text-lovesWhite hover:underline cursor-pointer">
                     {subordinateTitle}
                   </h1>
-                </Link>
-                <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                  <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
+                </div>
               </div>
               <div className="mt-4 text-center px-4 rounded-lg">
                 <div className="relative">
@@ -126,11 +169,15 @@ const DashboardSection = ({
     <div className="group bg-lightGray dark:bg-darkCompBg shadow-md p-4 rounded-lg mt-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <Link href={headerLink}>
-          <h1 className="text-2xl dark:text-darkPrimaryText font-futura-bold text-lovesBlack hover:underline cursor-pointer">
+        <div className="flex items-center">
+          <h1
+            onClick={handleTitleClick}
+            className="text-2xl dark:text-darkPrimaryText font-futura-bold text-lovesBlack hover:underline cursor-pointer"
+          >
             {title}
           </h1>
-        </Link>
+          <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack ml-2" />
+        </div>
         <div className="hidden lg:flex items-center space-x-2">
           {subExpanded && (
             <button
@@ -147,7 +194,7 @@ const DashboardSection = ({
               className="flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-4 py-2 rounded-lg font-futura-bold"
             >
               <XCircleIcon className="h-6 w-6 mr-2" />
-              Close Section
+              Close {name}
             </button>
           )}
         </div>
@@ -155,21 +202,23 @@ const DashboardSection = ({
 
       {/* Parent Metric Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {parentStats.map((item, index) => (
-          <StatCard
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            stat={item.stat}
-            // Pass your qualification logic here:
-            qualifies={true}
-            delay={index * 300}
-            isActive={activeMetric === item.name}
-            // Glow is only allowed when the section is expanded.
-            allowGlow={expanded}
-            onClick={() => handleMetricClick(item.name)}
-          />
-        ))}
+        {parentStats.map((item, index) => {
+          // Only mark the StatCard active (and thus glow) if the section is expanded
+          // and its metric equals the activeMetric.
+          const isActiveForItem = expanded && activeMetric === item.name;
+          return (
+            <StatCard
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              stat={item.stat}
+              qualifies={true}
+              delay={index * 300}
+              isActive={isActiveForItem}
+              onClick={() => handleMetricClick(item.name)}
+            />
+          );
+        })}
       </div>
 
       {/* Chart and subordinate block */}
@@ -193,7 +242,7 @@ const DashboardSection = ({
             onClick={toggleExpand}
             className="w-full mt-4 dark:bg-darkBg text-center py-3 bg-darkBorder dark:text-darkPrimaryText border-2 border-lovesBlack rounded-lg text-lovesWhite font-futura-bold text-xl"
           >
-            Expand Section
+            Expand {name}
           </button>
         </div>
       )}
