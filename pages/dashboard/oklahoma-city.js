@@ -446,7 +446,7 @@ export default function OklahomaCity() {
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
-      <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
+      <div className="px-6 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
                      border border-lightGray shadow-sm shadow-lovesBlack dark:border-darkBorder

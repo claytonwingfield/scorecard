@@ -206,6 +206,7 @@ const DashboardSection = ({
       </div>
 
       {/* Parent Metric Cards */}
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {parentStats.map((item, index) => {
           // Only mark the StatCard active (and thus glow) if the section is expanded

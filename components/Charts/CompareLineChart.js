@@ -181,16 +181,17 @@ const CompareLineChart = forwardRef(
         <div className="w-full h-full bg-lovesWhite dark:bg-darkBg  rounded-lg border-2 border-darkBorder shadow-md shadow-darkBorder dark:shadow-darkBorder ">
           <ResponsiveContainer
             width="100%"
-            height="95%"
+            height="100%"
             style={{ overflow: "visible" }}
           >
             <ComposedChart
               data={chartData}
               margin={{
                 top: isMobile ? 20 : 40,
-                right: isMobile ? 10 : 20,
+                left: isMobile ? 0 : 0,
+                right: isMobile ? 20 : 20,
 
-                bottom: 20,
+                bottom: isMobile ? 0 : 20,
               }}
             >
               <defs>

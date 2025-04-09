@@ -730,16 +730,20 @@ export default function ManagerDailyMetricsPage() {
   const detailView = (
     <>
       <div className="lg:hidden">
-        <nav aria-label="Breadcrumb" className="mb-2">
-          <ol className="flex space-x-4 rounded-md bg-lovesWhite dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack">
+        <nav
+          aria-label="Breadcrumb"
+          // Using inline-flex ensures nav is only as wide as its content
+          className="inline-flex rounded-md bg-lightGray dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack"
+        >
+          <ol className="flex space-x-1">
             <li className="flex">
               <div className="flex items-center">
                 <Link
                   href="/customer-service/daily-metrics"
-                  className="text-lovesBlack hover:text-lovesPrimaryRed"
+                  className="text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
                 >
-                  <HomeIcon aria-hidden="true" className="w-5 h-5 shrink-0" />
-                  <span className="sr-only">Home</span>
+                  <HomeIcon aria-hidden="true" className="w-4 h-4 shrink-0" />
+                  <span className="sr-only font-futura-bold">Home</span>
                 </Link>
               </div>
             </li>
@@ -752,30 +756,55 @@ export default function ManagerDailyMetricsPage() {
                     viewBox="0 0 24 44"
                     preserveAspectRatio="none"
                     aria-hidden="true"
-                    className="w-6 shrink-0 text-lovesGray dark:text-darkPrimaryText"
+                    className="w-4 shrink-0 text-darkBorder dark:text-darkPrimaryText"
                   >
                     <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
                   </svg>
                   <a
                     href={page.href}
                     aria-current={page.current ? "page" : undefined}
-                    className="ml-2 text-md font-futura-bold text-lovesBlack hover:text-lovesPrimaryRed"
+                    className="ml-1 mr-1 text-sm font-futura-bold text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
                   >
                     {page.name}
                   </a>
-                  <div className="ml-4 font-futura-bold text-sm">
-                    {formattedFrom} - {formattedTo}
-                  </div>
                 </div>
               </li>
             ))}
           </ol>
         </nav>
 
-        <div className="flex items-center text-center justify-center pt-4">
-          <h1 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
-            {managers}
-          </h1>
+        {/* New container (no absolute) for the date range and toggle */}
+        <div className="flex items-center justify-between px-0 mt-4 mb-4">
+          {/* Left side: Date range display */}
+          <div
+            className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold
+               shadow-sm shadow-lovesBlack 
+               rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
+            onClick={() => setShowCalendar(true)}
+          >
+            {fromDate && toDate
+              ? `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`
+              : "Date Range: Not Selected"}
+          </div>
+
+          {/* Right side: Filter calendar toggle */}
+          <FilterCalendarToggle
+            fromDate={fromDate}
+            toDate={toDate}
+            setFromDate={setFromDate}
+            setToDate={setToDate}
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            selectedDateRange={selectedDateRange}
+            setSelectedDateRange={setSelectedDateRange}
+            selectedDepartments={selectedDepartments}
+            setSelectedDepartments={setSelectedDepartments}
+            showCalendar={showCalendar}
+            setShowCalendar={setShowCalendar}
+            isDetail={isDetail}
+            showComparison={showComparison}
+            setShowComparison={setShowComparison}
+          />
         </div>
       </div>
       {showComparison ? (
@@ -1055,15 +1084,23 @@ export default function ManagerDailyMetricsPage() {
                 })}
               </dl>
             </div>
-            <div className="mt-0 p-6 lg:block hidden">
+            <div className="mt-0 lg:p-6 p-2 ">
               <div className="border-2  dark:border-darkBg shadow-md shadow-darkBorder  border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
                 <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between dark:bg-darkBg shadow-md dark:shadow-darkBg border-2 border-darkBorder dark:border dark:border-darkBg dark:shadow-sm pl-4 pt-2 pb-4 ">
+                  <div
+                    className="flex 
+             flex-col items-center space-y-2     /* Mobile: stack & center */
+             lg:flex-row lg:justify-between      /* Large screens: row & spaced */
+             dark:bg-darkBg shadow-md dark:shadow-darkBg 
+             border-2 border-darkBorder dark:border-darkBg dark:shadow-sm 
+             pl-4 pt-2 pb-4"
+                  >
+                    {/* H2 Title */}
                     <h2 className="text-xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite rounded-lg">
                       Performance Chart
                     </h2>
                     <div className="flex space-x-2 pr-2">
-                      <div className="w-48">
+                      <div className="lg:w-48 w-24">
                         <Listbox
                           value={groupByField}
                           onChange={setGroupByField}
@@ -1131,7 +1168,7 @@ export default function ManagerDailyMetricsPage() {
                         </Listbox>
                       </div>
 
-                      <div className="w-48">
+                      <div className="lg:w-48 w-24">
                         <Listbox value={metric} onChange={setMetric}>
                           <div className="relative">
                             <Listbox.Button className="bg-lightGray dark:bg-darkBorder relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
@@ -1190,7 +1227,7 @@ export default function ManagerDailyMetricsPage() {
                         </Listbox>
                       </div>
 
-                      <div className="w-48">
+                      <div className="lg:w-48 w-24">
                         <Listbox value={chartType} onChange={setChartType}>
                           <div className="relative">
                             <Listbox.Button className="bg-lightGray dark:bg-darkBorder relative w-full py-2 pl-3 pr-10 text-left rounded-md shadow-md cursor-default focus:outline-none text-md font-futura">
@@ -1299,7 +1336,7 @@ export default function ManagerDailyMetricsPage() {
                                 } items-center`}
                               >
                                 {col.label}
-                                <span className="ml-2 sm:inline hidden">
+                                <span className="ml-2 sm:inline ">
                                   {getSortIndicator(col.key)}
                                 </span>
                               </span>
@@ -1339,7 +1376,7 @@ export default function ManagerDailyMetricsPage() {
       <Header />
 
       <div className="px-4 sm:px-2 lg:px-8 mt-4">
-        <div className="hidden lg:block relative h-16">
+        <div className="hidden  lg:block relative h-16">
           <div className="flex items-center justify-center h-full">
             {showComparison ? (
               <h1 className="text-2xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
@@ -1350,7 +1387,7 @@ export default function ManagerDailyMetricsPage() {
             )}
           </div>
           {showComparison ? (
-            <div className="absolute inset-y-0 left-0 flex items-center px-2">
+            <div className="hidden absolute inset-y-0 left-0 lg:flex items-center px-2">
               <div
                 className="text-lovesBlack dark:text-darkPrimaryText font-futura-bold 
                       shadow-sm shadow-lovesBlack 
@@ -1363,7 +1400,7 @@ export default function ManagerDailyMetricsPage() {
               </div>
             </div>
           ) : (
-            <div className="absolute inset-y-0 left-0 flex items-center px-2">
+            <div className=" hidden absolute inset-y-0 left-0 lg:flex items-center px-2">
               <nav aria-label="Breadcrumb">
                 <ol className="flex space-x-2 rounded-md bg-lightGray dark:bg-darkCompBg px-2 py-1 lg:px-4 lg:py-1 text-md  shadow-sm shadow-lovesBlack">
                   <li className="flex">
@@ -1407,7 +1444,7 @@ export default function ManagerDailyMetricsPage() {
             </div>
           )}
           {showComparison ? (
-            <div className="absolute inset-y-0 right-0 flex items-center px-2">
+            <div className="hidden absolute inset-y-0 right-0 lg:flex items-center px-2">
               <FilterCalendarToggle
                 fromDate={fromDate}
                 toDate={toDate}
@@ -1427,7 +1464,7 @@ export default function ManagerDailyMetricsPage() {
               />
             </div>
           ) : (
-            <div className="absolute inset-y-0 right-0 flex items-center px-2">
+            <div className="hidden absolute inset-y-0 right-0 lg:flex items-center px-2">
               <div
                 className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold 
                         shadow-sm shadow-lovesBlack 
