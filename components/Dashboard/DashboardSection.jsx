@@ -110,9 +110,11 @@ const DashboardSection = ({
               <div className=""></div>
               <div className="flex items-center  mt-4 mb-2 mx-4">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText mr-2 text-lovesWhite hover:underline cursor-pointer">
-                    {subordinateTitle}
-                  </h1>
+                  <Link href={subordinateLink}>
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText mr-2 text-lovesWhite hover:underline cursor-pointer">
+                      {subordinateTitle}
+                    </h1>
+                  </Link>
                   <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                 </div>
               </div>
@@ -122,7 +124,10 @@ const DashboardSection = ({
                     {subordinateStats.map((subordinate) => (
                       <div key={subordinate.name} className="mb-8 py-2 px-2">
                         <div className="flex items-center justify-center mb-8">
-                          <h2 className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer">
+                          <h2
+                            onClick={handleTitleClick}
+                            className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer"
+                          >
                             {subordinate.name}
                           </h2>
                           <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />

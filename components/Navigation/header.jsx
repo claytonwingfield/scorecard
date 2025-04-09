@@ -112,11 +112,10 @@ export default function Header() {
                 height={60}
               />
             </Link>
-            {!isHomePage && (
-              <h1 className="font-futura-bold text-lovesBlack dark:text-darkPrimaryText lg:text-2xl text-xl mt-3">
-                {currentPage}
-              </h1>
-            )}
+
+            <h1 className="font-futura-bold text-lovesBlack dark:text-darkPrimaryText lg:text-2xl text-xl mt-3">
+              {currentPage}
+            </h1>
           </div>
 
           <div className="hidden md:flex items-center space-x-6 ml-auto">

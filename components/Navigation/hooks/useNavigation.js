@@ -35,9 +35,9 @@ export default function useNavigation() {
   }, [data]);
 
   const filteredPages = navPages.filter((page) => {
-    if (page.name === "Scorecard") {
+    // Filter for Department items
+    if (page.name === "Department") {
       if (router.pathname === "/") return false;
-
       if (
         router.pathname.startsWith("/dashboard/santo-domingo") ||
         router.pathname.startsWith("/santo-domingo")
@@ -46,8 +46,8 @@ export default function useNavigation() {
       }
       return page.isDominicanRepublic !== true;
     }
+    // Filter for Dashboard items
     if (page.name === "Dashboard") {
-      if (router.pathname === "/") return false;
       if (
         router.pathname.startsWith("/dashboard/santo-domingo") ||
         router.pathname.startsWith("/santo-domingo")
@@ -56,6 +56,7 @@ export default function useNavigation() {
       }
       return page.path === "/dashboard/oklahoma-city";
     }
+    // Default to including all other pages
     return true;
   });
 
