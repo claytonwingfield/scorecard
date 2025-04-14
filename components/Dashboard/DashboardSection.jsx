@@ -120,7 +120,7 @@ const DashboardSection = ({
               </div>
               <div className="mt-4 text-center px-4 rounded-lg">
                 <div className="relative">
-                  <div className="grid grid-cols-2 gap-x-16 gap-y-4">
+                  <div className="grid lg:grid-cols-2 grid-cols-1 gap-x-16 gap-y-4">
                     {subordinateStats.map((subordinate) => (
                       <div key={subordinate.name} className="mb-8 py-2 px-2">
                         <div className="flex items-center justify-center mb-8">
@@ -132,7 +132,7 @@ const DashboardSection = ({
                           </h2>
                           <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                         </div>
-                        <div className="grid grid-cols-2 gap-4 mt-2">
+                        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-2">
                           {subordinate.metrics &&
                             subordinate.metrics.map((m) => (
                               <StatCard
@@ -149,7 +149,7 @@ const DashboardSection = ({
                               />
                             ))}
                         </div>
-                        <div className="mt-4 h-80">
+                        <div className="mt-4 h-80 lg:block hidden">
                           <LineChartTime
                             data={chartDataMap[activeMetric]}
                             xDataKey="date"
@@ -255,18 +255,17 @@ const DashboardSection = ({
 
       {/* Button to toggle subordinate block if the section is open */}
       {expanded && (
-        <div className="mt-4 lg:flex justify-center">
+        <div className="mt-4 flex justify-center items-center">
           <button
             onClick={toggleSubExpanded}
             className="inline-flex items-center justify-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
           >
             {subExpanded ? (
-              <span className="flex items-center">
-                {/* Optionally, you could show a different icon/text when expanded */}
+              <span className="flex items-center justify-center">
                 Hide {subordinateTitle}
               </span>
             ) : (
-              <span className="flex items-center">
+              <span className="flex items-center justify-center">
                 <PlusCircleIcon className="h-6 w-6 mr-2" />
                 Show {subordinateTitle}
               </span>

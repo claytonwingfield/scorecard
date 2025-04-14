@@ -24,6 +24,7 @@ import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRang
 import CompareRed from "@/public/compare-red.svg";
 import CompareYellow from "@/public/compare-yellow.svg";
 import Change from "@/public/change.svg";
+import ChangeIcon from "@/public/ChangeIcon.svg";
 import dynamic from "next/dynamic";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
 
@@ -950,20 +951,37 @@ export default function AgentDailyMetricsPage() {
                 <div className="grid grid-cols-3 items-center justify-items-center">
                   <div></div>
 
-                  <div className="text-center whitespace-nowrap">
-                    <h2 className="text-lg font-bold text-lovesBlack dark:text-darkPrimaryText">
+                  <div className="text-center whitespace-nowrap lg:mr-4 mr-1">
+                    <h2 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
                       {comparisonAgent.label}
                     </h2>
                   </div>
 
-                  <div className="text-right">
-                    <button onClick={() => setIsAgentDropdownOpen(true)}>
-                      <Image
-                        src={Change}
-                        alt="Change Icon"
-                        width={15}
-                        height={15}
-                      />
+                  <div className="text-right ">
+                    <button
+                      className="border border-lovesBlack rounded-lg shadow shadow-sm shadow-lovesBlack dark:border-darkPrimaryText p-1 "
+                      onClick={() => setIsAgentDropdownOpen(true)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        id="change"
+                        fill="currentColor"
+                        className="w-6 h-6 dark:text-darkPrimaryText"
+                      >
+                        <path
+                          d="M12.0005 9.84354C11.1875 9.84354 10.5283 10.5027 10.5283 11.3158 10.5283 12.1288 11.1875 12.788 12.0005 12.788 12.8136 12.788 13.4728 12.1288 13.4728 11.3158 13.4728 10.5027 12.8136 9.84354 12.0005 9.84354zM9.02832 11.3158C9.02832 9.67425 10.359 8.34354 12.0005 8.34354 13.6421 8.34354 14.9728 9.67425 14.9728 11.3158 14.9728 12.9573 13.6421 14.288 12.0005 14.288 10.359 14.288 9.02832 12.9573 9.02832 11.3158zM12 16.0213C10.595 16.0213 9.34458 16.4483 8.44548 17.112 8.11223 17.3581 7.64265 17.2873 7.39665 16.9541 7.15064 16.6208 7.22137 16.1512 7.55462 15.9052 8.73177 15.0363 10.3002 14.5213 12 14.5213 13.6999 14.5213 15.2683 15.0363 16.4455 15.9052 16.7787 16.1512 16.8495 16.6208 16.6035 16.9541 16.3574 17.2873 15.8879 17.3581 15.5546 17.112 14.6555 16.4483 13.4051 16.0213 12 16.0213z"
+                          clip-rule="evenodd"
+                        ></path>
+                        <path
+                          d="M12 5.228C7.71979 5.228 4.25 8.69779 4.25 12.978C4.25 17.2582 7.71979 20.728 12 20.728C14.9594 20.728 17.5325 19.0695 18.8387 16.6278C19.034 16.2625 19.4885 16.1248 19.8538 16.3202C20.219 16.5156 20.3567 16.9701 20.1613 17.3353C18.6046 20.2455 15.5344 22.228 12 22.228C6.89137 22.228 2.75 18.0866 2.75 12.978C2.75 7.86936 6.89137 3.728 12 3.728C12.4142 3.728 12.75 4.06378 12.75 4.478C12.75 4.89221 12.4142 5.228 12 5.228ZM15.3422 5.12424C15.5376 4.759 15.9921 4.62129 16.3573 4.81667C19.2675 6.37338 21.25 9.44359 21.25 12.978C21.25 13.3922 20.9142 13.728 20.5 13.728C20.0858 13.728 19.75 13.3922 19.75 12.978C19.75 10.0186 18.0915 7.44547 15.6498 6.13932C15.2846 5.94395 15.1468 5.48948 15.3422 5.12424Z"
+                          clip-rule="evenodd"
+                        ></path>
+                        <path
+                          d="M9.52749 2.28401C9.78503 1.95959 10.2568 1.90539 10.5812 2.16293L12.7965 3.92155C13.1209 4.17909 13.1751 4.65086 12.9175 4.97527L11.1589 7.19051C10.9014 7.51492 10.4296 7.56913 10.1052 7.31159C9.78077 7.05404 9.72657 6.58227 9.98411 6.25786L11.2764 4.63003L9.64857 3.33773C9.32416 3.08019 9.26995 2.60842 9.52749 2.28401Z"
+                          clip-rule="evenodd"
+                        ></path>
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -1057,6 +1075,8 @@ export default function AgentDailyMetricsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Optionally add a second placeholder in column 2 */}
               </div>
             </div>
           ) : (
@@ -1148,14 +1168,14 @@ export default function AgentDailyMetricsPage() {
               </dl>
             </div>
             <div className="lg:mt-0 mt-5 lg:p-6 p-0">
-              <div className="border-2  dark:border-darkBg shadow-md shadow-darkBorder  border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
+              <div className="border-2  dark:border-darkBg shadow-md shadow-darkBorder dark:shadow-none  border-darkBorder dark:bg-darkBg  bg-darkBorder lg:m-4 rounded-lg p-2">
                 <div className="flex flex-col h-full">
                   <div
                     className="flex 
              flex-col items-center space-y-2    
              lg:flex-row lg:justify-between      
-             dark:bg-darkBg shadow-md dark:shadow-darkBg 
-             border-2 border-darkBorder dark:border-darkBg dark:shadow-sm 
+             dark:bg-darkBg shadow-md 
+             border-2 border-darkBorder dark:border-darkBg dark:shadow-none 
              pl-4 pt-2 pb-4"
                   >
                     {/* H2 Title */}
@@ -1237,7 +1257,7 @@ export default function AgentDailyMetricsPage() {
                   </div>
                 </div>
               </div>
-              <div className="lg:p-4 py-2">
+              <div className="lg:p-4 py-2 mt-4 mt-0">
                 <div className="bg-darkBorder dark:bg-darkBg shadow-md shadow-darkBorder dark:shadow-darkBg rounded-lg p-1.5 w-full max-w-full no-scrollbar">
                   <div className="flex-grow overflow-y-auto no-scrollbar">
                     <table className="min-w-full divide-y divide-darkBorder dark:divide-darkBg">
@@ -1296,41 +1316,89 @@ export default function AgentDailyMetricsPage() {
   );
 
   return (
-    <div className="bg-lovesWhite dark:bg-darkBg">
+    <div className="bg-lovesWhite dark:bg-darkBg mb-8 lg:mb-0">
       <Header />
       {showComparison && (
-        <div className="lg:hidden flex items-center justify-between px-6 lg:mb-4 my-4">
-          {/* Left side: Date range display */}
-          <div
-            className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold
-               shadow-sm shadow-lovesBlack 
-               rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
-            onClick={() => setShowCalendar(true)}
-          >
-            {fromDate && toDate
-              ? `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`
-              : "Date Range: Not Selected"}
+        <>
+          <div className="lg:hidden flex items-center justify-between px-4 lg:mb-4 my-4">
+            <nav
+              aria-label="Breadcrumb"
+              className="inline-flex rounded-md bg-lightGray dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack"
+            >
+              <ol className="flex space-x-1">
+                <li className="flex">
+                  <div className="flex items-center">
+                    <Link
+                      href="/customer-service/daily-metrics"
+                      className="text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
+                    >
+                      <HomeIcon
+                        aria-hidden="true"
+                        className="w-4 h-4 shrink-0"
+                      />
+                      <span className="sr-only font-futura-bold">Home</span>
+                    </Link>
+                  </div>
+                </li>
+                {pages.map((page) => (
+                  <li key={page.name} className="flex">
+                    <div className="flex items-center">
+                      <svg
+                        fill="currentColor"
+                        viewBox="0 0 24 44"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                        className="w-4 shrink-0 text-darkBorder dark:text-darkPrimaryText"
+                      >
+                        <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+                      </svg>
+                      <a
+                        href={page.href}
+                        aria-current={page.current ? "page" : undefined}
+                        className="ml-1 mr-1 text-sm font-futura-bold text-lovesBlack dark:text-darkPrimaryText hover:text-lovesPrimaryRed"
+                      >
+                        {page.name}
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </nav>
           </div>
 
-          {/* Right side: Filter calendar toggle */}
-          <FilterCalendarToggle
-            fromDate={fromDate}
-            toDate={toDate}
-            setFromDate={setFromDate}
-            setToDate={setToDate}
-            currentDate={currentDate}
-            setCurrentDate={setCurrentDate}
-            selectedDateRange={selectedDateRange}
-            setSelectedDateRange={setSelectedDateRange}
-            selectedDepartments={selectedDepartments}
-            setSelectedDepartments={setSelectedDepartments}
-            showCalendar={showCalendar}
-            setShowCalendar={setShowCalendar}
-            isDetail={isDetail}
-            showComparison={showComparison}
-            setShowComparison={setShowComparison}
-          />
-        </div>
+          <div className="lg:hidden flex items-center justify-between px-4 lg:mb-4 my-4">
+            {/* Left side: Date range display */}
+            <div
+              className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold
+               shadow-sm shadow-lovesBlack 
+               rounded-lg lg:px-2 px-1 py-1 cursor-pointer"
+              onClick={() => setShowCalendar(true)}
+            >
+              {fromDate && toDate
+                ? `${fromDate.toLocaleDateString()} - ${toDate.toLocaleDateString()}`
+                : "Date Range: Not Selected"}
+            </div>
+
+            {/* Right side: Filter calendar toggle */}
+            <FilterCalendarToggle
+              fromDate={fromDate}
+              toDate={toDate}
+              setFromDate={setFromDate}
+              setToDate={setToDate}
+              currentDate={currentDate}
+              setCurrentDate={setCurrentDate}
+              selectedDateRange={selectedDateRange}
+              setSelectedDateRange={setSelectedDateRange}
+              selectedDepartments={selectedDepartments}
+              setSelectedDepartments={setSelectedDepartments}
+              showCalendar={showCalendar}
+              setShowCalendar={setShowCalendar}
+              isDetail={isDetail}
+              showComparison={showComparison}
+              setShowComparison={setShowComparison}
+            />
+          </div>
+        </>
       )}
       <div className=" px-4 lg:px-8 lg:mt-4 mt-0">
         <div className="hidden  lg:block relative h-16">
@@ -1467,6 +1535,22 @@ export default function AgentDailyMetricsPage() {
             <div className="w-full lg:w-2/5 lg:pt-4 pt-0">{detailView}</div>
 
             {/* Right column: manager selection for comparison */}
+            {(!comparisonAgent || isAgentDropdownOpen) && (
+              <div className="flex flex-col items-center w-full lg:w-3/5 lg:mt-36 lg:mb-8 mb-0 lg:mr-4 px-4 py-4 lg:px-0">
+                {/* You can give it a fixed height to mimic the final chart’s size */}
+                <div className="w-full h-[500px] bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
+                  <div className="animate-pulse flex flex-col space-y-4">
+                    <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-3/5" />
+                    <div className="flex flex-col space-y-2">
+                      <div
+                        className="bg-gray-300 dark:bg-darkCompBg rounded"
+                        style={{ width: "100%", height: "420px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             {comparisonAgent && !isAgentDropdownOpen && (
               <div className="flex flex-col items-center w-full lg:w-3/5 lg:mt-20 mt-8">
                 <div className="flex justify-center items-center border border-lovesBlack rounded-lg shadow-sm shadow-lovesBlack bg-lovesWhite dark:bg-darkBg">
