@@ -14,12 +14,6 @@ export default function DesktopDropDownMenu({
   const [openSubIndex, setOpenSubIndex] = useState(null);
   const dropdownRef = useRef(null);
 
-  const handleMouseEnter = () => {
-    if (!isManual) {
-      setIsOpen(true);
-    }
-  };
-
   const handleButtonClick = (event) => {
     event.stopPropagation();
     setIsOpen(!isOpen);
@@ -56,7 +50,7 @@ export default function DesktopDropDownMenu({
         ${nested ? "left-full" : "left-[-120px]"}
         z-50 mt-2 bg-lovesWhite dark:bg-darkBg
         shadow-lg w-60 min-w-[200px]
-         rounded-lg shadow-md shadow-lovesBlack
+         rounded-lg  shadow-lovesBlack
         divide-y divide-lovesBlack`}
         >
           {subPages.map((subPage, idx) => {

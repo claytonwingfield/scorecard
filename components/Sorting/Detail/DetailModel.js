@@ -1,8 +1,4 @@
-export default function DetailModel({
-  onKeepFilters,
-  onClearFilters,
-  handleSearch,
-}) {
+export default function DetailModel({ onKeepFilters, onClearFilters }) {
   return (
     <div
       id="popup-modal"

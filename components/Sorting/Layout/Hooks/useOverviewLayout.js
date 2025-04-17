@@ -1,5 +1,3 @@
-// components/Sorting/Layout/Hooks/useOverviewLayout.js
-
 import { useMemo } from "react";
 
 export default function useOverviewLayout({

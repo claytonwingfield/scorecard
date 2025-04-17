@@ -7,14 +7,6 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 import { DataProvider } from "@/context/DataContext";
 
-console.log({
-  LoadingAnimation,
-  ApolloProvider,
-  client,
-  ThemeProvider,
-  DataProvider,
-});
-
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

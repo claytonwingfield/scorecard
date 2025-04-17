@@ -1,6 +1,5 @@
 "use client";
 import Header from "@/components/Navigation/header";
-
 import React, { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import {
@@ -8,17 +7,12 @@ import {
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
-import bgCard from "@/public/animations/bgCard.json";
-import down from "@/public/animations/down.json";
 import award from "@/public/animations/award.json";
 import dynamic from "next/dynamic";
-import BarChart from "@/components/Charts/BarChart";
-import warning from "@/public/warning.png";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import LineChartTime from "@/components/Charts/LineChartTime";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import { Transition } from "@headlessui/react";
-
 import {
   customerServiceAverageScore,
   customerServiceAHT,
@@ -26,7 +20,6 @@ import {
   customerServiceAdherence,
   allTeamData,
 } from "@/data/customerServiceData";
-import Image from "next/image";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const averageHandleTimeGoal = "5:30 - 6:30";
@@ -35,7 +28,6 @@ const adherenceGoal = "88%";
 const averageScoreGoal = "95%";
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
-    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
     let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
     let mins = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -43,15 +35,12 @@ function generateRandomMetricValue(metricName) {
       .toString()
       .padStart(2, "0")}`;
   } else if (metricName === "Average Score") {
-    // generate a random percentage between 90% and 105%
     let value = (Math.random() * 15 + 90).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Adherence") {
-    // generate a random percentage between 85% and 95%
     let value = (Math.random() * 10 + 85).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Quality") {
-    // generate a random percentage between 80% and 95%
     let value = (Math.random() * 15 + 80).toFixed(2);
     return `${value}%`;
   }
@@ -189,7 +178,6 @@ const helpDeskManagerStats = [
   },
 ];
 
-// Mapping for all departments
 const departmentManagerStats = {
   "Customer Service": computedCustomerServiceManagerStats,
   "Help Desk": helpDeskManagerStats,
@@ -205,7 +193,6 @@ function averagePercentageForManager(dataArray, key, managerName) {
   return avg.toFixed(2) + "%";
 }
 
-// Computes average AHT in MM:SS for a manager
 function averageAHTForManager(dataArray, managerName) {
   const filtered = dataArray.filter((item) => item.manager === managerName);
   if (filtered.length === 0) return "N/A";
@@ -220,11 +207,9 @@ function averageAHTForManager(dataArray, managerName) {
 }
 
 const StatCardComponent = ({
-  id,
   name,
   stat,
   qualifies,
-  bgColorClass,
   delay = 0,
   onClick,
   isActive,
@@ -275,15 +260,7 @@ const StatCardComponent = ({
             />
           </div>
         ) : (
-          <div className="absolute top-2 right-3 p-2">
-            {/* <Image
-              src={warning}
-              alt="Warning"
-              width={20}
-              height={20}
-              // style={{ width: "50px", height: "50px" }}
-            /> */}
-          </div>
+          <div className="absolute top-2 right-3 p-2"></div>
         ))}
 
       <div
@@ -312,44 +289,6 @@ const StatCardComponent = ({
   );
 };
 
-function generateRandomStat(metricName) {
-  return generateRandomMetricValue(metricName);
-}
-const customerServiceStats = [
-  {
-    id: 1,
-    name: "Average Handle Time",
-    stat: generateRandomStat("Average Handle Time"),
-  },
-  { id: 2, name: "Adherence", stat: generateRandomStat("Adherence") },
-  { id: 3, name: "Quality", stat: generateRandomStat("Quality") },
-  { id: 4, name: "Average Score", stat: generateRandomStat("Average Score") },
-];
-
-const helpDeskStats = [
-  { id: 1, name: "Average Handle Time", stat: "05:45" },
-  { id: 2, name: "Adherence", stat: "92%" },
-  { id: 3, name: "Quality", stat: "93%" },
-  { id: 4, name: "Average Score", stat: "95%" },
-];
-const electronicDispatchStats = [
-  { id: 1, name: "Average Handle Time", stat: "06:00" },
-  { id: 2, name: "Adherence", stat: "90%" },
-  { id: 3, name: "Quality", stat: "92%" },
-  { id: 4, name: "Average Score", stat: "94%" },
-];
-const writtenCommunicationStats = [
-  { id: 1, name: "Average Handle Time", stat: "05:50" },
-  { id: 2, name: "Adherence", stat: "91%" },
-  { id: 3, name: "Quality", stat: "90%" },
-  { id: 4, name: "Average Score", stat: "93%" },
-];
-const resolutionsStats = [
-  { id: 1, name: "Average Handle Time", stat: "06:10" },
-  { id: 2, name: "Adherence", stat: "89%" },
-  { id: 3, name: "Quality", stat: "91%" },
-  { id: 4, name: "Average Score", stat: "92%" },
-];
 export default function SantoDomingo() {
   const avgScore = useMemo(() => {
     const scores = customerServiceAverageScore.map((item) =>
@@ -411,27 +350,6 @@ export default function SantoDomingo() {
     { id: 4, name: "Average Score", stat: "95%" },
   ];
 
-  const electronicDispatchStats = [
-    { id: 1, name: "Average Handle Time", stat: "06:00" },
-    { id: 2, name: "Adherence", stat: "90%" },
-    { id: 3, name: "Quality", stat: "92%" },
-    { id: 4, name: "Average Score", stat: "94%" },
-  ];
-
-  const writtenCommunicationStats = [
-    { id: 1, name: "Average Handle Time", stat: "05:50" },
-    { id: 2, name: "Adherence", stat: "91%" },
-    { id: 3, name: "Quality", stat: "90%" },
-    { id: 4, name: "Average Score", stat: "93%" },
-  ];
-
-  const resolutionsStats = [
-    { id: 1, name: "Average Handle Time", stat: "06:10" },
-    { id: 2, name: "Adherence", stat: "89%" },
-    { id: 3, name: "Quality", stat: "91%" },
-    { id: 4, name: "Average Score", stat: "92%" },
-  ];
-
   const [expandedRows, setExpandedRows] = useState({
     "Customer Service": false,
     "Help Desk": false,
@@ -457,7 +375,7 @@ export default function SantoDomingo() {
   const toggleExpand = (dept) => {
     setExpandedRows((prev) => {
       const isCurrentlyExpanded = prev[dept];
-      // If the department is being closed, reset the manager's expanded state.
+
       if (isCurrentlyExpanded) {
         setManagersExpanded((prevManagers) => ({
           ...prevManagers,
@@ -473,7 +391,7 @@ export default function SantoDomingo() {
       [dept]: !prev[dept],
     }));
   };
-  const [activeMetric, setActiveMetric] = useState("Average Handle Time");
+
   const departmentManagerLinks = {
     "Customer Service": "/customer-service/daily-metrics/manager",
     "Help Desk": "/help-desk/daily-metrics/manager",
@@ -506,7 +424,6 @@ export default function SantoDomingo() {
 
     return (
       <>
-        {/* Main Chart */}
         <div className="my-4 h-80">
           <LineChartTime
             data={fakeDataMap[currentMetric]}
@@ -515,10 +432,6 @@ export default function SantoDomingo() {
             disableGrouping={true}
           />
         </div>
-
-        {/* Department Managers Heading */}
-
-        {/* Conditionally render button or managers block based on managersExpanded */}
         {!managersExpanded[dept] ? (
           <div className="lg:flex justify-center mt-4 hidden">
             <button
@@ -610,7 +523,7 @@ export default function SantoDomingo() {
                           );
                         })}
                       </div>
-                      {/* Vertical divider for medium screens and above */}
+
                       <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-darkLightGray" />
                     </div>
                   </div>
@@ -630,8 +543,6 @@ export default function SantoDomingo() {
     setFromDate,
     toDate,
     setToDate,
-    navigateMonth,
-    handleDateSelect,
   } = useDateRange();
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -643,7 +554,7 @@ export default function SantoDomingo() {
       <div className="px-5 sm:px-6 lg:px-8 mt-4 flex items-center justify-between">
         <div
           className="text-lovesBlack dark:text-darkPrimaryText dark:bg-darkCompBg font-futura-bold 
-                     border border-lightGray shadow-sm shadow-lovesBlack border-lightGray  dark:border-darkBorder
+                     border border-lightGray shadow-sm shadow-lovesBlack dark:border-darkBorder
                      rounded-lg lg:px-1 px-1 py-1 cursor-pointer bg-lightGray"
           onClick={() => setShowCalendar(true)}
         >
@@ -832,7 +743,7 @@ hover:underline cursor-pointer"
             {renderChart("Help Desk")}
 
             <div
-              className={`overflow-hidden transition-all duration-500 ease-in-out   transform ${
+              className={`overflow-hidden transition-all duration-500 ease-in-out transform ${
                 expandedRows["Help Desk"]
                   ? "max-h-0 opacity-0"
                   : "max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100"

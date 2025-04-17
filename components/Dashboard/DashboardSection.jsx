@@ -13,7 +13,7 @@ import Header from "@/components/Navigation/header";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import StatCard from "@/components/Card/StatCard"; // Your current stat card component
+import StatCard from "@/components/Card/StatCard";
 const LineChartTime = dynamic(
   () => import("@/components/Charts/LineChartTime"),
   { ssr: false }
@@ -23,18 +23,15 @@ const DashboardSection = ({
   title,
   headerLink,
   subordinateTitle,
-  agent,
   name,
   subordinateLink,
-  parentStats, // Array of metric objects for the parent item (for example: [{ id, name, stat }, ...])
-  subordinateStats, // Array of subordinate objects; each object should have a `name` and a `metrics` array (each metric: { id, name, stat })
-  chartDataMap, // Mapping from metric name to its chart dataset
-  metricMap, // Mapping from metric name to the yDataKey for your chart (e.g.: { "Average Handle Time": "ahtTeam", ... })
+  parentStats,
+  subordinateStats,
+  chartDataMap,
+  metricMap,
   initialActiveMetric = "Average Handle Time",
   fromDate,
-  setFromDate,
   toDate,
-  setToDate,
   dataSets,
   allTeamData,
 }) => {
@@ -45,14 +42,12 @@ const DashboardSection = ({
   const [activeMetric, setActiveMetric] = useState(initialActiveMetric);
   const handleTitleClick = () => {
     if (name === "Department") {
-      // Navigate directly to the department dashboard using the headerLink
       router.push(headerLink);
       return;
     }
 
     const activeFilters = [{ type: name, label: title }];
 
-    // Start the loading state
     setIsLoading(true);
 
     performSearch({
@@ -62,7 +57,7 @@ const DashboardSection = ({
       dataSets,
       allTeamData,
       router,
-      setIsLoading, // This can be used to reset the loading flag when search is done
+      setIsLoading,
     });
   };
   if (isLoading) {
@@ -74,7 +69,6 @@ const DashboardSection = ({
     );
   }
   const toggleExpand = () => {
-    // Collapse subordinate block when closing the parent section.
     if (expanded) setSubExpanded(false);
     setExpanded(!expanded);
   };
@@ -93,7 +87,6 @@ const DashboardSection = ({
 
     return (
       <>
-        {/* Main chart for the parent's active metric */}
         <div className="my-4 h-80">
           <LineChartTime
             data={chartDataMap[activeMetric]}
@@ -103,7 +96,6 @@ const DashboardSection = ({
           />
         </div>
 
-        {/* Subordinate Block */}
         {subExpanded && subordinateStats && (
           <div className="border-2 border-darkBorder dark:bg-darkBg bg-darkBorder mx-2 rounded-lg mt-4 p-4">
             <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg lg:m-8 rounded-lg">
@@ -140,7 +132,6 @@ const DashboardSection = ({
                                 id={m.id}
                                 name={m.name}
                                 stat={m.stat}
-                                // Use your own logic to determine qualification (for example, based on background color)
                                 qualifies={true}
                                 delay={100}
                                 allowGlow={toggleExpand}
@@ -172,7 +163,6 @@ const DashboardSection = ({
 
   return (
     <div className="group bg-lightGray dark:bg-darkCompBg shadow-md p-4 rounded-lg mt-4">
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <h1
@@ -205,12 +195,8 @@ const DashboardSection = ({
         </div>
       </div>
 
-      {/* Parent Metric Cards */}
-
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {parentStats.map((item, index) => {
-          // Only mark the StatCard active (and thus glow) if the section is expanded
-          // and its metric equals the activeMetric.
           const isActiveForItem = expanded && activeMetric === item.name;
           return (
             <StatCard
@@ -227,7 +213,6 @@ const DashboardSection = ({
         })}
       </div>
 
-      {/* Chart and subordinate block */}
       <Transition
         show={expanded}
         appear
@@ -241,7 +226,6 @@ const DashboardSection = ({
         <div>{renderChart()}</div>
       </Transition>
 
-      {/* Toggle button when not expanded */}
       {!expanded && (
         <div className="overflow-hidden transition-all duration-500 ease-in-out transform max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100">
           <button
@@ -253,7 +237,6 @@ const DashboardSection = ({
         </div>
       )}
 
-      {/* Button to toggle subordinate block if the section is open */}
       {expanded && (
         <div className="mt-4 flex justify-center items-center">
           <button

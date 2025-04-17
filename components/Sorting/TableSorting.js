@@ -10,7 +10,6 @@ import ActiveFilters from "@/components/Sorting/Filters/ActiveFilters/ActiveFilt
 export default function TableSorting({
   activeFilters,
   handleDateRangeSelect,
-  filterOptions,
   handleFilterChange,
   removeFilter,
   selectedVisibilityOption,

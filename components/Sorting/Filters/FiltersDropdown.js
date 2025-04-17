@@ -21,7 +21,6 @@ export default function FiltersDropdown({
   handleColumnVisibilityChange,
   columnVisibility,
   activeTab,
-  allTeamData,
 }) {
   useEffect(() => {
     if (selectedVisibilityOption.length === 0) {

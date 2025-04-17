@@ -12,7 +12,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "192.168.0.231"],
+    domains: ["localhost", "172.26.132.93"],
   },
 };
 

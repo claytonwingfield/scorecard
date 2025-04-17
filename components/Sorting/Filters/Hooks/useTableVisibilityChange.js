@@ -8,12 +8,10 @@ export default function useTableVisibilityChange({
   setSelectedVisibilityOption,
   hiddenTables,
   setHiddenTables,
-  activeFilters,
   setActiveFilters,
 }) {
   const handleTableVisibilityChange = useCallback(
     (optionValue, isChecked) => {
-      // Decide which array to look in
       const activeVisibilityArray =
         activeTab === "agent"
           ? agentTableVisibilityOptions

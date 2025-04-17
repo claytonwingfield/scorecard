@@ -5,8 +5,6 @@ import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
-
-// Import agent-level data from your customer service data file
 import {
   JohnTeamOverview,
   ShellyTeamOverview,
@@ -17,7 +15,6 @@ import {
   allTeamData,
   customerServiceData,
 } from "@/data/customerServiceData";
-
 import {
   fakeAHTData,
   fakeAdherenceData,
@@ -25,7 +22,6 @@ import {
   fakeMtdScoreData,
 } from "@/data/fakeMetricsData";
 
-// Create the fake data mapping for charts (adjust keys if needed)
 const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
   Adherence: fakeAdherenceData,
@@ -33,7 +29,6 @@ const fakeDataMap = {
   "Average Score": fakeMtdScoreData,
 };
 
-// Mapping for the chart’s yDataKey per metric name
 const metricMap = {
   "Average Handle Time": "ahtTeam",
   Adherence: "adherence",
@@ -41,8 +36,6 @@ const metricMap = {
   "Average Score": "mtdScore",
 };
 
-// Flatten all agent arrays into a single array.
-// This ignores any supervisor mapping and treats all agents as a single list.
 const agentData = [
   ...JohnTeamOverview,
   ...ShellyTeamOverview,
@@ -52,14 +45,11 @@ const agentData = [
   ...DestinyTeamOverview,
 ];
 
-// Conversion mapping for renaming metric keys
 const metricRenameMap = {
   mtdScore: "Average Score",
   AHT: "Average Handle Time",
 };
 
-// Utility function: Formats each agent’s metrics and renames certain keys,
-// while filtering out unwanted keys (like "manager" or "supervisor").
 const formatMetrics = (entity) =>
   Object.entries(entity)
     .filter(
@@ -67,11 +57,11 @@ const formatMetrics = (entity) =>
     )
     .map(([metric, value], idx) => ({
       id: idx,
-      name: metricRenameMap[metric] || metric, // rename mtdScore and AHT as desired
+      name: metricRenameMap[metric] || metric,
       stat: value,
     }));
 const dataSets = customerServiceData.dataSets;
-// ─── AGENT DASHBOARD COMPONENT ───────────────────────────────
+
 export default function AgentSelectionForm() {
   const {
     currentDate,
@@ -124,7 +114,6 @@ export default function AgentSelectionForm() {
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
-        {/* Render a DashboardSection for each agent */}
         {agentData.map((agent) => {
           const parentStats = formatMetrics(agent);
           return (
@@ -133,9 +122,7 @@ export default function AgentSelectionForm() {
               title={agent.agent}
               name={"Agent"}
               headerLink={`/customer-service/daily-metrics/agent/${agent.agent}`}
-              // Pass the "agent" prop to adjust the DashboardSection UI (e.g., hide subordinate features)
               agent={true}
-              // Agents do not have subordinate data, so we only pass the parent's metrics.
               parentStats={parentStats}
               chartDataMap={fakeDataMap}
               metricMap={metricMap}

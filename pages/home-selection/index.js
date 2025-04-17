@@ -11,10 +11,8 @@ export default function HomeSelection() {
   if (loading) return <LoadingAnimation />;
   if (error) return <p>Error: {error.message}</p>;
 
-  // Get the image sections from the homePage data.
   const locations = data?.homePage?.imageSection || [];
 
-  // Extract locations by a unique property. Here we use the 'city' property.
   const oklahomaLocation = locations.find(
     (location) => location.city === "Oklahoma City"
   );

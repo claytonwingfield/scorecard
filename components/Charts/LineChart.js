@@ -29,17 +29,7 @@ function getGoalForMetric(yDataKey) {
 }
 
 const LineChart = forwardRef(
-  (
-    {
-      data,
-      xDataKey,
-      yDataKey,
-      groupByKey,
-      isScoreCard = false,
-      disableGrouping = false,
-    },
-    ref
-  ) => {
+  ({ data, xDataKey, yDataKey, groupByKey, disableGrouping = false }, ref) => {
     const legendNames = {
       mtdScore: "Score",
       qualityTeam: "Quality",
@@ -151,14 +141,6 @@ const LineChart = forwardRef(
     } else if (yDataKey === "qualityTeam") {
       goalValue = parseFloat(qualityGoal.replace("%", ""));
     }
-
-    const yAxisDomain =
-      yDataKey === "AHT" || yDataKey === "ahtTeam"
-        ? fixedAHTDomain
-        : [
-            Math.floor(Math.min(yMin, goalValue)),
-            Math.ceil(Math.max(yMax, goalValue)),
-          ];
 
     let computedHighOffset, computedLowOffset;
     if (yDataKey === "AHT" || yDataKey === "ahtTeam") {

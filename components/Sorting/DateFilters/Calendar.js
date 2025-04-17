@@ -163,7 +163,7 @@ export default function Calendar({
             showButtons ? "md:col-span-9" : "md:col-span-12"
           } border-2 border-darkBorder rounded-lg shadow-md shadow-darkBorder dark:shadow-sm flex flex-col `}
         >
-          <div className="flex items-center justify-between text-lovesBlack dark:text-darkPrimaryText  font-futura-bold dark:text-darkPrimaryText p-3">
+          <div className="flex items-center justify-between text-lovesBlack dark:text-darkPrimaryText  font-futura-bold p-3">
             <button
               type="button"
               className="-m-1.5 flex items-center justify-center p-1.5 text-lovesBlack dark:text-darkPrimaryText "

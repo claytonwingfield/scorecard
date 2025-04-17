@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 
 export default function useRemoveFilter({
-  activeFilters,
   setActiveFilters,
   tableColumns,
   setColumnVisibility,

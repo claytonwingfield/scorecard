@@ -3,8 +3,7 @@ import React, { useState, useRef } from "react";
 import { FunnelIcon, CalendarIcon } from "@heroicons/react/20/solid";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
 import { useClickOutside } from "@/hooks/useClickOutside";
-import { Listbox } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/20/solid";
 
 const departmentOptions = [
   { label: "Customer Service", value: "Customer Service" },
@@ -83,23 +82,6 @@ export default function FilterCalendarToggle({
       ...prev,
       [department]: !prev[department],
     }));
-  };
-
-  const selectedValues = departmentOptions
-    .filter((opt) => selectedDepartments[opt.value])
-    .map((opt) => opt.value);
-
-  const handleListboxChange = (newSelectedArray) => {
-    const updatedObj = { ...selectedDepartments };
-
-    Object.keys(updatedObj).forEach((dep) => {
-      updatedObj[dep] = false;
-    });
-
-    newSelectedArray.forEach((depValue) => {
-      updatedObj[depValue] = true;
-    });
-    setSelectedDepartments(updatedObj);
   };
 
   const baseButton = `
@@ -281,7 +263,6 @@ export default function FilterCalendarToggle({
           >
             {showComparison ? (
               <>
-                {/* The icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -300,7 +281,6 @@ export default function FilterCalendarToggle({
               </>
             ) : (
               <>
-                {/* The icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 1024 1024"

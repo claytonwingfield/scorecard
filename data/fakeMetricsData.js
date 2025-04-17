@@ -1,12 +1,7 @@
 "use client";
-const averageHandleTimeGoal = "5:30 - 6:30";
-const qualityGoal = "88%";
-const adherenceGoal = "88%";
-const averageScoreGoal = "95%";
 
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
-    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
     let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
     let mins = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -14,15 +9,12 @@ function generateRandomMetricValue(metricName) {
       .toString()
       .padStart(2, "0")}`;
   } else if (metricName === "Average Score") {
-    // generate a random percentage between 90% and 105%
     let value = (Math.random() * 15 + 90).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Adherence") {
-    // generate a random percentage between 85% and 95%
     let value = (Math.random() * 10 + 85).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Quality") {
-    // generate a random percentage between 80% and 95%
     let value = (Math.random() * 15 + 80).toFixed(2);
     return `${value}%`;
   }

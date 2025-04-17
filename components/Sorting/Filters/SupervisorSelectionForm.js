@@ -5,9 +5,6 @@ import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
-import Link from "next/link";
-
-// Import supervisor-level metric data for charts
 import {
   customerServiceAverageScore,
   customerServiceAHT,
@@ -15,7 +12,6 @@ import {
   customerServiceAdherence,
   allTeamData,
   customerServiceData,
-  // Import the agent-level team overview data
   JohnTeamOverview,
   ShellyTeamOverview,
   JennaTeamOverview,
@@ -23,7 +19,6 @@ import {
   TylerTeamOverview,
   DestinyTeamOverview,
 } from "@/data/customerServiceData";
-
 import {
   fakeAHTData,
   fakeAdherenceData,
@@ -31,7 +26,6 @@ import {
   fakeMtdScoreData,
 } from "@/data/fakeMetricsData";
 
-// Create the fake data mapping for charts
 const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
   Adherence: fakeAdherenceData,
@@ -39,7 +33,6 @@ const fakeDataMap = {
   "Average Score": fakeMtdScoreData,
 };
 
-// Mapping for the chart’s yDataKey per metric name
 const metricMap = {
   "Average Handle Time": "ahtTeam",
   Adherence: "adherence",
@@ -47,7 +40,6 @@ const metricMap = {
   "Average Score": "mtdScore",
 };
 
-// ─── HELPER FUNCTIONS FOR COMPUTING SUPERVISOR METRICS ──────────────────────────
 function averagePercentageForSupervisor(dataArray, key, supervisorName) {
   const filtered = dataArray.filter(
     (item) => item.supervisor === supervisorName && item[key]
@@ -80,7 +72,7 @@ function averageAHTForSupervisor(dataArray, supervisorName) {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 const dataSets = customerServiceData.dataSets;
-// ─── COMPUTE SUPERVISOR STATS ────────────────────────────────
+
 const computedCustomerServiceSupervisorStats = Array.from(
   new Set(allTeamData.map((item) => item.supervisor))
 ).map((supervisorName) => ({
@@ -106,7 +98,6 @@ const computedCustomerServiceSupervisorStats = Array.from(
   ),
 }));
 
-// ─── NEW: Mapping from Supervisor Name to Agent Overview Data ───────────────
 const agentOverviewMapping = {
   "John Herrera": JohnTeamOverview,
   "Shelly Wynn": ShellyTeamOverview,
@@ -116,14 +107,12 @@ const agentOverviewMapping = {
   "Destiny Turney": DestinyTeamOverview,
 };
 
-// ─── COMPUTE AGENT STATS FOR A GIVEN SUPERVISOR ─────────────────────────
-// Instead of filtering allTeamData (which lacks metric values), use the proper team overview array.
 const getAgentStatsForSupervisor = (supervisorName) => {
   const data = agentOverviewMapping[supervisorName] || [];
   return data.map((item) => ({
     name: item.agent,
     "Average Handle Time": item.AHT,
-    // Ensure percentages include the "%" sign if not already provided.
+
     Adherence: item.Adherence.toString().includes("%")
       ? item.Adherence
       : item.Adherence + "%",
@@ -134,7 +123,6 @@ const getAgentStatsForSupervisor = (supervisorName) => {
   }));
 };
 
-// ─── UTILITY FUNCTION: Format Data for DashboardSection ─────────────────────────
 const formatMetrics = (entity) =>
   Object.entries(entity)
     .filter(([key]) => key !== "name")
@@ -161,7 +149,6 @@ const formatAgentData = (supervisorName) => {
   });
 };
 
-// ─── SUPERVISOR DASHBOARD COMPONENT ───────────────────────────────
 export default function SupervisorSelectionForm() {
   const {
     currentDate,

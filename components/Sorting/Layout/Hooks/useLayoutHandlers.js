@@ -1,4 +1,3 @@
-// useLayoutHandlers.js
 import { useCallback, useEffect } from "react";
 
 export default function useLayoutHandlers({

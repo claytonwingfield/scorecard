@@ -169,7 +169,6 @@ const BarChart = forwardRef(
     const shouldRotateLabels = chartData.length > 7;
     const shouldPadLabels = chartData.length > 7;
 
-    // Custom X-Axis Tick
     const CustomXAxisTick = ({ x, y, payload, angle, isDarkMode }) => {
       const transform = angle ? `rotate(${angle}, ${x}, ${y})` : undefined;
       const textAnchor = angle ? "end" : "middle";

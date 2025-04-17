@@ -1,4 +1,4 @@
-"use client"; // Ensure this page is a client component if using Next.js 13+
+"use client";
 
 import React, { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -11,26 +11,18 @@ import { useTheme } from "next-themes";
 import Header from "@/components/Navigation/header";
 import BarChart from "@/components/Charts/BarChart";
 import LineChartTime from "@/components/Charts/LineChartTime";
-
 import CompareBarChart from "@/components/Charts/CompareBarChart";
 import CompareLineChart from "@/components/Charts/CompareLineChart";
-import { allTeamData, customerServiceData } from "@/data/customerServiceData";
-
-import bgCard from "@/public/animations/bgCard.json";
+import { customerServiceData } from "@/data/customerServiceData";
 import award from "@/public/animations/award.json";
-import down from "@/public/animations/down.json";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import CompareRed from "@/public/compare-red.svg";
 import CompareYellow from "@/public/compare-yellow.svg";
-import Change from "@/public/change.svg";
 import dynamic from "next/dynamic";
-import Calendar from "@/components/Sorting/DateFilters/Calendar";
-
 import SupervisorSelectionForm from "@/components/Sorting/Filters/SupervisorSelectionForm";
-// New selection form for supervisors
-import { qualityGoalTableConfig } from "@/components/Tables/CustomerService/Overview/QualityTable/qualityGoalTableConfig";
 import Image from "next/image";
+
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const averageHandleTimeGoal = "5:30 - 6:30";
@@ -73,11 +65,9 @@ function getBgColor(statName, statValue) {
 }
 
 const StatCardComponent = ({
-  id,
   name,
   stat,
   qualifies,
-  bgColorClass,
   delay = 0,
   onClick,
   isActive,
@@ -128,15 +118,7 @@ const StatCardComponent = ({
             />
           </div>
         ) : (
-          <div className="absolute top-2 right-3 p-2">
-            {/* <Image
-              src={warning}
-              alt="Warning"
-              width={20}
-              height={20}
-              // style={{ width: "50px", height: "50px" }}
-            /> */}
-          </div>
+          <div className="absolute top-2 right-3 p-2"></div>
         ))}
 
       <div
@@ -191,17 +173,8 @@ const computeAveragePercentage = (data, key) => {
   return avg.toFixed(2) + "%";
 };
 
-function aggregateMetrics(data) {
-  return {
-    AHT: computeAverageTime(data, "AHT"),
-    mtdScore: computeAveragePercentage(data, "mtdScore"),
-    Adherence: computeAveragePercentage(data, "Adherence"),
-    Quality: computeAveragePercentage(data, "Quality"),
-  };
-}
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
-    // generate a random time between 5:00 (300 sec) and 6:30 (390 sec)
     let seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
     let mins = Math.floor(seconds / 60);
     let secs = seconds % 60;
@@ -209,49 +182,16 @@ function generateRandomMetricValue(metricName) {
       .toString()
       .padStart(2, "0")}`;
   } else if (metricName === "Average Score") {
-    // generate a random percentage between 90% and 105%
     let value = (Math.random() * 15 + 90).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Adherence") {
-    // generate a random percentage between 85% and 95%
     let value = (Math.random() * 10 + 85).toFixed(2);
     return `${value}%`;
   } else if (metricName === "Quality") {
-    // generate a random percentage between 80% and 95%
     let value = (Math.random() * 15 + 80).toFixed(2);
     return `${value}%`;
   }
   return "0%";
-}
-
-function createUniqueAHTGenerator(minSeconds, maxSeconds) {
-  const possibleValues = [];
-  for (let s = minSeconds; s <= maxSeconds; s++) {
-    possibleValues.push(s);
-  }
-  // Shuffle the array using Fisher–Yates
-  for (let i = possibleValues.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [possibleValues[i], possibleValues[j]] = [
-      possibleValues[j],
-      possibleValues[i],
-    ];
-  }
-  let index = 0;
-  return function getNextAHT() {
-    if (index >= possibleValues.length) {
-      index = 0;
-      // reshuffle
-      for (let i = possibleValues.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [possibleValues[i], possibleValues[j]] = [
-          possibleValues[j],
-          possibleValues[i],
-        ];
-      }
-    }
-    return possibleValues[index++];
-  };
 }
 
 function generateRandomAHTValueInMinutes() {
@@ -310,16 +250,9 @@ export const fakeMtdScoreComparison = generateFakeDataForMarch2025ForMetric(
   () => generateRandomMetricValue("Average Score")
 );
 
-const combinedFakeData = fakeAHTDataMain.map((item, index) => ({
-  date: item.date,
-  mainValue: item.ahtTeam,
-  comparedValue: fakeAHTDataComparison[index]?.ahtTeam,
-}));
-
 export default function SupervisorDailyMetricsPage() {
   const router = useRouter();
   const { from, to, supervisor, managers } = router.query;
-  const [selectedSupervisor, setSelectedSupervisor] = useState(null);
   const [isSupervisorDropdownOpen, setIsSupervisorDropdownOpen] =
     useState(false);
   const pages = [
@@ -353,13 +286,9 @@ export default function SupervisorDailyMetricsPage() {
     value: supervisor,
   }));
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  const formattedFrom = from
-    ? new Date(from).toLocaleDateString("en-US")
-    : "None";
-  const formattedTo = to ? new Date(to).toLocaleDateString("en-US") : "None";
 
   const dataSets = customerServiceData.dataSets;
-  // Filter by supervisor instead of manager
+
   const filteredDataSets = dataSets.map((set) => ({
     ...set,
     data: set.data.filter((row) => row.supervisor === supervisor),
@@ -497,11 +426,6 @@ export default function SupervisorDailyMetricsPage() {
   const [metric, setMetric] = useState("Average Score");
   const [chartType, setChartType] = useState("Bar Chart");
 
-  const groupByOptions = [
-    { value: "agent", label: "Agent" },
-    // Remove supervisor option if you don't need it.
-  ];
-
   const metricOptions = [
     { value: "Average Score", label: "Average Score" },
     { value: "Adherence", label: "Adherence" },
@@ -562,8 +486,6 @@ export default function SupervisorDailyMetricsPage() {
     setFromDate,
     toDate,
     setToDate,
-    navigateMonth,
-    handleDateSelect,
   } = useDateRange();
 
   const [selectedDepartments, setSelectedDepartments] = useState({
@@ -577,13 +499,11 @@ export default function SupervisorDailyMetricsPage() {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const xAxisField = groupByField;
-  const yAxisField = metricMapping[metric];
 
-  // New grouping (by agent)
   const aggregatedData = useMemo(() => {
     const groups = {};
     chartData.forEach((row) => {
-      const key = row.agent; // group by agent
+      const key = row.agent;
       if (!groups[key]) {
         groups[key] = {
           agent: row.agent,
@@ -720,7 +640,6 @@ export default function SupervisorDailyMetricsPage() {
   ];
   const renderCustomLegend = (props) => {
     const { payload } = props;
-    // Assume theme is a string, 'dark' or 'light'
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
@@ -758,7 +677,6 @@ export default function SupervisorDailyMetricsPage() {
         {!showComparison && (
           <nav
             aria-label="Breadcrumb"
-            // Using inline-flex ensures nav is only as wide as its content
             className="inline-flex rounded-md bg-lightGray dark:bg-darkCompBg px-4 py-1 shadow-sm shadow-lovesBlack"
           >
             <ol className="flex space-x-1">
@@ -802,7 +720,6 @@ export default function SupervisorDailyMetricsPage() {
 
         {!showComparison && (
           <div className="flex items-center justify-between px-0 lg:mt-0 mt-4 mb-4">
-            {/* Left side: Date range display */}
             <div
               className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold
                shadow-sm shadow-lovesBlack 
@@ -814,7 +731,6 @@ export default function SupervisorDailyMetricsPage() {
                 : "Date Range: Not Selected"}
             </div>
 
-            {/* Right side: Filter calendar toggle */}
             <FilterCalendarToggle
               fromDate={fromDate}
               toDate={toDate}
@@ -923,8 +839,8 @@ export default function SupervisorDailyMetricsPage() {
 
                   <div className="text-right ">
                     <button
-                      className="border border-lovesBlack rounded-lg shadow shadow-sm shadow-lovesBlack dark:border-darkPrimaryText p-1 "
-                      onClick={() => setIsAgentDropdownOpen(true)}
+                      className="border border-lovesBlack rounded-lg shadow-sm shadow-lovesBlack dark:border-darkPrimaryText p-1 "
+                      onClick={() => setIsSupervisorDropdownOpen(true)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1140,7 +1056,6 @@ export default function SupervisorDailyMetricsPage() {
              border-2 border-darkBorder dark:border-darkBg dark:shadow-none 
              pl-4 pt-2 pb-4"
                   >
-                    {/* H2 Title */}
                     <h2 className="text-xl font-futura-bold dark:text-darkPrimaryText text-lovesWhite rounded-lg">
                       Performance Chart
                     </h2>
@@ -1290,7 +1205,7 @@ export default function SupervisorDailyMetricsPage() {
                   )}
                 </div>
               </div>
-              <div className="lg:p-4 py-2 mt-4 mt-0">
+              <div className="lg:p-4 py-2 mt-4">
                 <div className="bg-darkBorder dark:bg-darkBg shadow-md shadow-darkBorder dark:shadow-darkBg rounded-lg p-1.5 w-full max-w-full no-scrollbar">
                   <div className="flex-grow overflow-y-auto no-scrollbar">
                     <table className="min-w-full divide-y divide-darkBorder dark:divide-darkBg">
@@ -1400,7 +1315,6 @@ export default function SupervisorDailyMetricsPage() {
           </div>
 
           <div className="lg:hidden flex items-center justify-between px-4 lg:mb-4 my-4">
-            {/* Left side: Date range display */}
             <div
               className="text-lovesBlack dark:text-darkPrimaryText bg-lightGray dark:bg-darkCompBg font-futura-bold
                shadow-sm shadow-lovesBlack 
@@ -1412,7 +1326,6 @@ export default function SupervisorDailyMetricsPage() {
                 : "Date Range: Not Selected"}
             </div>
 
-            {/* Right side: Filter calendar toggle */}
             <FilterCalendarToggle
               fromDate={fromDate}
               toDate={toDate}
@@ -1559,16 +1472,11 @@ export default function SupervisorDailyMetricsPage() {
           )}
         </div>
 
-        {/* Show the Compare Managers button only if isDetail is true */}
-
         {showComparison ? (
-          // Split-screen layout when comparing
           <div className="flex flex-col lg:flex-row gap-1 bg-lightGray dark:bg-darkCompBg shadow-md shadow-darkBg dark:shadow-none dark:border-2 dark:border-darkBorder rounded-lg lg:mb-2 mb-0">
-            {/* Left column: your current detail view */}
             <div className="w-full lg:w-2/5 lg:pt-4 pt-0">{detailView}</div>
             {!comparisonSupervisor || isSupervisorDropdownOpen ? (
               <div className="flex flex-col items-center w-full lg:w-3/5 lg:mt-36 lg:mb-8 mb-0 lg:mr-4 px-4 py-4 lg:px-0">
-                {/* You can give it a fixed height to mimic the final chart’s size */}
                 <div className="w-full h-[500px] bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                   <div className="animate-pulse flex flex-col space-y-4">
                     <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-3/5" />
@@ -1604,8 +1512,6 @@ export default function SupervisorDailyMetricsPage() {
                   ))}
                 </div>
 
-                {/* Set a fixed height for the chart container */}
-
                 <div className="w-full mt-4 mb-4 h-[500px]">
                   <CompareLineChart
                     data={compareChartData}
@@ -1617,14 +1523,9 @@ export default function SupervisorDailyMetricsPage() {
             )}
           </div>
         ) : (
-          // Normal view when not in comparison mode
           <div>{detailView}</div>
         )}
       </div>
     </div>
   );
-}
-
-function getTextAlignment(index) {
-  return index === 0 ? "text-left" : "text-center";
 }

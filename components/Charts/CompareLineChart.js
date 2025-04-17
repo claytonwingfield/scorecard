@@ -5,27 +5,9 @@ import {
   Line,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
-import CustomTooltip from "./CustomTooltip";
 import { useTheme } from "next-themes";
-
-const averageScoreGoal = "95%";
-const adherenceGoal = "88%";
-const qualityGoal = "88%";
-const averageHandleTimeGoal = "5:30 - 6:30";
-
-function getGoalForMetric(yDataKey) {
-  if (yDataKey === "mtdScore") return averageScoreGoal;
-  if (yDataKey === "adherence") return adherenceGoal;
-  if (yDataKey === "qualityTeam") return qualityGoal;
-  if (yDataKey === "AHT" || yDataKey === "ahtTeam")
-    return averageHandleTimeGoal;
-  return "";
-}
 
 const formatNumericToTime = (value) => {
   const minutes = Math.floor(value);
@@ -34,25 +16,8 @@ const formatNumericToTime = (value) => {
 };
 
 const CompareLineChart = forwardRef(
-  (
-    {
-      data,
-      xDataKey,
-      yDataKey,
-      groupByKey,
-      isScoreCard = false,
-      disableGrouping = false,
-    },
-    ref
-  ) => {
+  ({ data, xDataKey, yDataKey, groupByKey, disableGrouping = false }, ref) => {
     const isAHT = yDataKey === "AHT" || yDataKey === "ahtTeam";
-    const legendNames = {
-      mtdScore: "Score",
-      qualityTeam: "Quality",
-      AHT: "AHT",
-      ahtTeam: "AHT",
-      adherence: "Adherence",
-    };
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
@@ -118,15 +83,6 @@ const CompareLineChart = forwardRef(
       ? [yMin - 0.1, yMax + 0.1]
       : [Math.floor(yMin) - 0.5, Math.ceil(yMax) + 0.5];
 
-    const averageNumeric = useMemo(() => {
-      const total = chartData.reduce((sum, item) => sum + item.mainValue, 0);
-      return chartData.length ? total / chartData.length : 0;
-    }, [chartData]);
-
-    const average = isAHT
-      ? formatNumericToTime(averageNumeric)
-      : averageNumeric.toFixed(0);
-
     const computeTicks = (data, yDataKey) => {
       if (isAHT) {
         const [domainMin, domainMax] = yAxisDomain;
@@ -190,7 +146,6 @@ const CompareLineChart = forwardRef(
                 top: isMobile ? 20 : 40,
                 left: isMobile ? 0 : 0,
                 right: isMobile ? 20 : 20,
-
                 bottom: isMobile ? 0 : 20,
               }}
             >

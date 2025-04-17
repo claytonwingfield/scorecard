@@ -1,27 +1,21 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import defaultAwardAnimation from "@/public/animations/award.json";
 
 const StatCard = ({
-  id,
   name,
   stat,
-  qualifies, // Boolean indicating if the stat qualifies
-  bgColorClass, // Optional additional background styling class
-  delay = 0, // Animation delay (milliseconds)
+  qualifies,
+  delay = 0,
   onClick = () => {},
-  isActive = false, // True when this card is selected/active
-  allowGlow = false, // Only allow glow when the section is expanded
+  isActive = false,
   awardAnimationData = defaultAwardAnimation,
-  warningIcon = null,
 }) => {
   const [animationFinished, setAnimationFinished] = useState(true);
   const [startAnimation, setStartAnimation] = useState(false);
 
-  // Set text color based on active state and qualification.
   useEffect(() => {
     const timer = setTimeout(() => {
       setStartAnimation(true);
@@ -67,11 +61,7 @@ const StatCard = ({
             />
           </div>
         ) : (
-          <div className="absolute top-2 right-3 p-2">
-            {/* {warningIcon && (
-              <img src={warningIcon} alt="Warning" width={20} height={20} />
-            )} */}
-          </div>
+          <div className="absolute top-2 right-3 p-2"></div>
         ))}
 
       <div

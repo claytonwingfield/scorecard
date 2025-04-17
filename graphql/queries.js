@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-// Supervisors
+
 const GET_ALL_SUPERVISORS = gql`
   query Supervisor {
     supervisors {
@@ -23,7 +23,7 @@ const GET_ALL_SUPERVISORS = gql`
     }
   }
 `;
-// Agents
+
 const GET_ALL_AGENTS = gql`
   query Agent {
     agents {
@@ -36,7 +36,7 @@ const GET_ALL_AGENTS = gql`
     }
   }
 `;
-// Managers
+
 const GET_ALL_MANAGERS = gql`
   query Manager {
     managers {
@@ -54,7 +54,7 @@ const GET_ALL_MANAGERS = gql`
     }
   }
 `;
-// Departments
+
 const GET_ALL_DEPARTMENTS = gql`
   query Department {
     departments {

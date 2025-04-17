@@ -52,17 +52,7 @@ const convertTimeToMinutes = (timeStr) => {
 };
 
 const LineChartTime = forwardRef(
-  (
-    {
-      data,
-      xDataKey,
-      yDataKey,
-      groupByKey,
-      isScoreCard = false,
-      disableGrouping = false,
-    },
-    ref
-  ) => {
+  ({ data, xDataKey, yDataKey, groupByKey, disableGrouping = false }, ref) => {
     const legendNames = {
       mtdScore: "Score",
       qualityTeam: "Quality",
@@ -73,7 +63,6 @@ const LineChartTime = forwardRef(
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 
-    // Define the dot rendering function inside the component so it can access isDarkMode
     const renderColoredDot = (props) => {
       const { cx, cy } = props;
       return (
@@ -162,7 +151,6 @@ const LineChartTime = forwardRef(
         return ticks;
       }
     }
-    console.log(convertTimeToMinutes("6:30"));
 
     const yValues = chartData.map((item) => item[yDataKey]);
     const yMin = Math.min(...yValues);
@@ -457,7 +445,7 @@ const LineChartTime = forwardRef(
                                 width: 20,
                                 height: 20,
                                 backgroundColor: entry.color,
-                                borderRadius: "50%", // This makes it a circle
+                                borderRadius: "50%",
                               }}
                             />
                           )}

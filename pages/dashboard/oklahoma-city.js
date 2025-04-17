@@ -1,9 +1,7 @@
 "use client";
-
 import React, { useMemo, useState } from "react";
-
 import Header from "@/components/Navigation/header";
-import DashboardSection from "@/components/Dashboard/DashboardSection"; // Your reusable dashboard component
+import DashboardSection from "@/components/Dashboard/DashboardSection";
 import {
   customerServiceAverageScore,
   customerServiceAHT,
@@ -14,24 +12,18 @@ import {
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import { Transition } from "@headlessui/react";
-
-// Fake chart data for each metric – you may already have these functions/exports.
 import {
   fakeAHTData,
   fakeAdherenceData,
   fakeQualityData,
   fakeMtdScoreData,
 } from "@/data/fakeMetricsData";
-
-// Create a mapping from metric name to its data series (for the charts)
 const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
   Adherence: fakeAdherenceData,
   Quality: fakeQualityData,
   "Average Score": fakeMtdScoreData,
 };
-
-// Mapping for chart’s yDataKey per metric name
 const metricMap = {
   "Average Handle Time": "ahtTeam",
   Adherence: "adherence",
@@ -39,13 +31,6 @@ const metricMap = {
   "Average Score": "mtdScore",
 };
 
-/**
- * --- CUSTOMER SERVICE SECTION ---
- *
- * This section computes four parent metrics using data (via useMemo)
- * and then computes a subordinate list of managers. For each manager, we
- * transform their raw stats object into the expected format: { name, metrics: [{ id, name, stat }, ...] }.
- */
 const CustomerServiceSection = () => {
   const avgScore = useMemo(() => {
     const scores = customerServiceAverageScore.map((item) =>
@@ -95,12 +80,10 @@ const CustomerServiceSection = () => {
     { id: 4, name: "Average Score", stat: avgScore },
   ];
 
-  // Gather a unique list of manager names for customer service.
   const customerServiceManagers = Array.from(
     new Set(allTeamData.map((item) => item.manager))
   ).map((managerName) => ({ name: managerName }));
 
-  // Helper functions used to compute averages:
   const averagePercentageForManager = (dataArray, key, managerName) => {
     const filtered = dataArray.filter((item) => item.manager === managerName);
     if (filtered.length === 0) return "N/A";
@@ -125,7 +108,6 @@ const CustomerServiceSection = () => {
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
-  // Compute manager stats for customer service.
   const computedCustomerServiceManagerStats = customerServiceManagers.map(
     (manager) => {
       const managerName = manager.name;
@@ -154,7 +136,6 @@ const CustomerServiceSection = () => {
     }
   );
 
-  // Transform the object for each manager into the expected subordinate data shape.
   const subordinateStats = computedCustomerServiceManagerStats.map(
     (manager) => ({
       name: manager.name,
@@ -183,11 +164,6 @@ const CustomerServiceSection = () => {
   );
 };
 
-/**
- * --- HELP DESK SECTION ---
- *
- * This example uses static department stats and manager stats.
- */
 const HelpDeskSection = () => {
   const parentStats = [
     { id: 1, name: "Average Handle Time", stat: "05:45" },
@@ -240,9 +216,6 @@ const HelpDeskSection = () => {
   );
 };
 
-/**
- * --- ELECTRONIC DISPATCH SECTION ---
- */
 const ElectronicDispatchSection = () => {
   const parentStats = [
     { id: 1, name: "Average Handle Time", stat: "06:00" },
@@ -302,9 +275,6 @@ const ElectronicDispatchSection = () => {
   );
 };
 
-/**
- * --- WRITTEN COMMUNICATION SECTION ---
- */
 const WrittenCommunicationSection = () => {
   const parentStats = [
     { id: 1, name: "Average Handle Time", stat: "05:50" },
@@ -357,9 +327,6 @@ const WrittenCommunicationSection = () => {
   );
 };
 
-/**
- * --- RESOLUTIONS SECTION ---
- */
 const ResolutionsSection = () => {
   const parentStats = [
     { id: 1, name: "Average Handle Time", stat: "06:10" },
@@ -420,11 +387,6 @@ const ResolutionsSection = () => {
   );
 };
 
-/**
- * --- OKLAHOMA CITY PAGE ---
- *
- * Render the header and the five department sections.
- */
 export default function OklahomaCity() {
   const {
     currentDate,

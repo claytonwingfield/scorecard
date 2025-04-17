@@ -46,7 +46,7 @@ export default function ActiveFilters({
       <h2 id="active-filters-heading" className="sr-only">
         Active Filters
       </h2>
-      <div className="bg-lightGray dark:bg-darkCompBg lg:pb-4 border-b-lightGray dark:border-b-darkBorder border-r-lightGray dark:border-b-darkBorder dark:border-r-darkBorder  shadow-sm shadow-lovesBlack dark:shadow-darkBorder dark:shadow-sm rounded-b-lg">
+      <div className="bg-lightGray dark:bg-darkCompBg lg:pb-4 border-b-lightGray dark:border-b-darkBorder border-r-lightGray dark:border-r-darkBorder  shadow-sm shadow-lovesBlack dark:shadow-darkBorder dark:shadow-sm rounded-b-lg">
         <div className="mx-auto max-w-full px-4 lg:px-8 lg:py-4 ">
           <div className="flex items-center lg:flex-wrap lg:space-x-2 lg:pt-0 pt-2">
             <span className="text-md font-futura-bold text-lovesBlack dark:text-darkPrimaryText pr-2 mb-2">

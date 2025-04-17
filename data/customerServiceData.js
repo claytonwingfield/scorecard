@@ -1,6 +1,4 @@
 export const allTeamData = [
-  // Linda
-  // Tyler
   {
     manager: "Linda McKown",
     supervisor: "Tyler Wheeler",
@@ -632,13 +630,6 @@ export const customerServiceScorecard = [
     mtdScore: "76.07%",
     mtdRanking: "35",
   },
-  // {
-  //   manager: "Linda McKown",
-  //   supervisor: "John Herrera",
-  //   agent: "Barbara Thomas",
-  //   mtdScore: "#N/A",
-  //   mtdRanking: "TBD",
-  // },
 ];
 
 export const JohnTeamOverview = [
@@ -1100,7 +1091,7 @@ export const tableColumns = {
     { key: "mtdScore", label: "Score" },
     { key: "mtdRanking", label: "Ranking" },
   ],
-  // Define columns for other tables similarly
+
   ScoreCardTable: [
     { key: "manager", label: "Manager" },
     { key: "supervisor", label: "Supervisor" },

@@ -6,7 +6,6 @@ export default function MobileDropDownMenu({
   menuTitle,
   subPages,
   handlePageChange,
-  nested = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isManual, setIsManual] = useState(false);

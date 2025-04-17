@@ -9,21 +9,7 @@ import {
   LabelList,
   ResponsiveContainer,
 } from "recharts";
-
 import { useTheme } from "next-themes";
-
-const averageScoreGoal = "95%";
-const adherenceGoal = "88%";
-const qualityGoal = "88%";
-const averageHandleTimeGoal = "5:30 - 6:30";
-
-function getGoalForMetric(yDataKey) {
-  if (yDataKey === "mtdScore") return averageScoreGoal;
-  if (yDataKey === "Adherence") return adherenceGoal;
-  if (yDataKey === "Quality") return qualityGoal;
-  if (yDataKey === "AHT") return averageHandleTimeGoal;
-  return "";
-}
 
 const CompareBarChart = forwardRef(
   (
@@ -98,31 +84,7 @@ const CompareBarChart = forwardRef(
         .padStart(2, "0");
       return `${m}:${s}`;
     };
-    const CustomTooltipComponent = ({ active, payload, label }) => {
-      if (active && payload && payload.length) {
-        const isTimeMetric =
-          payload[0].payload.metric === "Average Handle Time";
-        return (
-          <div
-            style={{
-              backgroundColor: "#fff",
-              border: "1px solid #ccc",
-              padding: "5px",
-              color: "#000",
-            }}
-          >
-            <p style={{ margin: 0 }}>{payload[0].payload.metric}</p>
-            {payload.map((entry, index) => (
-              <p key={index} style={{ margin: 0 }}>
-                {entry.name}:{" "}
-                {isTimeMetric ? formatSecondsToTime(entry.value) : entry.value}
-              </p>
-            ))}
-          </div>
-        );
-      }
-      return null;
-    };
+
     const isTimeMetric = chartData[0]?.metric === "Average Handle Time";
     const tickFormatter = isTimeMetric ? formatSecondsToTime : (val) => val;
 

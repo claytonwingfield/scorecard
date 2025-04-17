@@ -1,12 +1,8 @@
-// components/Sorting/Filters/Hooks/useDisplayOptionChange.js
-
 import { useCallback } from "react";
 
 export default function useDisplayOptionChange({
-  displayOptions,
   setDisplayOptions,
   displayOptionLabels,
-  activeFilters,
   setActiveFilters,
 }) {
   const handleDisplayOptionChange = useCallback(

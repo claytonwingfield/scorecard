@@ -5,10 +5,6 @@ import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
-import { Transition } from "@headlessui/react";
-import Link from "next/link";
-
-// Import your data and functions
 import {
   customerServiceAverageScore,
   customerServiceAHT,
@@ -17,9 +13,7 @@ import {
   allTeamData,
   customerServiceData,
 } from "@/data/customerServiceData";
-import { useRouter } from "next/router";
 
-// ─── FAKE CHART DATA (for example purposes) ────────────────────────────────
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
     const seconds = Math.floor(Math.random() * (390 - 300 + 1)) + 300;
@@ -96,7 +90,6 @@ export const fakeDataMap = {
   "Average Score": fakeMtdScoreData,
 };
 
-// ─── HELPER FUNCTIONS FOR COMPUTING AVERAGE METRICS ───────────────────────
 function averagePercentageForManager(dataArray, key, managerName) {
   const filtered = dataArray.filter((item) => item.manager === managerName);
   if (filtered.length === 0) return "N/A";
@@ -154,7 +147,7 @@ function averageAHTForSupervisor(dataArray, supervisorName) {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 const dataSets = customerServiceData.dataSets;
-// ─── COMPUTE MANAGER STATS ────────────────────────────────────────────────
+
 const customerServiceManagers = Array.from(
   new Set(allTeamData.map((item) => item.manager))
 ).map((managerName) => ({ name: managerName }));
@@ -187,12 +180,11 @@ const computedCustomerServiceManagerStats = customerServiceManagers.map(
   }
 );
 
-// ─── COMPUTE SUPERVISOR STATS FOR A GIVEN MANAGER ─────────────────────────
 const getSupervisorStatsForManager = (managerName) => {
   const filteredData = allTeamData.filter(
     (item) => item.manager === managerName
   );
-  // Get unique supervisors for this manager.
+
   const uniqueSupervisors = Array.from(
     new Set(filteredData.map((item) => item.supervisor))
   );
@@ -220,9 +212,7 @@ const getSupervisorStatsForManager = (managerName) => {
   }));
 };
 
-// ─── UTILITY FUNCTIONS TO FORMAT DATA FOR THE REUSABLE COMPONENT ───────────
 const formatMetrics = (entity) => {
-  // Convert an object (with keys: name, and metrics) into an array of metric objects.
   return Object.entries(entity)
     .filter(([key]) => key !== "name")
     .map(([metric, value], idx) => ({
@@ -249,7 +239,6 @@ const formatSupervisorData = (managerName) => {
   });
 };
 
-// ─── CHART MAPPING (same as before) ─────────────────────────────────────────
 const metricMap = {
   "Average Handle Time": "ahtTeam",
   Adherence: "adherence",
@@ -258,8 +247,6 @@ const metricMap = {
 };
 
 export default function ManagerDashboard() {
-  const router = useRouter();
-
   const {
     currentDate,
     setCurrentDate,
@@ -301,7 +288,7 @@ export default function ManagerDashboard() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments} // <-- Pass it here
+          selectedDepartments={selectedDepartments}
           setSelectedDepartments={setSelectedDepartments}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
@@ -317,9 +304,9 @@ export default function ManagerDashboard() {
               key={manager.name}
               name={"Manager"}
               title={manager.name}
-              headerLink={`/customer-service/daily-metrics/manager/${manager.name}`} // Customize as needed.
+              headerLink={`/customer-service/daily-metrics/manager/${manager.name}`}
               subordinateTitle="Supervisors"
-              subordinateLink="/customer-service/daily-metrics/supervisor" // Customize link if required.
+              subordinateLink="/customer-service/daily-metrics/supervisor"
               parentStats={parentStats}
               subordinateStats={subordinateStats}
               chartDataMap={fakeDataMap}

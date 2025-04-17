@@ -1,6 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useMemo } from "react";
-import { useRouter } from "next/router";
+import { useState, useRef, useMemo } from "react";
 import {
   ChevronDownIcon,
   CheckIcon,
@@ -14,14 +13,10 @@ const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import filterBackground from "@/public/animations/filterBackground.json";
 import { useDropdown } from "@/hooks/useDropdown";
 import { Disclosure } from "@headlessui/react";
-import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import { useFilters } from "@/components/Sorting/Filters/Hooks/useFilters";
-import DateFilterDropdown from "@/components/Sorting/DateFilters/DateFilterDropdown";
-import FiltersDropdown from "@/components/Sorting/Filters/FiltersDropdown";
-import ActiveFilters from "@/components/Sorting/Filters/ActiveFilters/ActiveFilters";
 import { Transition, Listbox } from "@headlessui/react";
 import Calendar from "@/components/Sorting/DateFilters/Calendar";
-import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
+
 export default function DetailHomeFilters({
   activeFilters,
   handleDateRangeSelect,
@@ -34,20 +29,12 @@ export default function DetailHomeFilters({
   navigateMonth,
   handleDateSelect,
   handleFilterChange,
-  dataSets,
   allTeamData,
-
   handleSearch,
 }) {
-  const containerRef = useRef(null);
-  const dateDropdownRef = useRef(null);
-  const filtersDropdownRef = useRef(null);
-
   const { openDropdown, toggleDropdown } = useDropdown();
-
   const [filterToEdit, setFilterToEdit] = useState(null);
   const { categoryRefs } = useFilters(openDropdown === "filters", filterToEdit);
-
   const [selectedDateRange, setSelectedDateRange] = useState(null);
 
   const saveRange = (close) => {

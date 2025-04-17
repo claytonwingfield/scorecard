@@ -1,4 +1,3 @@
-// components/Hooks/useIsMobile.js
 import { useState, useEffect } from "react";
 
 export default function useIsMobile() {
