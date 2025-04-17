@@ -1,10 +1,6 @@
-// components/Tables/Hooks/useRenderTablesList.js
 import { useCallback } from "react";
 
-export default function useRenderTablesList({
-  renderTable,
-  onMeasuredHeightChange,
-}) {
+export default function useRenderTablesList({ renderTable }) {
   const renderTablesList = useCallback(
     (tableList) => {
       return tableList.map(renderTable);

@@ -147,7 +147,7 @@ export default function Calendar({
                       className={classNames(
                         "w-full border-2 border-darkBorder dark:shadow-sm shadow-md shadow-lovesGray text-left text-md font-futura-bold px-4 py-2 lg:py-8  hover:bg-darkBorder dark:hover:bg-darkBorder dark:hover:text-darkPrimaryText hover:text-lovesWhite rounded-lg   dark:bg-darkBg",
                         selectedDateRange === option.value &&
-                          "bg-darkBorder text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText" // <--- Make sure it's text-lovesWhite
+                          "bg-darkBorder text-lovesWhite dark:bg-darkBorder dark:text-darkPrimaryText"
                       )}
                     >
                       {option.label}

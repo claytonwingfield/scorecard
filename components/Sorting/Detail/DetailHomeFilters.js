@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   ChevronDownIcon,
   CheckIcon,

@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useMemo,
-  useEffect,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import TableSorting from "@/components/Sorting/TableSorting";
@@ -43,11 +37,8 @@ import "react-resizable/css/styles.css";
 import DetailHomeFilters from "./Sorting/Detail/DetailHomeFilters";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import DetailModel from "./Sorting/Detail/DetailModel";
-import OverviewTableWrapper from "@/components/Tables/Layouts/Overview/OverviewTableWrapper ";
-import TeamTableWrapper from "@/components/Tables/Layouts/Agent/TeamTableWrapper";
-import { useData } from "@/context/DataContext";
 import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
-import Header from "./Navigation/header";
+
 export default function MetricsDashboard({
   dataSets,
   tableVisibilityOptions,
@@ -78,10 +69,9 @@ export default function MetricsDashboard({
   const [originalAgentLayout, setOriginalAgentLayout] = useState(null);
   const { handleDateRangeSelect } = useDateRangeSelect(setActiveFilters);
   const router = useRouter();
-  const { managers } = router.query;
 
   const [isLoading, setIsLoading] = useState(false);
-  const tableRefs = useRef({});
+
   const [selectedVisibilityOption, setSelectedVisibilityOption] = useState([
     "All",
   ]);
@@ -285,9 +275,6 @@ export default function MetricsDashboard({
   const handleTabChange = (newTab) => {
     setActiveTab(newTab);
   };
-  function dateToParam(date) {
-    return date ? date.toISOString().split("T")[0] : undefined;
-  }
 
   const handleSearch = () => {
     performSearch({
@@ -300,10 +287,6 @@ export default function MetricsDashboard({
       setIsLoading,
     });
   };
-
-  const handleMeasuredHeightChange = useCallback((tableName, newHeight) => {
-    setMeasuredHeights((prev) => ({ ...prev, [tableName]: newHeight }));
-  }, []);
 
   if (isLoading) {
     return (

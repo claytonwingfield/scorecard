@@ -12,16 +12,7 @@ import {
 import { useTheme } from "next-themes";
 
 const CompareBarChart = forwardRef(
-  (
-    {
-      data,
-      xDataKey,
-
-      managers,
-      comparisonManager,
-    },
-    ref
-  ) => {
+  ({ data, xDataKey, managers, comparisonManager }, ref) => {
     const { theme } = useTheme();
     const isDarkMode = theme === "dark";
 

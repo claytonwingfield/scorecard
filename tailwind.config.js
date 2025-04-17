@@ -28,10 +28,9 @@ module.exports = {
         "4xl": "2rem",
       },
       keyframes: {
-        // Custom pulse for light mode with less reduction in opacity
         "custom-pulse-light": {
           "0%, 100%": { opacity: 1 },
-          "50%": { opacity: 0.9 }, // adjust to your desired opacity
+          "50%": { opacity: 0.9 },
         },
         glow: {
           "0%, 100%": { boxShadow: "0 0 10px #9dca7e, 0 0 20px #9dca7e" },

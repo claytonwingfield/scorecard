@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
@@ -14,6 +14,7 @@ import { IconMoon, IconSun } from "@/components/Icons/icons";
 import { GET_LOGO } from "@/graphql/queries";
 import LoadingAnimation from "../Effects/Loading/LoadingAnimation";
 import { usePathname } from "next/navigation";
+
 export default function Header() {
   const { data, loading, error } = useQuery(GET_LOGO);
   const { isMenuOpen, setIsMenuOpen, currentPage, handlePageChange, pages } =

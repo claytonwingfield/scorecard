@@ -1,4 +1,3 @@
-// TeamTable.jsx
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { defaultSort, upArrow, downArrow } from "@/components/Icons/icons";
 import { Listbox } from "@headlessui/react";
@@ -12,7 +11,6 @@ export default function TeamTable({
   data,
   hiddenColumns,
   displayOptions,
-  onHeightChange,
 }) {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -127,8 +125,8 @@ export default function TeamTable({
           <div
             className={`flex ${
               isMobile
-                ? "flex-col items-center" // MOBILE: Title on top
-                : "flex-row items-center justify-between" // DESKTOP: Title on left, listboxes on right
+                ? "flex-col items-center"
+                : "flex-row items-center justify-between"
             } bg-lightGray dark:bg-darkCompBg pl-4 pt-2 pb-4`}
           >
             <h2 className="text-xl font-futura-bold text-lovesBlack dark:text-darkPrimaryText">
