@@ -9,8 +9,6 @@ Welcome to the **Contact Center Scorecard** project! This repository is built wi
   - [Starting the Next.js Frontend](#starting-the-nextjs-frontend)
   - [Starting the Strapi Backend](#starting-the-strapi-backend)
 - [Development Workflow](#development-workflow)
-- [Learn More](#learn-more)
-- [Deploy on Vercel](#deploy-on-vercel)
 
 ## Overview ✨
 
