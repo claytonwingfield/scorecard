@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import defaultAwardAnimation from "@/public/animations/award.json";
+
 const mobileRenameMap = {
   "Average Handle Time": "Handle Time",
   "Average Score": "Score",
