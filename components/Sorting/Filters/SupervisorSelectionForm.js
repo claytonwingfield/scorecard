@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
@@ -25,6 +25,7 @@ import {
   fakeQualityData,
   fakeMtdScoreData,
 } from "@/data/fakeMetricsData";
+import { Transition } from "@headlessui/react";
 
 const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
@@ -160,13 +161,20 @@ export default function SupervisorSelectionForm() {
   } = useDateRange();
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
-  });
+  const supervisorOptions = useMemo(
+    () =>
+      computedCustomerServiceSupervisorStats.map((sup) => ({
+        label: sup.name,
+        value: sup.name,
+      })),
+    []
+  );
+  const [selectedSupervisors, setSelectedSupervisors] = useState(() =>
+    supervisorOptions.reduce((acc, opt) => {
+      acc[opt.value] = true;
+      return acc;
+    }, {})
+  );
 
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
@@ -185,6 +193,7 @@ export default function SupervisorSelectionForm() {
 
         <FilterCalendarToggle
           fromDate={fromDate}
+          name="Supervisor"
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
@@ -192,37 +201,52 @@ export default function SupervisorSelectionForm() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
+          filterOptions={supervisorOptions}
+          selectedFilters={selectedSupervisors}
+          setSelectedFilters={setSelectedSupervisors}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
         />
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
-        {computedCustomerServiceSupervisorStats.map((supervisor) => {
-          const parentStats = formatMetrics(supervisor);
-          const subordinateStats = formatAgentData(supervisor.name);
+        {computedCustomerServiceSupervisorStats.map((sup) => {
+          const isVisible = selectedSupervisors[sup.name];
+          const parentStats = formatMetrics(sup);
+          const subordinateStats = formatMetrics(sup.name);
           return (
-            <DashboardSection
-              key={supervisor.name}
-              name={"Supervisor"}
-              title={supervisor.name}
-              headerLink={`/customer-service/daily-metrics/supervisor/${supervisor.name}`}
-              subordinateTitle="Agents"
-              subordinateLink="/customer-service/daily-metrics/agent"
-              parentStats={parentStats}
-              subordinateStats={subordinateStats}
-              chartDataMap={fakeDataMap}
-              metricMap={metricMap}
-              agent={false}
-              fromDate={fromDate}
-              setFromDate={setFromDate}
-              toDate={toDate}
-              setToDate={setToDate}
-              dataSets={dataSets}
-              allTeamData={allTeamData}
-            />
+            <Transition
+              key={sup.name}
+              as="div"
+              show={isVisible}
+              appear
+              enter="transition ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <DashboardSection
+                key={sup.name}
+                name="Supervisor"
+                title={sup.name}
+                headerLink={`/customer-service/daily-metrics/supervisor/${sup.name}`}
+                subordinateTitle="Agents"
+                subordinateLink="/customer-service/daily-metrics/agent"
+                parentStats={parentStats}
+                subordinateStats={subordinateStats}
+                chartDataMap={fakeDataMap}
+                metricMap={metricMap}
+                agent={false}
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                toDate={toDate}
+                setToDate={setToDate}
+                dataSets={dataSets}
+                allTeamData={allTeamData}
+              />
+            </Transition>
           );
         })}
       </div>

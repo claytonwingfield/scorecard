@@ -30,6 +30,13 @@ const metricMap = {
   Quality: "qualityTeam",
   "Average Score": "mtdScore",
 };
+const departmentOptions = [
+  { label: "Customer Service", value: "Customer Service" },
+  { label: "Help Desk", value: "Help Desk" },
+  { label: "Electronic Dispatch", value: "Electronic Dispatch" },
+  { label: "Written Communication", value: "Written Communication" },
+  { label: "Resolutions", value: "Resolutions" },
+];
 
 const CustomerServiceSection = () => {
   const avgScore = useMemo(() => {
@@ -398,13 +405,22 @@ export default function OklahomaCity() {
   } = useDateRange();
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
-  });
+  const [selectedDepartments, setSelectedDepartments] = useState(() =>
+    departmentOptions.reduce((acc, opt) => {
+      acc[opt.value] = true;
+      return acc;
+    }, {})
+  );
+  const departmentSections = [
+    { key: "Customer Service", component: <CustomerServiceSection /> },
+    { key: "Help Desk", component: <HelpDeskSection /> },
+    { key: "Electronic Dispatch", component: <ElectronicDispatchSection /> },
+    {
+      key: "Written Communication",
+      component: <WrittenCommunicationSection />,
+    },
+    { key: "Resolutions", component: <ResolutionsSection /> },
+  ];
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
@@ -422,6 +438,7 @@ export default function OklahomaCity() {
 
         <FilterCalendarToggle
           fromDate={fromDate}
+          name="Department"
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
@@ -429,93 +446,88 @@ export default function OklahomaCity() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
+          filterOptions={departmentOptions}
+          selectedFilters={selectedDepartments}
+          setSelectedFilters={setSelectedDepartments}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
         />
       </div>
       <div className="px-4 sm:px-6 lg:px-8 mt-4 space-y-8">
-        {selectedDepartments["Customer Service"] && (
-          <Transition
-            show={selectedDepartments["Customer Service"]}
-            appear
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div>
-              <CustomerServiceSection />
-            </div>
-          </Transition>
-        )}
-        {selectedDepartments["Help Desk"] && (
-          <Transition
-            show={selectedDepartments["Help Desk"]}
-            appear
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div>
-              <HelpDeskSection />
-            </div>
-          </Transition>
-        )}
-        {selectedDepartments["Electronic Dispatch"] && (
-          <Transition
-            show={selectedDepartments["Electronic Dispatch"]}
-            appear
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div>
-              <ElectronicDispatchSection />
-            </div>
-          </Transition>
-        )}
-        {selectedDepartments["Written Communication"] && (
-          <Transition
-            show={selectedDepartments["Written Communication"]}
-            appear
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div>
-              <WrittenCommunicationSection />
-            </div>
-          </Transition>
-        )}
-        {selectedDepartments["Resolutions"] && (
-          <Transition
-            show={selectedDepartments["Resolutions"]}
-            appear
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div>
-              <ResolutionsSection />
-            </div>
-          </Transition>
-        )}
+        <Transition
+          show={selectedDepartments["Customer Service"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            <CustomerServiceSection />
+          </div>
+        </Transition>
+
+        <Transition
+          show={selectedDepartments["Help Desk"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            <HelpDeskSection />
+          </div>
+        </Transition>
+
+        <Transition
+          show={selectedDepartments["Electronic Dispatch"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            <ElectronicDispatchSection />
+          </div>
+        </Transition>
+
+        <Transition
+          show={selectedDepartments["Written Communication"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            <WrittenCommunicationSection />
+          </div>
+        </Transition>
+
+        <Transition
+          show={selectedDepartments["Resolutions"]}
+          appear
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
+          <div>
+            <ResolutionsSection />
+          </div>
+        </Transition>
       </div>
     </div>
   );

@@ -330,13 +330,7 @@ export default function SantoDomingo() {
       .toString()
       .padStart(2, "0")}`;
   }, []);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
-  });
+
   const customerServiceStats = [
     { id: 1, name: "Average Handle Time", stat: avgAHT },
     { id: 2, name: "Adherence", stat: avgAdherence },
@@ -405,6 +399,10 @@ export default function SantoDomingo() {
     Quality: "qualityTeam",
     "Average Score": "mtdScore",
   };
+  const departmentOptions = [
+    { label: "Customer Service", value: "Customer Service" },
+    { label: "Help Desk", value: "Help Desk" },
+  ];
   const handleStatCardClick = (department, metricName) => {
     setActiveMetrics((prev) => ({
       ...prev,
@@ -547,7 +545,12 @@ export default function SantoDomingo() {
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-
+  const [selectedDepartments, setSelectedDepartments] = useState(() =>
+    departmentOptions.reduce((acc, opt) => {
+      acc[opt.value] = true;
+      return acc;
+    }, {})
+  );
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
@@ -565,6 +568,7 @@ export default function SantoDomingo() {
 
         <FilterCalendarToggle
           fromDate={fromDate}
+          name="Department"
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
@@ -572,8 +576,9 @@ export default function SantoDomingo() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
+          filterOptions={departmentOptions}
+          selectedFilters={selectedDepartments}
+          setSelectedFilters={setSelectedDepartments}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
         />

@@ -5,16 +5,9 @@ import Calendar from "@/components/Sorting/DateFilters/Calendar";
 import { useClickOutside } from "@/hooks/useClickOutside";
 import { CheckIcon } from "@heroicons/react/20/solid";
 
-const departmentOptions = [
-  { label: "Customer Service", value: "Customer Service" },
-  { label: "Help Desk", value: "Help Desk" },
-  { label: "Electronic Dispatch", value: "Electronic Dispatch" },
-  { label: "Written Communication", value: "Written Communication" },
-  { label: "Resolutions", value: "Resolutions" },
-];
-
 export default function FilterCalendarToggle({
   fromDate,
+  name,
   toDate,
   setFromDate,
   setToDate,
@@ -22,43 +15,32 @@ export default function FilterCalendarToggle({
   setCurrentDate,
   selectedDateRange,
   setSelectedDateRange,
-  selectedDepartments,
-  setSelectedDepartments,
   showCalendar,
   setShowCalendar,
   isDetail,
   showComparison,
   setShowComparison,
+  filterOptions = [],
+  selectedFilters = {},
+  setSelectedFilters = () => {},
+  supervisorOptions = [],
+  selectedSupervisors = {},
+  setSelectedSupervisors = () => {},
+  isAgentFilter = false,
 }) {
   const [showFilters, setShowFilters] = useState(false);
-  FilterCalendarToggle.defaultProps = {
-    selectedDepartments: {
-      "Customer Service": false,
-      "Help Desk": false,
-      "Electronic Dispatch": false,
-      "Written Communication": false,
-      Resolutions: false,
-    },
-    setSelectedDepartments: () => {},
-  };
   const calendarRef = useRef(null);
   const filterRef = useRef(null);
 
+  useClickOutside([calendarRef, filterRef], () => {
+    setShowCalendar(false);
+    setShowFilters(false);
+  });
+
   const toggleCalendar = () => {
-    setShowCalendar((prev) => !prev);
+    setShowCalendar((x) => !x);
     setShowFilters(false);
   };
-  const toggleFilters = () => {
-    setShowFilters((prev) => !prev);
-    setShowCalendar(false);
-  };
-
-  const handleClickOutside = () => {
-    setShowCalendar(false);
-    setShowFilters(false);
-  };
-  useClickOutside([calendarRef, filterRef], handleClickOutside);
-
   const navigateMonth = (offset) => {
     setCurrentDate((prev) => {
       const newDate = new Date(prev);
@@ -66,7 +48,10 @@ export default function FilterCalendarToggle({
       return newDate;
     });
   };
-
+  const toggleFilters = () => {
+    setShowFilters((x) => !x);
+    setShowCalendar(false);
+  };
   const clearRange = () => {
     setFromDate(null);
     setToDate(null);
@@ -76,12 +61,11 @@ export default function FilterCalendarToggle({
   const saveRange = () => {
     setShowCalendar(false);
   };
-
-  const handleCheckboxChange = (department) => {
-    setSelectedDepartments((prev) => ({
-      ...prev,
-      [department]: !prev[department],
-    }));
+  const handleCheckboxChange = (value) => {
+    setSelectedFilters((prev) => ({ ...prev, [value]: !prev[value] }));
+  };
+  const handleSupervisorChange = (value) => {
+    setSelectedSupervisors((prev) => ({ ...prev, [value]: !prev[value] }));
   };
 
   const baseButton = `
@@ -225,30 +209,85 @@ export default function FilterCalendarToggle({
     "
               >
                 <h1 className="text-lovesBlack text-md font-futura-bold dark:text-darkPrimaryText">
-                  Filter Departments
+                  Filter {name}
                 </h1>
                 <div className="border-b border-lightGray dark:border-darkBorder my-2"></div>
+                {isAgentFilter ? (
+                  <>
+                    <h2 className="text-md font-futura-bold mb-1">
+                      Supervisors
+                    </h2>
+                    {supervisorOptions.map((opt) => (
+                      <div
+                        key={opt.value}
+                        className="flex items-center mb-2 cursor-pointer"
+                        onClick={() => handleSupervisorChange(opt.value)}
+                      >
+                        {selectedSupervisors[opt.value] ? (
+                          <CheckIcon className="h-4 w-4 mr-2 text-lovesPrimaryRed" />
+                        ) : (
+                          <span className="w-4 mr-2" />
+                        )}
+                        <span
+                          className="text-md font-futura-bold hover:text-lovesPrimaryRed
+                               text-lovesBlack dark:text-darkPrimaryText"
+                        >
+                          {opt.label}
+                        </span>
+                      </div>
+                    ))}
 
-                {departmentOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center mb-2 cursor-pointer"
-                    onClick={() => handleCheckboxChange(option.value)}
-                  >
-                    {selectedDepartments[option.value] ? (
-                      <CheckIcon
-                        className="h-4 w-4 mr-2 text-lovesPrimaryRed "
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <span className="w-4 mr-2" />
-                    )}
+                    <div className="border-b … my-2" />
+                    <h2 className="text-md font-futura-bold mb-1">Agents</h2>
 
-                    <span className="text-md text-lovesBlack dark:text-darkPrimaryText font-futura-bold hover:text-lovesPrimaryRed">
-                      {option.label}
-                    </span>
-                  </div>
-                ))}
+                    {filterOptions.map((group) => (
+                      <div key={group.label} className="mb-4">
+                        <h3 className="text-sm font-futura-bold mb-1">
+                          {group.label}
+                        </h3>
+                        {group.options.map((opt) => (
+                          <div
+                            key={opt.value}
+                            className="flex items-center mb-1 cursor-pointer pl-2"
+                            onClick={() => handleCheckboxChange(opt.value)}
+                          >
+                            {selectedFilters[opt.value] ? (
+                              <CheckIcon className="h-4 w-4 mr-2 text-lovesPrimaryRed" />
+                            ) : (
+                              <span className="w-4 mr-2" />
+                            )}
+                            <span
+                              className="text-md font-futura-bold hover:text-lovesPrimaryRed
+                                   text-lovesBlack dark:text-darkPrimaryText"
+                            >
+                              {opt.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  filterOptions.map((opt) => (
+                    <div
+                      key={opt.value}
+                      className="flex items-center mb-2 cursor-pointer"
+                      onClick={() => handleCheckboxChange(opt.value)}
+                    >
+                      {selectedFilters[opt.value] ? (
+                        <CheckIcon className="h-4 w-4 mr-2 text-lovesPrimaryRed" />
+                      ) : (
+                        <span className="w-4 mr-2" />
+                      )}
+                      <span
+                        className="text-md font-futura-bold hover:text-lovesPrimaryRed
+                             text-lovesBlack dark:text-darkPrimaryText"
+                      >
+                        {opt.label}
+                      </span>
+                    </div>
+                  ))
+                )}
               </div>
             )}
           </>

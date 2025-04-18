@@ -3,7 +3,10 @@ import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import defaultAwardAnimation from "@/public/animations/award.json";
-
+const mobileRenameMap = {
+  "Average Handle Time": "Handle Time",
+  "Average Score": "Score",
+};
 const StatCard = ({
   name,
   stat,
@@ -15,6 +18,16 @@ const StatCard = ({
 }) => {
   const [animationFinished, setAnimationFinished] = useState(true);
   const [startAnimation, setStartAnimation] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkWidth = () => setIsMobile(window.innerWidth < 1240);
+    checkWidth();
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
+
+  const displayName =
+    isMobile && mobileRenameMap[name] ? mobileRenameMap[name] : name;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,7 +65,7 @@ const StatCard = ({
     >
       {animationFinished &&
         (qualifies ? (
-          <div className="absolute top-0 right-0 p-2">
+          <div className="absolute top-0 right-0 p-2 ">
             <Lottie
               animationData={awardAnimationData}
               loop={true}
@@ -75,7 +88,7 @@ const StatCard = ({
           <p
             className={`truncate text-lg font-futura-bold ${nameTextColorClass}`}
           >
-            {name}
+            {displayName}
           </p>
         </dt>
         <dd className="flex flex-col items-center justify-center pt-4">

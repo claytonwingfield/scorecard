@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
@@ -21,6 +21,7 @@ import {
   fakeQualityData,
   fakeMtdScoreData,
 } from "@/data/fakeMetricsData";
+import { Transition } from "@headlessui/react";
 
 const fakeDataMap = {
   "Average Handle Time": fakeAHTData,
@@ -46,14 +47,19 @@ const agentData = [
 ];
 
 const metricRenameMap = {
-  mtdScore: "Average Score",
   AHT: "Average Handle Time",
+  Quality: "Quality",
+  Adherence: "Adherence",
+  mtdScore: "Average Score",
 };
-
+const INTERNAL_ORDER = ["AHT", "Adherence", "Quality", "mtdScore"];
 const formatMetrics = (entity) =>
   Object.entries(entity)
-    .filter(
-      ([key]) => key !== "agent" && key !== "manager" && key !== "supervisor"
+    .filter(([k]) => !["agent", "manager", "supervisor"].includes(k))
+
+    .sort(
+      ([aKey], [bKey]) =>
+        INTERNAL_ORDER.indexOf(aKey) - INTERNAL_ORDER.indexOf(bKey)
     )
     .map(([metric, value], idx) => ({
       id: idx,
@@ -74,13 +80,40 @@ export default function AgentSelectionForm() {
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
-  });
+  const groupedAgentOptions = useMemo(() => {
+    const supervisors = {};
+    agentData.forEach(({ supervisor, agent }) => {
+      if (!supervisors[supervisor]) supervisors[supervisor] = [];
+      supervisors[supervisor].push({ label: agent, value: agent });
+    });
+    return Object.entries(supervisors).map(([sup, opts]) => ({
+      label: sup,
+      options: opts,
+    }));
+  }, []);
+
+  const agentOptions = useMemo(() => {
+    const unique = Array.from(new Set(agentData.map((a) => a.agent)));
+    return unique.map((name) => ({ label: name, value: name }));
+  }, []);
+  const supervisorOptions = useMemo(() => {
+    const unique = Array.from(new Set(agentData.map((a) => a.supervisor)));
+    return unique.map((name) => ({ label: name, value: name }));
+  }, []);
+
+  const [selectedSupervisors, setSelectedSupervisors] = useState(() =>
+    supervisorOptions.reduce((acc, opt) => {
+      acc[opt.value] = true;
+      return acc;
+    }, {})
+  );
+
+  const [selectedAgents, setSelectedAgents] = useState(() =>
+    agentOptions.reduce((acc, opt) => {
+      acc[opt.value] = true;
+      return acc;
+    }, {})
+  );
 
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
@@ -99,6 +132,8 @@ export default function AgentSelectionForm() {
 
         <FilterCalendarToggle
           fromDate={fromDate}
+          name="Agent"
+          isAgentFilter={true}
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
@@ -106,8 +141,12 @@ export default function AgentSelectionForm() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
+          filterOptions={groupedAgentOptions}
+          selectedFilters={selectedAgents}
+          setSelectedFilters={setSelectedAgents}
+          supervisorOptions={supervisorOptions}
+          selectedSupervisors={selectedSupervisors}
+          setSelectedSupervisors={setSelectedSupervisors}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
         />
@@ -115,24 +154,41 @@ export default function AgentSelectionForm() {
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
         {agentData.map((agent) => {
+          const isVisible =
+            selectedAgents[agent.agent] &&
+            selectedSupervisors[agent.supervisor];
           const parentStats = formatMetrics(agent);
+
           return (
-            <DashboardSection
+            <Transition
               key={agent.agent}
-              title={agent.agent}
-              name={"Agent"}
-              headerLink={`/customer-service/daily-metrics/agent/${agent.agent}`}
-              agent={true}
-              parentStats={parentStats}
-              chartDataMap={fakeDataMap}
-              metricMap={metricMap}
-              fromDate={fromDate}
-              setFromDate={setFromDate}
-              toDate={toDate}
-              setToDate={setToDate}
-              dataSets={dataSets}
-              allTeamData={allTeamData}
-            />
+              as="div"
+              show={isVisible}
+              appear
+              enter="transition ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <DashboardSection
+                key={agent.agent}
+                title={agent.agent}
+                name={"Agent"}
+                headerLink={`/customer-service/daily-metrics/agent/${agent.agent}`}
+                agent={true}
+                parentStats={parentStats}
+                chartDataMap={fakeDataMap}
+                metricMap={metricMap}
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                toDate={toDate}
+                setToDate={setToDate}
+                dataSets={dataSets}
+                allTeamData={allTeamData}
+              />
+            </Transition>
           );
         })}
       </div>

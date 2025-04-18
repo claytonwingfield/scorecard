@@ -13,6 +13,7 @@ import {
   allTeamData,
   customerServiceData,
 } from "@/data/customerServiceData";
+import { Transition } from "@headlessui/react";
 
 function generateRandomMetricValue(metricName) {
   if (metricName === "Average Handle Time") {
@@ -179,7 +180,10 @@ const computedCustomerServiceManagerStats = customerServiceManagers.map(
     };
   }
 );
-
+const managerOptions = computedCustomerServiceManagerStats.map((m) => ({
+  label: m.name,
+  value: m.name,
+}));
 const getSupervisorStatsForManager = (managerName) => {
   const filteredData = allTeamData.filter(
     (item) => item.manager === managerName
@@ -257,13 +261,10 @@ export default function ManagerDashboard() {
   } = useDateRange();
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState({
-    "Customer Service": true,
-    "Help Desk": true,
-    "Electronic Dispatch": true,
-    "Written Communication": true,
-    Resolutions: true,
-  });
+
+  const [selectedManagers, setSelectedManagers] = useState(
+    managerOptions.reduce((acc, opt) => ({ ...acc, [opt.value]: true }), {})
+  );
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
@@ -281,6 +282,7 @@ export default function ManagerDashboard() {
 
         <FilterCalendarToggle
           fromDate={fromDate}
+          name="Manager"
           toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
@@ -288,37 +290,52 @@ export default function ManagerDashboard() {
           setCurrentDate={setCurrentDate}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
-          selectedDepartments={selectedDepartments}
-          setSelectedDepartments={setSelectedDepartments}
           showCalendar={showCalendar}
           setShowCalendar={setShowCalendar}
+          filterOptions={managerOptions}
+          selectedFilters={selectedManagers}
+          setSelectedFilters={setSelectedManagers}
         />
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
         {computedCustomerServiceManagerStats.map((manager) => {
+          const isVisible = selectedManagers[manager.name];
           const parentStats = formatMetrics(manager);
           const subordinateStats = formatSupervisorData(manager.name);
           return (
-            <DashboardSection
+            <Transition
               key={manager.name}
-              name={"Manager"}
-              title={manager.name}
-              headerLink={`/customer-service/daily-metrics/manager/${manager.name}`}
-              subordinateTitle="Supervisors"
-              subordinateLink="/customer-service/daily-metrics/supervisor"
-              parentStats={parentStats}
-              subordinateStats={subordinateStats}
-              chartDataMap={fakeDataMap}
-              metricMap={metricMap}
-              agent={false}
-              fromDate={fromDate}
-              setFromDate={setFromDate}
-              toDate={toDate}
-              setToDate={setToDate}
-              dataSets={dataSets}
-              allTeamData={allTeamData}
-            />
+              as="div"
+              show={isVisible}
+              appear
+              enter="transition ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <DashboardSection
+                key={manager.name}
+                name={"Manager"}
+                title={manager.name}
+                headerLink={`/customer-service/daily-metrics/manager/${manager.name}`}
+                subordinateTitle="Supervisors"
+                subordinateLink="/customer-service/daily-metrics/supervisor"
+                parentStats={parentStats}
+                subordinateStats={subordinateStats}
+                chartDataMap={fakeDataMap}
+                metricMap={metricMap}
+                agent={false}
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                toDate={toDate}
+                setToDate={setToDate}
+                dataSets={dataSets}
+                allTeamData={allTeamData}
+              />
+            </Transition>
           );
         })}
       </div>

@@ -29,7 +29,7 @@ const DashboardSection = ({
   subordinateStats,
   chartDataMap,
   metricMap,
-  initialActiveMetric = "Average Handle Time",
+  initialActiveMetric = "Handle Time",
   fromDate,
   toDate,
   dataSets,
