@@ -2,7 +2,7 @@
 
 import React, { useState, Fragment } from "react";
 import Header from "@/components/Navigation/header";
-import DashboardSection from "@/components/Dashboard/DashboardSection";
+import DashboardSection from "@/components/Dashboard/Hierarchy/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import {

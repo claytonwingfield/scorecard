@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, Fragment } from "react";
 import Header from "@/components/Navigation/header";
-import DashboardSection from "@/components/Dashboard/DashboardSection";
+import DashboardSection from "@/components/Dashboard/Hierarchy/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
 import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRange";
 import {
@@ -150,7 +150,7 @@ const formatAgentData = (supervisorName) => {
   });
 };
 
-export default function SupervisorSelectionForm() {
+export default function SupervisorDashboard() {
   const {
     currentDate,
     setCurrentDate,

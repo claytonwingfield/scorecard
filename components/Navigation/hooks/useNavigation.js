@@ -76,6 +76,10 @@ export default function useNavigation() {
   };
 
   useEffect(() => {
+    if (router.pathname === "/403") {
+      setCurrentPage("Restricted Access");
+      return;
+    }
     if (dashboardNames[router.pathname]) {
       setCurrentPage(dashboardNames[router.pathname]);
       return;

@@ -46,11 +46,6 @@ const GET_ALL_MANAGERS = gql`
       createdAt
       updatedAt
       publishedAt
-      supervisors {
-        documentId
-        name
-        role
-      }
     }
   }
 `;
@@ -60,15 +55,16 @@ const GET_ALL_DEPARTMENTS = gql`
     departments {
       documentId
       name
-      createdAt
-      updatedAt
-      publishedAt
-      managers {
+      supervisors {
         documentId
         name
         role
+        location
+        managers {
+          documentId
+        }
       }
-      supervisors {
+      managers {
         documentId
         name
         role
@@ -137,11 +133,19 @@ const GET_404 = gql`
       description
       buttonText
       url
-      code
     }
   }
 `;
-
+const GET_403 = gql`
+  query Forbidden {
+    forbidden {
+      title
+      description
+      buttonText
+      url
+    }
+  }
+`;
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
@@ -151,4 +155,5 @@ export {
   GET_LOGO,
   GET_NAVIGATION,
   GET_404,
+  GET_403,
 };

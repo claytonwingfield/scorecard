@@ -19,7 +19,7 @@ import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRang
 import CompareRed from "@/public/compare-red.svg";
 import CompareYellow from "@/public/compare-yellow.svg";
 import dynamic from "next/dynamic";
-import AgentSelectionForm from "@/components/Sorting/Filters/AgentSelectionForm";
+import AgentDashboard from "@/components/Dashboard/Hierarchy/AgentDashboard";
 import Image from "next/image";
 import StatCard from "@/components/Card/StatCard";
 
@@ -583,7 +583,7 @@ export default function AgentDailyMetricsPage() {
     index === 0 ? "text-left" : "text-center";
 
   if (!agents) {
-    return <AgentSelectionForm allTeamData={allTeamData} dataSets={dataSets} />;
+    return <AgentDashboard allTeamData={allTeamData} dataSets={dataSets} />;
   }
   const legendPayload = [
     { value: agents, color: "#FF0000" },
@@ -837,7 +837,7 @@ export default function AgentDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
@@ -855,15 +855,15 @@ export default function AgentDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -873,15 +873,15 @@ export default function AgentDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -891,15 +891,15 @@ export default function AgentDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg w-1/3" />
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -1355,10 +1355,10 @@ export default function AgentDailyMetricsPage() {
               <div className="flex flex-col items-center w-full lg:w-3/5 lg:mt-36 lg:mb-8 mb-0 lg:mr-4 px-4 py-4 lg:px-0">
                 <div className="w-full h-[500px] bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                   <div className="animate-pulse flex flex-col space-y-4">
-                    <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-3/5" />
+                    <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-3/5" />
                     <div className="flex flex-col space-y-2">
                       <div
-                        className="bg-gray-300 dark:bg-darkCompBg rounded"
+                        className="bg-lovesGray dark:bg-darkCompBg rounded"
                         style={{ width: "100%", height: "420px" }}
                       />
                     </div>

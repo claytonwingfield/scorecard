@@ -30,7 +30,11 @@ export default function App({ Component, pageProps }) {
     <ThemeProvider attribute="class" defaultTheme="light">
       <DataProvider>
         <ApolloProvider client={client}>
-          {loading && <LoadingAnimation />}
+          {loading && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <LoadingAnimation />
+            </div>
+          )}
           <Component {...pageProps} />
         </ApolloProvider>
       </DataProvider>

@@ -20,7 +20,7 @@ import { useDateRange } from "@/components/Sorting/DateFilters/Hooks/useDateRang
 import CompareRed from "@/public/compare-red.svg";
 import CompareYellow from "@/public/compare-yellow.svg";
 import dynamic from "next/dynamic";
-import SupervisorSelectionForm from "@/components/Sorting/Filters/SupervisorSelectionForm";
+import SupervisorDashboard from "@/components/Dashboard/Hierarchy/SupervisorDashboard";
 import Image from "next/image";
 import StatCard from "@/components/Card/StatCard";
 
@@ -550,7 +550,7 @@ export default function SupervisorDailyMetricsPage() {
 
   if (!supervisor) {
     return (
-      <SupervisorSelectionForm allTeamData={allTeamData} dataSets={dataSets} />
+      <SupervisorDashboard allTeamData={allTeamData} dataSets={dataSets} />
     );
   }
   const legendPayload = [
@@ -805,15 +805,33 @@ export default function SupervisorDailyMetricsPage() {
                 <div className="p-2">
                   <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                     <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-1/3" />
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
+                          style={{ width: "70%", height: "50px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-2">
+                  <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
+                    <div className="animate-pulse flex flex-col space-y-4">
+                      <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-1/3" />
+
+                      <div className="flex flex-col space-y-2">
+                        <div
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
+                          style={{ width: "50%", height: "50px" }}
+                        />
+                        <div
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -827,29 +845,11 @@ export default function SupervisorDailyMetricsPage() {
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "70%", height: "50px" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-2">
-                  <div className="w-full h-full bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
-                    <div className="animate-pulse flex flex-col space-y-4">
-                      <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-1/3" />
-
-                      <div className="flex flex-col space-y-2">
-                        <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
-                          style={{ width: "50%", height: "50px" }}
-                        />
-                        <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -863,11 +863,11 @@ export default function SupervisorDailyMetricsPage() {
 
                       <div className="flex flex-col space-y-2">
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "50%", height: "50px" }}
                         />
                         <div
-                          className="bg-gray-300 dark:bg-darkCompBg rounded"
+                          className="bg-lovesGray dark:bg-darkCompBg rounded"
                           style={{ width: "70%", height: "50px" }}
                         />
                       </div>
@@ -1396,10 +1396,10 @@ export default function SupervisorDailyMetricsPage() {
               <div className="flex flex-col items-center w-full lg:w-3/5 lg:mt-36 lg:mb-8 mb-0 lg:mr-4 px-4 py-4 lg:px-0">
                 <div className="w-full h-[500px] bg-lovesWhite dark:bg-darkBg rounded-lg p-4">
                   <div className="animate-pulse flex flex-col space-y-4">
-                    <div className="h-4 bg-gray-300 dark:bg-darkCompBg rounded w-3/5" />
+                    <div className="h-4 bg-lovesGray dark:bg-darkCompBg rounded w-3/5" />
                     <div className="flex flex-col space-y-2">
                       <div
-                        className="bg-gray-300 dark:bg-darkCompBg rounded"
+                        className="bg-lovesGray dark:bg-darkCompBg rounded"
                         style={{ width: "100%", height: "420px" }}
                       />
                     </div>

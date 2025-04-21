@@ -1,18 +1,18 @@
 import React from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { GET_404 } from "@/graphql/queries";
+import { GET_403 } from "@/graphql/queries";
 import Header from "@/components/Navigation/header";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 
-const Custom404 = () => {
-  const { data, loading, error } = useQuery(GET_404);
+const Custom403 = () => {
+  const { data, loading, error } = useQuery(GET_403);
 
   if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading 404 page: {error.message}</p>;
+  if (error) return <p>Error loading 403 page: {error.message}</p>;
 
-  const content = data?.notFoundPage || {};
+  const content = data?.forbidden || {};
 
   const getBackgroundUrl = () => {
     const raw = content.background?.[0]?.url;
@@ -24,7 +24,7 @@ const Custom404 = () => {
   };
 
   const bgUrl = getBackgroundUrl();
-
+  console.log(content.title);
   return (
     <>
       <Header />
@@ -83,7 +83,7 @@ const Custom404 = () => {
                   textShadow: "0 12px 4px rgba(0,0,0,0.25)",
                 }}
               >
-                4
+                3
               </span>
             </h1>
           </div>
@@ -97,7 +97,6 @@ const Custom404 = () => {
               href={content.url}
               className="inline-flex items-center text-lovesBlack uppercase dark:text-darkPrimaryText text-xl font-futura font-semibold hover:underline transition"
             >
-              <ChevronLeftIcon className="w-5 h-5 mr-2" />
               {content.buttonText}
             </Link>
           </div>
@@ -107,4 +106,4 @@ const Custom404 = () => {
   );
 };
 
-export default Custom404;
+export default Custom403;
