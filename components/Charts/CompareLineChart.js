@@ -177,7 +177,8 @@ const CompareLineChart = forwardRef(
                     <CustomXAxisTick angle={shouldRotateLabels ? -45 : 0} />
                   )
                 }
-                interval={0}
+                interval="preserveStartEnd"
+                minTickGap={isMobile ? 10 : 30}
                 padding={
                   isMobile
                     ? { left: 0, right: 0 }

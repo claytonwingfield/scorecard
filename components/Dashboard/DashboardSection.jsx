@@ -14,6 +14,7 @@ import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import StatCard from "@/components/Card/StatCard";
+
 const LineChartTime = dynamic(
   () => import("@/components/Charts/LineChartTime"),
   { ssr: false }
@@ -29,7 +30,7 @@ const DashboardSection = ({
   subordinateStats,
   chartDataMap,
   metricMap,
-  initialActiveMetric = "Handle Time",
+  initialActiveMetric = "Average Handle Time",
   fromDate,
   toDate,
   dataSets,
@@ -40,18 +41,15 @@ const DashboardSection = ({
   const [expanded, setExpanded] = useState(false);
   const [subExpanded, setSubExpanded] = useState(false);
   const [activeMetric, setActiveMetric] = useState(initialActiveMetric);
+
   const handleTitleClick = () => {
     if (name === "Department") {
       router.push(headerLink);
       return;
     }
-
-    const activeFilters = [{ type: name, label: title }];
-
     setIsLoading(true);
-
     performSearch({
-      activeFilters,
+      activeFilters: [{ type: name, label: title }],
       fromDate,
       toDate,
       dataSets,
@@ -60,6 +58,7 @@ const DashboardSection = ({
       setIsLoading,
     });
   };
+
   if (isLoading) {
     return (
       <>
@@ -68,15 +67,12 @@ const DashboardSection = ({
       </>
     );
   }
+
   const toggleExpand = () => {
     if (expanded) setSubExpanded(false);
     setExpanded(!expanded);
   };
-
-  const toggleSubExpanded = () => {
-    setSubExpanded(!subExpanded);
-  };
-
+  const toggleSubExpanded = () => setSubExpanded(!subExpanded);
   const handleMetricClick = (metricName) => {
     setActiveMetric(metricName);
     if (!expanded) setExpanded(true);
@@ -84,7 +80,6 @@ const DashboardSection = ({
 
   const renderChart = () => {
     if (!expanded) return null;
-
     return (
       <>
         <div className="my-4 h-80">
@@ -92,18 +87,26 @@ const DashboardSection = ({
             data={chartDataMap[activeMetric]}
             xDataKey="date"
             yDataKey={metricMap[activeMetric]}
-            disableGrouping={true}
+            disableGrouping
           />
         </div>
 
-        {subExpanded && subordinateStats && (
+        <Transition
+          show={subExpanded}
+          enter="transition ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="transition ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+          as="div"
+        >
           <div className="border-2 border-darkBorder dark:bg-darkBg bg-darkBorder mx-2 rounded-lg mt-4 p-4">
-            <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg  bg-darkCompBg lg:m-8 rounded-lg">
-              <div className=""></div>
-              <div className="flex items-center  mt-4 mb-2 mx-4">
+            <div className="border border-darkBorder shadow-md shadow-lovesBlack dark:bg-darkCompBg bg-darkCompBg lg:m-8 rounded-lg">
+              <div className="flex items-center mt-4 mb-2 mx-4">
                 <div className="flex items-center space-x-2 cursor-pointer">
                   <Link href={subordinateLink}>
-                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText mr-2 text-lovesWhite hover:underline cursor-pointer">
+                    <h1 className="text-2xl font-futura-bold dark:text-darkPrimaryText mr-2 text-lovesWhite hover:underline">
                       {subordinateTitle}
                     </h1>
                   </Link>
@@ -118,34 +121,31 @@ const DashboardSection = ({
                         <div className="flex items-center justify-center mb-8">
                           <h2
                             onClick={handleTitleClick}
-                            className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline cursor-pointer"
+                            className="text-xl font-futura-bold text-lovesWhite mr-2 hover:underline"
                           >
                             {subordinate.name}
                           </h2>
                           <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesWhite" />
                         </div>
                         <div className="grid lg:grid-cols-2 grid-cols-1 gap-4 mt-2">
-                          {subordinate.metrics &&
-                            subordinate.metrics.map((m) => (
-                              <StatCard
-                                key={m.id}
-                                id={m.id}
-                                name={m.name}
-                                stat={m.stat}
-                                qualifies={true}
-                                delay={100}
-                                allowGlow={toggleExpand}
-                                isActive={activeMetric === m.name}
-                                onClick={() => handleMetricClick(m.name)}
-                              />
-                            ))}
+                          {subordinate.metrics.map((m) => (
+                            <StatCard
+                              key={m.id}
+                              {...m}
+                              qualifies
+                              delay={100}
+                              allowGlow={toggleExpand}
+                              isActive={activeMetric === m.name}
+                              onClick={() => handleMetricClick(m.name)}
+                            />
+                          ))}
                         </div>
                         <div className="mt-4 h-80 lg:block hidden">
                           <LineChartTime
                             data={chartDataMap[activeMetric]}
                             xDataKey="date"
                             yDataKey={metricMap[activeMetric]}
-                            disableGrouping={true}
+                            disableGrouping
                           />
                         </div>
                       </div>
@@ -156,7 +156,7 @@ const DashboardSection = ({
               </div>
             </div>
           </div>
-        )}
+        </Transition>
       </>
     );
   };
@@ -167,17 +167,18 @@ const DashboardSection = ({
         <div className="flex items-center">
           <h1
             onClick={handleTitleClick}
-            className="text-2xl dark:text-darkPrimaryText font-futura-bold text-lovesBlack hover:underline cursor-pointer"
+            className="text-2xl dark:text-darkPrimaryText font-futura-bold text-lovesBlack hover:underline"
           >
             {title}
           </h1>
           <ChevronRightIcon className="h-6 w-6 dark:text-darkPrimaryText text-lovesBlack ml-2" />
         </div>
-        <div className="hidden lg:flex items-center space-x-2">
+
+        <div className="flex lg:space-x-2 space-x-3">
           {subExpanded && (
             <button
               onClick={toggleSubExpanded}
-              className="flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-4 py-2 rounded-lg font-futura-bold"
+              className="hidden lg:flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-4 py-2 rounded-lg font-futura-bold"
             >
               <XCircleIcon className="h-6 w-6 mr-2" />
               Hide {subordinateTitle}
@@ -186,42 +187,40 @@ const DashboardSection = ({
           {expanded && (
             <button
               onClick={toggleExpand}
-              className="flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-4 py-2 rounded-lg font-futura-bold"
+              className="flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-2 py-2 lg:px-4 lg:py-2 rounded-lg font-futura-bold"
             >
               <XCircleIcon className="h-6 w-6 mr-2" />
-              Close {name}
+              <span className="lg:hidden">Close</span>
+              <span className="hidden lg:inline">Close {name}</span>
             </button>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {parentStats.map((item, index) => {
-          const isActiveForItem = expanded && activeMetric === item.name;
-          return (
-            <StatCard
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              stat={item.stat}
-              qualifies={true}
-              delay={index * 300}
-              isActive={isActiveForItem}
-              onClick={() => handleMetricClick(item.name)}
-            />
-          );
-        })}
+        {parentStats.map((item, i) => (
+          <StatCard
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            stat={item.stat}
+            qualifies
+            delay={i * 300}
+            isActive={expanded && activeMetric === item.name}
+            onClick={() => handleMetricClick(item.name)}
+          />
+        ))}
       </div>
 
       <Transition
         show={expanded}
-        appear
         enter="transition ease-out duration-300"
         enterFrom="opacity-0 scale-95"
         enterTo="opacity-100 scale-100"
         leave="transition ease-in duration-200"
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
+        as="div"
       >
         <div>{renderChart()}</div>
       </Transition>
@@ -237,21 +236,19 @@ const DashboardSection = ({
         </div>
       )}
 
-      {expanded && (
-        <div className="mt-4 flex justify-center items-center">
+      {expanded && name !== "Agent" && (
+        <div className="mt-4 flex justify-center">
           <button
             onClick={toggleSubExpanded}
-            className="inline-flex items-center justify-center text-lovesWhite bg-darkCompBg dark:bg-darkBg dark:text-darkPrimaryText font-futura-bold px-4 py-2 rounded-lg"
+            className="inline-flex items-center bg-darkCompBg dark:bg-darkBg text-lovesWhite px-4 py-2 rounded-lg font-futura-bold"
           >
             {subExpanded ? (
-              <span className="flex items-center justify-center">
-                Hide {subordinateTitle}
-              </span>
+              <span className="flex items-center">Hide {subordinateTitle}</span>
             ) : (
-              <span className="flex items-center justify-center">
+              <>
                 <PlusCircleIcon className="h-6 w-6 mr-2" />
                 Show {subordinateTitle}
-              </span>
+              </>
             )}
           </button>
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, Fragment } from "react";
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import {
@@ -412,14 +412,11 @@ export default function OklahomaCity() {
     }, {})
   );
   const departmentSections = [
-    { key: "Customer Service", component: <CustomerServiceSection /> },
-    { key: "Help Desk", component: <HelpDeskSection /> },
-    { key: "Electronic Dispatch", component: <ElectronicDispatchSection /> },
-    {
-      key: "Written Communication",
-      component: <WrittenCommunicationSection />,
-    },
-    { key: "Resolutions", component: <ResolutionsSection /> },
+    { key: "Customer Service", Component: CustomerServiceSection },
+    { key: "Help Desk", Component: HelpDeskSection },
+    { key: "Electronic Dispatch", Component: ElectronicDispatchSection },
+    { key: "Written Communication", Component: WrittenCommunicationSection },
+    { key: "Resolutions", Component: ResolutionsSection },
   ];
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
@@ -454,80 +451,32 @@ export default function OklahomaCity() {
         />
       </div>
       <div className="px-4 sm:px-6 lg:px-8 mt-4 space-y-8">
-        <Transition
-          show={selectedDepartments["Customer Service"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div>
-            <CustomerServiceSection />
-          </div>
-        </Transition>
-
-        <Transition
-          show={selectedDepartments["Help Desk"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div>
-            <HelpDeskSection />
-          </div>
-        </Transition>
-
-        <Transition
-          show={selectedDepartments["Electronic Dispatch"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div>
-            <ElectronicDispatchSection />
-          </div>
-        </Transition>
-
-        <Transition
-          show={selectedDepartments["Written Communication"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div>
-            <WrittenCommunicationSection />
-          </div>
-        </Transition>
-
-        <Transition
-          show={selectedDepartments["Resolutions"]}
-          appear
-          enter="transition ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="transition ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
-          <div>
-            <ResolutionsSection />
-          </div>
-        </Transition>
+        {departmentSections.map(({ Component, key }, idx) => (
+          <Transition
+            key={key}
+            show={selectedDepartments[key]}
+            appear
+            as={Fragment}
+            enter="transition ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="transition ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            {/* child handles the translate-y for “up” + the delay */}
+            <Transition.Child
+              as="div"
+              enter="transform"
+              enterFrom="translate-y-4"
+              enterTo="translate-y-0"
+              leave="" // no extra transform on leave
+              style={{ transitionDelay: `${idx * 150}ms` }}
+            >
+              <Component />
+            </Transition.Child>
+          </Transition>
+        ))}
       </div>
     </div>
   );

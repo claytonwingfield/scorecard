@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, Fragment } from "react";
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
@@ -153,7 +153,7 @@ export default function AgentSelectionForm() {
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
-        {agentData.map((agent) => {
+        {agentData.map((agent, idx) => {
           const isVisible =
             selectedAgents[agent.agent] &&
             selectedSupervisors[agent.supervisor];
@@ -162,7 +162,7 @@ export default function AgentSelectionForm() {
           return (
             <Transition
               key={agent.agent}
-              as="div"
+              as={Fragment}
               show={isVisible}
               appear
               enter="transition ease-out duration-300"
@@ -172,22 +172,32 @@ export default function AgentSelectionForm() {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DashboardSection
-                key={agent.agent}
-                title={agent.agent}
-                name={"Agent"}
-                headerLink={`/customer-service/daily-metrics/agent/${agent.agent}`}
-                agent={true}
-                parentStats={parentStats}
-                chartDataMap={fakeDataMap}
-                metricMap={metricMap}
-                fromDate={fromDate}
-                setFromDate={setFromDate}
-                toDate={toDate}
-                setToDate={setToDate}
-                dataSets={dataSets}
-                allTeamData={allTeamData}
-              />
+              {/* child handles the translate-y for “up” + the delay */}
+              <Transition.Child
+                as="div"
+                enter="transform"
+                enterFrom="translate-y-4"
+                enterTo="translate-y-0"
+                leave="" // no extra transform on leave
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <DashboardSection
+                  key={agent.agent}
+                  title={agent.agent}
+                  name={"Agent"}
+                  headerLink={`/customer-service/daily-metrics/agent/${agent.agent}`}
+                  agent={true}
+                  parentStats={parentStats}
+                  chartDataMap={fakeDataMap}
+                  metricMap={metricMap}
+                  fromDate={fromDate}
+                  setFromDate={setFromDate}
+                  toDate={toDate}
+                  setToDate={setToDate}
+                  dataSets={dataSets}
+                  allTeamData={allTeamData}
+                />
+              </Transition.Child>
             </Transition>
           );
         })}

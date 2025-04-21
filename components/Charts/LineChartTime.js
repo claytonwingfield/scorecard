@@ -372,7 +372,8 @@ const LineChartTime = forwardRef(
                     />
                   )
                 }
-                interval={0}
+                interval="preserveStartEnd"
+                minTickGap={isMobile ? 10 : 30}
                 padding={
                   isMobile
                     ? { left: 0, right: 0 }

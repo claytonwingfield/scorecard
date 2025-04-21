@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, Fragment } from "react";
 import Header from "@/components/Navigation/header";
 import DashboardSection from "@/components/Dashboard/DashboardSection";
 import FilterCalendarToggle from "@/components/Sorting/Filters/FilterCalendarToggle";
@@ -210,16 +210,16 @@ export default function SupervisorSelectionForm() {
       </div>
 
       <div className="px-4 sm:px-6 lg:px-8 mt-0 mb-8">
-        {computedCustomerServiceSupervisorStats.map((sup) => {
+        {computedCustomerServiceSupervisorStats.map((sup, idx) => {
           const isVisible = selectedSupervisors[sup.name];
           const parentStats = formatMetrics(sup);
           const subordinateStats = formatMetrics(sup.name);
           return (
             <Transition
               key={sup.name}
-              as="div"
-              show={isVisible}
+              show={selectedSupervisors[sup.name]}
               appear
+              as={Fragment}
               enter="transition ease-out duration-300"
               enterFrom="opacity-0 scale-95"
               enterTo="opacity-100 scale-100"
@@ -227,25 +227,35 @@ export default function SupervisorSelectionForm() {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DashboardSection
-                key={sup.name}
-                name="Supervisor"
-                title={sup.name}
-                headerLink={`/customer-service/daily-metrics/supervisor/${sup.name}`}
-                subordinateTitle="Agents"
-                subordinateLink="/customer-service/daily-metrics/agent"
-                parentStats={parentStats}
-                subordinateStats={subordinateStats}
-                chartDataMap={fakeDataMap}
-                metricMap={metricMap}
-                agent={false}
-                fromDate={fromDate}
-                setFromDate={setFromDate}
-                toDate={toDate}
-                setToDate={setToDate}
-                dataSets={dataSets}
-                allTeamData={allTeamData}
-              />
+              {/* child handles the translate-y for “up” + the delay */}
+              <Transition.Child
+                as="div"
+                enter="transform"
+                enterFrom="translate-y-4"
+                enterTo="translate-y-0"
+                leave="" // no extra transform on leave
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <DashboardSection
+                  key={sup.name}
+                  name="Supervisor"
+                  title={sup.name}
+                  headerLink={`/customer-service/daily-metrics/supervisor/${sup.name}`}
+                  subordinateTitle="Agents"
+                  subordinateLink="/customer-service/daily-metrics/agent"
+                  parentStats={parentStats}
+                  subordinateStats={subordinateStats}
+                  chartDataMap={fakeDataMap}
+                  metricMap={metricMap}
+                  agent={false}
+                  fromDate={fromDate}
+                  setFromDate={setFromDate}
+                  toDate={toDate}
+                  setToDate={setToDate}
+                  dataSets={dataSets}
+                  allTeamData={allTeamData}
+                />
+              </Transition.Child>
             </Transition>
           );
         })}

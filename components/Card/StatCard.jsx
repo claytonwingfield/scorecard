@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import defaultAwardAnimation from "@/public/animations/award.json";
 
-const mobileRenameMap = {
+const renameMap = {
   "Average Handle Time": "Handle Time",
   "Average Score": "Score",
 };
@@ -27,8 +27,7 @@ const StatCard = ({
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
 
-  const displayName =
-    isMobile && mobileRenameMap[name] ? mobileRenameMap[name] : name;
+  const displayName = renameMap[name] ? renameMap[name] : name;
 
   useEffect(() => {
     const timer = setTimeout(() => {
