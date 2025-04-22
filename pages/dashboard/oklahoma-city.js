@@ -40,12 +40,17 @@ export default function OklahomaCity() {
   const departmentSections = departmentOrder
     .map((name) => {
       const dept = data.departments.find((d) => d.name === name);
-      if (!dept) return null; // or throw, or skip
+      if (!dept) return null;
+
       return {
         key: name,
         Component: sectionMap[name],
-        managers: dept.managers,
-        supervisors: dept.supervisors,
+        // keep ONLY the managers whose flag is true
+        // (flip the comparison if you want to exclude them instead)
+        managers: (dept.managers ?? []).filter(
+          (m) => m.managerOfDominican === true
+        ),
+        supervisors: dept.supervisors ?? [],
       };
     })
     .filter(Boolean);

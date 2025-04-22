@@ -60,14 +60,12 @@ const GET_ALL_DEPARTMENTS = gql`
         name
         role
         location
-        managers {
-          documentId
-        }
       }
       managers {
         documentId
         name
         role
+        managerOfDominican
       }
     }
   }

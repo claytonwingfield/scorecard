@@ -26,6 +26,7 @@ export default function DashboardPage({
     }, {})
   );
 
+  console.log(departmentSections);
   return (
     <div className="bg-lovesWhite dark:bg-darkBg min-h-screen">
       <Header />
@@ -62,30 +63,36 @@ export default function DashboardPage({
 
       {/* Department Sections */}
       <div className="px-4 sm:px-6 lg:px-8 mt-4 space-y-8">
-        {departmentSections.map(({ key, Component }, idx) => (
-          <Transition
-            key={key}
-            show={selectedDepartments[key]}
-            appear
-            as={Fragment}
-            enter="transition ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="transition ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <Transition.Child
-              as="div"
-              enter="transform"
-              enterFrom="translate-y-4"
-              enterTo="translate-y-0"
-              style={{ transitionDelay: `${idx * 150}ms` }}
+        {departmentSections.map(
+          ({ key, Component, managers, supervisors }, idx) => (
+            <Transition
+              key={key}
+              show={selectedDepartments[key]}
+              appear
+              as={Fragment}
+              enter="transition ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="transition ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              <Component />
-            </Transition.Child>
-          </Transition>
-        ))}
+              <Transition.Child
+                as="div"
+                enter="transform"
+                enterFrom="translate-y-4"
+                enterTo="translate-y-0"
+                style={{ transitionDelay: `${idx * 150}ms` }}
+              >
+                <Component
+                  key={key}
+                  managers={managers}
+                  supervisors={supervisors}
+                />
+              </Transition.Child>
+            </Transition>
+          )
+        )}
       </div>
     </div>
   );
