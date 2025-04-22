@@ -1,25 +1,25 @@
 import React from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
-import { GET_403 } from "@/graphql/queries";
+import { GET_500 } from "@/graphql/queries";
 import Header from "@/components/Navigation/header";
 import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import AccessRequestModel from "@/components/Model/AccessRequestModel";
 import dynamic from "next/dynamic";
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
-import lock from "@/public/animations/lock.json";
-import lockDark from "@/public/animations/lockDark.json";
+import server from "@/public/animations/server.json";
+
 import { useTheme } from "next-themes";
-const Custom403 = () => {
-  const { data, loading, error } = useQuery(GET_403);
+const Custom500 = () => {
+  const { data, loading, error } = useQuery(GET_500);
   const { theme } = useTheme();
   const isDarkMode = theme === "dark";
 
   if (loading) return <LoadingAnimation />;
   if (error) return <p>Error loading 403 page: {error.message}</p>;
 
-  const content = data?.forbidden || {};
+  const content = data?.internalServerError || {};
 
   const getBackgroundUrl = () => {
     const raw = content.background?.[0]?.url;
@@ -31,7 +31,7 @@ const Custom403 = () => {
   };
 
   const bgUrl = getBackgroundUrl();
-  console.log(content.title);
+
   return (
     <>
       <Header />
@@ -45,29 +45,30 @@ const Custom403 = () => {
             <h1 className="flex items-center leading-none">
               <span
                 className="
-        relative inline-block
-        text-[12rem] sm:text-[15rem] md:text-[18rem]
-        font-extrabold font-futura-bold
-        text-lovesPrimaryRed 
-         text-stroke-red
-      "
+    relative inline-block
+    text-[12rem] sm:text-[15rem] md:text-[18rem]
+    font-extrabold font-futura-bold
+    text-lovesPrimaryRed 
+     text-stroke-red
+  "
                 style={{
                   WebkitTextFillColor: "currentColor",
                   textShadow: "0 12px 4px rgba(0,0,0,0.25)",
                 }}
               >
-                4
+                5
               </span>
+
               <span
                 className="
-       relative
+         relative
         
         inline-block
-        -mx-24 lg:-mx-28 sm:-mx-28 md:-mx-28
+        -mx-20 md:-mx-28 sm:-mx-28 
         text-[12rem] sm:text-[15rem] md:text-[18rem]
         font-extrabold font-futura-bold
         text-lovesPrimaryRed  
-        z-30 text-stroke-red transform md:scale-[1.25] lg:scale-[1.25] scale-[1.25] drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)]
+        z-30 text-stroke-red transform md:scale-[1.4] lg:scale-[1.3] scale-[1.3]  drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)]
       "
                 style={{
                   WebkitTextFillColor: "currentColor",
@@ -75,11 +76,12 @@ const Custom403 = () => {
                 }}
               >
                 <Lottie
-                  animationData={lockDark}
+                  animationData={server}
                   loop
                   style={{ width: "100%", height: "100%" }}
                 />
               </span>
+
               <span
                 className="
     relative inline-block
@@ -93,7 +95,7 @@ const Custom403 = () => {
                   textShadow: "0 12px 4px rgba(0,0,0,0.25)",
                 }}
               >
-                3
+                0
               </span>
             </h1>
           </div>
@@ -102,14 +104,19 @@ const Custom403 = () => {
             {content.description}
           </p>
 
-          <AccessRequestModel
-            content={content}
-            buttonText={content.buttonText}
-          />
+          <div className="mt-10">
+            <Link
+              href={content.url}
+              className="inline-flex items-center text-lovesBlack uppercase dark:text-darkPrimaryText text-xl font-futura font-semibold hover:underline transition"
+            >
+              <ChevronLeftIcon className="w-5 h-5 mr-2" />
+              {content.buttonText}
+            </Link>
+          </div>
         </div>
       </main>
     </>
   );
 };
 
-export default Custom403;
+export default Custom500;

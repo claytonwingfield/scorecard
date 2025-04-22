@@ -80,6 +80,10 @@ export default function useNavigation() {
       setCurrentPage("Restricted Access");
       return;
     }
+    if (router.pathname === "/500") {
+      setCurrentPage("Internal Server");
+      return;
+    }
     if (dashboardNames[router.pathname]) {
       setCurrentPage(dashboardNames[router.pathname]);
       return;

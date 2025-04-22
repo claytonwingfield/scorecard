@@ -144,6 +144,26 @@ const GET_403 = gql`
     }
   }
 `;
+const GET_500 = gql`
+  query GET_500 {
+    internalServerError {
+      title
+      description
+      buttonText
+      url
+    }
+  }
+`;
+const GET_503 = gql`
+  query GET_503 {
+    serviceUnavailable {
+      title
+      description
+      buttonText
+      url
+    }
+  }
+`;
 export {
   GET_ALL_SUPERVISORS,
   GET_ALL_MANAGERS,
@@ -154,4 +174,6 @@ export {
   GET_NAVIGATION,
   GET_404,
   GET_403,
+  GET_500,
+  GET_503,
 };
