@@ -84,6 +84,10 @@ export default function useNavigation() {
       setCurrentPage("Internal Server");
       return;
     }
+    if (router.pathname === "/503") {
+      setCurrentPage("Under Maintenance");
+      return;
+    }
     if (dashboardNames[router.pathname]) {
       setCurrentPage(dashboardNames[router.pathname]);
       return;

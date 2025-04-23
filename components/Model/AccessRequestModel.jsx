@@ -14,7 +14,7 @@ export default function AccessRequestModal({ content, buttonText }) {
 
   return (
     <>
-      <div className="mt-10">
+      <div className="mt-10 mb-24">
         <button
           onClick={() => setIsOpen(true)}
           className="inline-flex items-center text-lovesBlack uppercase dark:text-darkPrimaryText text-xl font-futura font-semibold hover:underline transition"

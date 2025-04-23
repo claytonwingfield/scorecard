@@ -37,19 +37,19 @@ const Custom403 = () => {
       <Header />
       <main className="grid min-h-full place-items-center bg-white dark:bg-darkBg px-6 py-30 sm:py-16 lg:px-8">
         <div className="max-w-lg text-center">
-          <p className="text-2xl font-futura font-semibold uppercase text-lovesBlack dark:text-darkPrimaryText">
+          <p className="md:mt-5  mt-20  text-2xl font-futura font-semibold uppercase text-lovesBlack dark:text-darkPrimaryText md:mb-20 mb-16">
             {content.title}
           </p>
 
           <div className="flex justify-center items-center">
             <h1 className="flex items-center leading-none">
               <span
-                className="
+                className="pl-4 lg:pl-6
         relative inline-block
         text-[12rem] sm:text-[15rem] md:text-[18rem]
         font-extrabold font-futura-bold
         text-lovesPrimaryRed 
-         text-stroke-red
+        text-stroke-yellow
       "
                 style={{
                   WebkitTextFillColor: "currentColor",
@@ -63,30 +63,38 @@ const Custom403 = () => {
        relative
         
         inline-block
-        -mx-24 lg:-mx-28 sm:-mx-28 md:-mx-28
-        text-[12rem] sm:text-[15rem] md:text-[18rem]
+        z-12 lg:-mx-12 -mx-8
+        
         font-extrabold font-futura-bold
         text-lovesPrimaryRed  
-        z-30 text-stroke-red transform md:scale-[1.25] lg:scale-[1.25] scale-[1.25] drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)]
+        z-30 text-stroke-yellow transform md:scale-[2.3] scale-[2.3] drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)] md:mb-16 mb-8
       "
                 style={{
                   WebkitTextFillColor: "currentColor",
                   textShadow: "0 12px 4px rgba(0,0,0,0.25)",
                 }}
               >
-                <Lottie
-                  animationData={lockDark}
-                  loop
-                  style={{ width: "100%", height: "100%" }}
-                />
+                {isDarkMode ? (
+                  <Lottie
+                    animationData={lockDark}
+                    loop
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <Lottie
+                    animationData={lock}
+                    loop
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
               </span>
               <span
-                className="
+                className="pr-5 lg:pr-6
     relative inline-block
     text-[12rem] sm:text-[15rem] md:text-[18rem]
     font-extrabold font-futura-bold
     text-lovesPrimaryRed 
-    z-20 text-stroke-red 
+    z-20 text-stroke-yellow
   "
                 style={{
                   WebkitTextFillColor: "currentColor",

@@ -17,7 +17,11 @@
 .glow {
   text-shadow: 0 0 2px currentColor;
 }
-.text-stroke-red {
+.text-stroke-yellow {
   -webkit-text-stroke-width: 4px;
   -webkit-text-stroke-color: #ffeb00;
+}
+.text-stroke-red {
+  -webkit-text-stroke-width: 4px;
+  -webkit-text-stroke-color: #ff0000;
 }

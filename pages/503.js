@@ -35,21 +35,21 @@ const Custom503 = () => {
   return (
     <>
       <Header />
-      <main className="grid min-h-full place-items-center bg-white dark:bg-darkBg px-6 py-30 sm:py-16 lg:px-8">
-        <div className="max-w-lg text-center">
-          <p className=" text-2xl font-futura font-semibold uppercase text-lovesBlack dark:text-darkPrimaryText">
+      <main className="grid min-h-full place-items-center bg-white dark:bg-darkBg px-6 py-30 sm:py-16 lg:px-8 ">
+        <div className="max-w-lg text-center ">
+          <p className="md:mt-5  mt-20 text-2xl font-futura font-semibold uppercase text-lovesBlack dark:text-darkPrimaryText md:mb-20 mb-16">
             {content.title}
           </p>
 
           <div className="flex justify-center items-center">
             <h1 className="flex items-center leading-none">
               <span
-                className="
+                className="pl-8
     relative inline-block
     text-[12rem] sm:text-[15rem] md:text-[18rem]
     font-extrabold font-futura-bold
     text-lovesPrimaryRed 
-     text-stroke-red
+    text-stroke-yellow
   "
                 style={{
                   WebkitTextFillColor: "currentColor",
@@ -58,17 +58,16 @@ const Custom503 = () => {
               >
                 5
               </span>
-
               <span
                 className="
-         relative
+       relative
         
         inline-block
-        -mx-20 md:-mx-28 sm:-mx-28 
-        text-[12rem] sm:text-[15rem] md:text-[18rem]
+        z-12 lg:-mx-8 -mx-8
+        
         font-extrabold font-futura-bold
         text-lovesPrimaryRed  
-        z-30 text-stroke-red transform md:scale-[1] lg:scale-[1] scale-[1]  drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)]
+        z-30 text-stroke-yellow transform md:scale-[3] scale-[3] drop-shadow-[0_12px_4px_rgba(0,0,0,0.25)] 
       "
                 style={{
                   WebkitTextFillColor: "currentColor",
@@ -89,14 +88,13 @@ const Custom503 = () => {
                   />
                 )}
               </span>
-
               <span
-                className="
+                className="pr-8
     relative inline-block
     text-[12rem] sm:text-[15rem] md:text-[18rem]
     font-extrabold font-futura-bold
     text-lovesPrimaryRed 
-    z-20 text-stroke-red 
+    z-14 text-stroke-yellow
   "
                 style={{
                   WebkitTextFillColor: "currentColor",
@@ -112,7 +110,7 @@ const Custom503 = () => {
             {content.description}
           </p>
 
-          <div className="mt-10">
+          <div className="mt-10 mb-32">
             <Link
               href={content.url}
               className="inline-flex items-center text-lovesBlack uppercase dark:text-darkPrimaryText text-xl font-futura font-semibold hover:underline transition"
