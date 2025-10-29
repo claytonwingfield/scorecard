@@ -123,13 +123,20 @@ export default function Header() {
             {pages.map((page) => (
               <div key={page.name}>
                 {page.isDropdown ? (
-                  <DesktopDropDownMenu
-                    menuTitle={page.name}
-                    subPages={page.subPages}
-                    handlePageChange={handlePageChange}
-                  />
+                  <>
+                    {/* --- MODIFICATION 1 --- */}
+                    {/* Only show dropdown if it's NOT the home page */}
+                    {!isHomePage && (
+                      <DesktopDropDownMenu
+                        menuTitle={page.name}
+                        subPages={page.subPages}
+                        handlePageChange={handlePageChange}
+                      />
+                    )}
+                  </>
                 ) : (
                   <>
+                    {/* This logic was already correct */}
                     {!isHomePage && (
                       <Link
                         href={page.path}
@@ -151,6 +158,7 @@ export default function Header() {
           </div>
 
           <div className="flex items-center space-x-5 md:ml-3">
+            {/* This logic was already correct */}
             {!isHomePage && (
               <button
                 className="md:hidden text-lovesBlack dark:text-darkPrimaryText flex items-center h-10"
@@ -181,24 +189,35 @@ export default function Header() {
             {pages.map((page) => (
               <div key={page.name} className="flex flex-col">
                 {page.isDropdown ? (
-                  <MobileDropDownMenu
-                    menuTitle={page.name}
-                    subPages={page.subPages}
-                    handlePageChange={handlePageChange}
-                  />
+                  <>
+                    {/* --- MODIFICATION 2 --- */}
+                    {/* Only show dropdown if it's NOT the home page */}
+                    {!isHomePage && (
+                      <MobileDropDownMenu
+                        menuTitle={page.name}
+                        subPages={page.subPages}
+                        handlePageChange={handlePageChange}
+                      />
+                    )}
+                  </>
                 ) : (
-                  <Link
-                    href={page.path}
-                    onClick={() => handlePageChange(page.name)}
-                    className="
-                      block
-                      text-lovesBlack dark:text-darkPrimaryText
-                      text-xl font-medium font-futura-bold
-                      cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
-                    "
-                  >
-                    {page.name}
-                  </Link>
+                  <>
+                    {/* Also added !isHomePage here for consistency with desktop */}
+                    {!isHomePage && (
+                      <Link
+                        href={page.path}
+                        onClick={() => handlePageChange(page.name)}
+                        className="
+                          block
+                          text-lovesBlack dark:text-darkPrimaryText
+                          text-xl font-medium font-futura-bold
+                          cursor-pointer hover:text-lovesPrimaryRed dark:hover:text-lovesPrimaryRed
+                        "
+                      >
+                        {page.name}
+                      </Link>
+                    )}
+                  </>
                 )}
               </div>
             ))}

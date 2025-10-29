@@ -788,7 +788,7 @@ export default function AgentDailyMetricsPage() {
                     </h2>
                   </div>
 
-                  <div className="text-right ">
+                  <div className="text-right">
                     <button
                       className="border border-lovesBlack rounded-lg  shadow-sm shadow-lovesBlack dark:border-darkPrimaryText p-1 "
                       onClick={() => setIsAgentDropdownOpen(true)}

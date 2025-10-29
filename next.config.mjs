@@ -1,9 +1,13 @@
-/** @type {import('next').NextConfig} */
+const strapiHostname = process.env.NEXT_PUBLIC_STRAPI_HOSTNAME || "localhost";
 
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "192.168.0.231"],
+    domains: [
+      "localhost",
+      // Include the deployed Strapi hostname
+      strapiHostname,
+    ],
   },
 };
 

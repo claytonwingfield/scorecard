@@ -1,292 +1,93 @@
 "use client";
-import React, { useMemo } from "react";
+import React from "react";
 import DashboardSection from "@/components/Dashboard/Hierarchy/DashboardSection";
-import {
-  customerServiceAverageScore,
-  customerServiceAHT,
-  qualityInfo,
-  customerServiceAdherence,
-  allTeamData,
-} from "@/data/customerServiceData";
-import { useRouter } from "next/router";
-import LoadingAnimation from "@/components/Effects/Loading/LoadingAnimation";
-import {
-  fakeAHTData,
-  fakeAdherenceData,
-  fakeQualityData,
-  fakeMtdScoreData,
-} from "@/data/fakeMetricsData";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_DEPARTMENTS } from "@/graphql/queries";
 
-// Customer Service Section (shared)
-const fakeDataMap = {
-  "Average Handle Time": fakeAHTData,
-  Adherence: fakeAdherenceData,
-  Quality: fakeQualityData,
-  "Average Score": fakeMtdScoreData,
-};
-const metricMap = {
-  "Average Handle Time": "ahtTeam",
-  Adherence: "adherence",
-  Quality: "qualityTeam",
-  "Average Score": "mtdScore",
-};
+// --- Generic Department Section Creator ---
+const createDepartmentSection = (
+  defaultDeptName,
+  metricsPath,
+  supervisorPath
+) => {
+  const DepartmentSectionComponent = ({ departmentData }) => {
+    // Fallback logic
+    const data = departmentData || {
+      name: defaultDeptName,
+      parentStats: [
+        /* ... N/A stats ... */
+      ],
+      subordinateStats: [],
+      dailyChartData: {
+        // Add fallback for chart data
+        "Average Handle Time": [],
+        Adherence: [],
+        Quality: [],
+        "Average Score": [],
+      },
+    };
 
-// helper to build subordinateStats skeleton
-const makeSubordinateStats = (managerNames, parentStats) =>
-  managerNames.map((name) => ({
-    name,
-    metrics: parentStats.map(({ name: metricName }) => ({
-      id: `${name}-${metricName}`,
-      name: metricName,
-      stat: "—", // placeholder until real data arrives
-    })),
-  }));
+    const parentStatsArray = Array.isArray(data.parentStats)
+      ? data.parentStats
+      : [];
+    const subordinateStatsArray = Array.isArray(data.subordinateStats)
+      ? data.subordinateStats
+      : [];
+    // Get dailyChartData (with fallback)
+    const dailyChartData = data.dailyChartData || {
+      "Average Handle Time": [],
+      Adherence: [],
+      Quality: [],
+      "Average Score": [],
+    };
 
-// ----------------------------------------------------------------------
-// Customer Service Section
-// ----------------------------------------------------------------------
-export const CustomerServiceSection = () => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
-  if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading departments: {error.message}</p>;
-
-  // find the right department
-  const dept = data.departments.find((d) => d.name === "Customer Service");
-
-  // compute your parentStats exactly as before
-  const avg = (arr, key) =>
-    (
-      arr.reduce((sum, x) => sum + parseFloat(x[key].replace("%", "")), 0) /
-      arr.length
-    ).toFixed(2) + "%";
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const avgAHT = useMemo(() => {
-    const secs = customerServiceAHT.map(({ ahtTeam }) => {
-      const [m, s] = ahtTeam.split(":").map(Number);
-      return m * 60 + s;
-    });
-    const avgSec = secs.reduce((a, b) => a + b, 0) / secs.length;
-    const m = Math.floor(avgSec / 60);
-    const s = Math.round(avgSec % 60);
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  }, []);
-
-  const parentStats = [
-    { id: 1, name: "Average Handle Time", stat: avgAHT },
-    { id: 2, name: "Adherence", stat: avg(qualityInfo, "qualityTeam") },
-    { id: 3, name: "Quality", stat: avg(qualityInfo, "qualityTeam") },
-    {
-      id: 4,
-      name: "Average Score",
-      stat: avg(customerServiceAverageScore, "mtdScore"),
-    },
-  ];
-
-  const cityParam = router.query.city || "";
-  const isOKC = cityParam.toLowerCase() === "oklahoma-city";
-
-  // build the OKC filter
-  let managersToShow = dept.managers;
-  if (isOKC) {
-    const okcManagerIds = new Set(
-      dept.supervisors
-        .filter((s) => s.location === "Oklahoma_City")
-        .map((s) => s.manager.documentId)
+    return (
+      <DashboardSection
+        name="Department"
+        title={data.name}
+        headerLink={metricsPath}
+        subordinateTitle="Supervisors"
+        subordinateLink={supervisorPath}
+        parentStats={parentStatsArray}
+        subordinateStats={subordinateStatsArray}
+        // *** Pass REAL daily chart data ***
+        realChartData={dailyChartData}
+      />
     );
-    managersToShow = dept.managers.filter((m) =>
-      okcManagerIds.has(m.documentId)
-    );
-  }
-
-  // then everything else stays the same…
-  const managerNames = managersToShow.map((m) => m.name);
-  const subordinateStats = makeSubordinateStats(managerNames, parentStats);
-
-  return (
-    <DashboardSection
-      name="Department"
-      title={dept.name}
-      headerLink="/customer-service/daily-metrics"
-      subordinateTitle="Managers"
-      subordinateLink="/customer-service/daily-metrics/manager"
-      parentStats={parentStats}
-      subordinateStats={subordinateStats}
-      chartDataMap={fakeDataMap}
-      metricMap={metricMap}
-    />
-  );
+  };
+  DepartmentSectionComponent.displayName = `${defaultDeptName.replace(
+    / /g,
+    ""
+  )}Section`;
+  return DepartmentSectionComponent;
 };
 
-// ----------------------------------------------------------------------
-// Help Desk Section
-// ----------------------------------------------------------------------
-export const HelpDeskSection = () => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
-  if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading departments: {error.message}</p>;
+// --- Exporting Specific Sections ---
 
-  const dept = data.departments.find((d) => d.name === "Help Desk");
+export const CustomerServiceSection = createDepartmentSection(
+  "Customer Service",
+  "/customer-service/daily-metrics",
+  "/customer-service/daily-metrics/supervisor"
+);
 
-  // your existing static parentStats
-  const parentStats = [
-    { id: 1, name: "Average Handle Time", stat: "05:45" },
-    { id: 2, name: "Adherence", stat: "92%" },
-    { id: 3, name: "Quality", stat: "93%" },
-    { id: 4, name: "Average Score", stat: "95%" },
-  ];
-  const cityParam = router.query.city || "";
-  const isOKC = cityParam.toLowerCase() === "oklahoma-city";
-  let managersToShow = dept.managers;
-  if (isOKC) {
-    managersToShow = dept.managers.filter((_, idx) => {
-      const sup = dept.supervisors[idx];
-      return sup?.location === "Oklahoma_City";
-    });
-  }
-  const managerNames = managersToShow.map((m) => m.name);
-  const subordinateStats = makeSubordinateStats(managerNames, parentStats);
+export const HelpDeskSection = createDepartmentSection(
+  "Help Desk",
+  "/help-desk/daily-metrics",
+  "/help-desk/daily-metrics/supervisor" // Assuming this path exists
+);
 
-  return (
-    <DashboardSection
-      name="Department"
-      title={dept.name}
-      headerLink="/help-desk/daily-metrics"
-      subordinateTitle="Managers"
-      subordinateLink="/help-desk/daily-metrics/manager"
-      parentStats={parentStats}
-      subordinateStats={subordinateStats}
-      chartDataMap={fakeDataMap}
-      metricMap={metricMap}
-      initialActiveMetric="Average Handle Time"
-    />
-  );
-};
+export const ElectronicDispatchSection = createDepartmentSection(
+  "Electronic Dispatch",
+  "/electronic-dispatch/daily-metrics",
+  "/electronic-dispatch/daily-metrics/supervisor" // Assuming this path exists
+);
 
-export const ElectronicDispatchSection = () => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
-  if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading departments: {error.message}</p>;
+export const WrittenCommunicationSection = createDepartmentSection(
+  "Written Communication",
+  "/written-communication/daily-metrics",
+  "/written-communication/daily-metrics/supervisor" // Assuming this path exists
+);
 
-  const dept = data.departments.find((d) => d.name === "Electronic Dispatch");
-  const parentStats = [
-    { id: 1, name: "Average Handle Time", stat: "06:00" },
-    { id: 2, name: "Adherence", stat: "90%" },
-    { id: 3, name: "Quality", stat: "92%" },
-    { id: 4, name: "Average Score", stat: "94%" },
-  ];
-
-  const cityParam = router.query.city || "";
-  const isOKC = cityParam.toLowerCase() === "oklahoma-city";
-  let managersToShow = dept.managers;
-  if (isOKC) {
-    managersToShow = dept.managers.filter((_, idx) => {
-      const sup = dept.supervisors[idx];
-      return sup?.location === "Oklahoma_City";
-    });
-  }
-  const managerNames = managersToShow.map((m) => m.name);
-  const subordinateStats = makeSubordinateStats(managerNames, parentStats);
-
-  return (
-    <DashboardSection
-      name="Department"
-      title={dept.name}
-      headerLink="/electronic-dispatch/daily-metrics"
-      subordinateTitle="Managers"
-      subordinateLink="/electronic-dispatch/daily-metrics/manager"
-      parentStats={parentStats}
-      subordinateStats={subordinateStats}
-      chartDataMap={fakeDataMap}
-      metricMap={metricMap}
-      initialActiveMetric="Average Handle Time"
-    />
-  );
-};
-
-export const WrittenCommunicationSection = () => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
-  if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading departments: {error.message}</p>;
-
-  const dept = data.departments.find((d) => d.name === "Written Communication");
-  const parentStats = [
-    { id: 1, name: "Average Handle Time", stat: "05:50" },
-    { id: 2, name: "Adherence", stat: "91%" },
-    { id: 3, name: "Quality", stat: "90%" },
-    { id: 4, name: "Average Score", stat: "93%" },
-  ];
-  const cityParam = router.query.city || "";
-  const isOKC = cityParam.toLowerCase() === "oklahoma-city";
-  let managersToShow = dept.managers;
-  if (isOKC) {
-    managersToShow = dept.managers.filter((_, idx) => {
-      const sup = dept.supervisors[idx];
-      return sup?.location === "Oklahoma_City";
-    });
-  }
-  const managerNames = managersToShow.map((m) => m.name);
-  const subordinateStats = makeSubordinateStats(managerNames, parentStats);
-
-  return (
-    <DashboardSection
-      name="Department"
-      title={dept.name}
-      headerLink="/written-communication/daily-metrics"
-      subordinateTitle="Managers"
-      subordinateLink="/written-communication/daily-metrics/manager"
-      parentStats={parentStats}
-      subordinateStats={subordinateStats}
-      chartDataMap={fakeDataMap}
-      metricMap={metricMap}
-      initialActiveMetric="Average Handle Time"
-    />
-  );
-};
-
-export const ResolutionsSection = () => {
-  const router = useRouter();
-  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
-  if (loading) return <LoadingAnimation />;
-  if (error) return <p>Error loading departments: {error.message}</p>;
-
-  const dept = data.departments.find((d) => d.name === "Resolutions");
-  const parentStats = [
-    { id: 1, name: "Average Handle Time", stat: "06:10" },
-    { id: 2, name: "Adherence", stat: "89%" },
-    { id: 3, name: "Quality", stat: "91%" },
-    { id: 4, name: "Average Score", stat: "92%" },
-  ];
-  const cityParam = router.query.city || "";
-  const isOKC = cityParam.toLowerCase() === "oklahoma-city";
-  let managersToShow = dept.managers;
-  if (isOKC) {
-    managersToShow = dept.managers.filter((_, idx) => {
-      const sup = dept.supervisors[idx];
-      return sup?.location === "Oklahoma_City";
-    });
-  }
-  const managerNames = managersToShow.map((m) => m.name);
-  const subordinateStats = makeSubordinateStats(managerNames, parentStats);
-
-  return (
-    <DashboardSection
-      name="Department"
-      title={dept.name}
-      headerLink="/resolutions/daily-metrics"
-      subordinateTitle="Managers"
-      subordinateLink="/resolutions/daily-metrics/manager"
-      parentStats={parentStats}
-      subordinateStats={subordinateStats}
-      chartDataMap={fakeDataMap}
-      metricMap={metricMap}
-      initialActiveMetric="Average Handle Time"
-      agent={false}
-    />
-  );
-};
+export const ResolutionsSection = createDepartmentSection(
+  "Resolutions",
+  "/resolutions/daily-metrics",
+  "/resolutions/daily-metrics/supervisor" // Assuming this path exists
+);
