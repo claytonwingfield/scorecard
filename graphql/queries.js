@@ -77,36 +77,18 @@ const GET_ALL_DEPARTMENTS = gql`
     staffs {
       email
       agentname
-      teamname
+      teamname # Supervisor
       department
       webexes {
-        agentname
-        staff {
-          teamname
-        }
         date
-        inbound_connected_count
-        total_inbound_handled_time
         average_inbound_handle_time_seconds
-        outbound_connected_count
-        total_outbound_handled_time
-        average_outbound_handle_time_seconds
       }
       wfms {
         date
-        agentname
-        staff {
-          teamname
-        }
         adherence
       }
       qualities {
         date
-        agentname
-        email
-        staff {
-          teamname
-        }
         totalscore
       }
     }

@@ -3,6 +3,8 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_DEPARTMENTS } from "@/graphql/queries";
 import TableSorting from "@/components/Sorting/TableSorting";
 import SearchBox from "@/components/Sorting/Search/SearchBox";
 import LayoutOptions from "@/components/Sorting/Layout/LayoutOptions";
@@ -40,7 +42,6 @@ import DetailModel from "./Sorting/Detail/DetailModel";
 import { performSearch } from "@/components/Sorting/Search/Hooks/searchUtils";
 
 export default function MetricsDashboard({
-  dataSets,
   tableVisibilityOptions,
   agentTableVisibilityOptions,
   columnVisibilityOptions,
@@ -57,6 +58,15 @@ export default function MetricsDashboard({
   agentLayout,
   allTeamData,
 }) {
+  const { data, loading, error } = useQuery(GET_ALL_DEPARTMENTS);
+
+  // Derive dataSets from the fetched data (data.staffs is the array of agents/teams)
+  const dataSets = useMemo(() => {
+    if (data && data.staffs) {
+      return data.staffs;
+    }
+    return [];
+  }, [data]);
   const ResponsiveGridLayout = useMemo(() => WidthProvider(Responsive), []);
   const [activeFilters, setActiveFilters] = useState([]);
   const [filterOptions, setFilterOptions] = useState([]);
